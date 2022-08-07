@@ -1,0 +1,64 @@
+name: share_kakeibo
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+  # fireBase
+  firebase_core: ^1.15.0
+  cloud_firestore: ^3.1.13
+  firebase_auth: ^3.3.16
+  firebase_storage: ^10.2.14
+
+  # riverPod
+  hooks_riverpod: ^1.0.3
+
+  # カレンダー
+  intl: ^0.17.0
+  table_calendar: ^3.0.4
+  month_picker_dialog: ^0.4.0
+
+  # チャート
+  fl_chart: ^0.45.0
+
+  # アプリアイコン
+  flutter_launcher_icons: ^0.9.3
+
+  # 画像選択
+  image_picker: ^0.8.5
+
+  # 画面遷移
+  page_transition: ^2.0.5
+
+  # app_tracking_transparency
+  app_tracking_transparency: ^2.0.2+4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: 'assets/image/app_icon_512.png'
+  adaptive_icon_background: '#FCF6EC'
+  adaptive_icon_foreground: 'assets/image/app_icon_256_background_opacity0.png'
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/image/app_theme.png

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "502008914076",
+    "project_id": "sharekakeibo-59b13",
+    "storage_bucket": "sharekakeibo-59b13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502008914076:android:7ec5ef8cf91bbad5ac8d59",
+        "android_client_info": {
+          "package_name": "com.example.share_kakeibo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "502008914076-ulpri4und9549r6veuvqa7q0tk9dtdo1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_hpviIK5C34gX0Vn1AKeuDq6rY9STx3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "502008914076-ulpri4und9549r6veuvqa7q0tk9dtdo1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
