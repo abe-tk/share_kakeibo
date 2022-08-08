@@ -1,4 +1,4 @@
-package com.example.share_kakeibo
+package com.myApp.shareKakeibo
 
 import io.flutter.embedding.android.FlutterActivity
 

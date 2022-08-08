@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.share_kakeibo">
+    package="com.myApp.shareKakeibo">
    <application
         android:label="家計簿"
         android:name="${applicationName}"

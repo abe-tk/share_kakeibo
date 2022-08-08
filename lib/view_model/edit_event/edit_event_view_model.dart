@@ -156,6 +156,15 @@ class EditIncomeEventModel extends ChangeNotifier {
   }
 
   Future <void> incomeEventUpdate() async {
+
+    if (price == null || price == "") {
+      throw 'Priceが入力されていません';
+    } else if (double.tryParse(price) == null) {
+      throw '半角数字のみでご入力ください';
+    } else if (price.contains('.')) {
+      throw '半角数字のみでご入力ください';
+    }
+
     await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').doc(event.id).update({
       'date': selectedDate,
       'smallCategory': incomeCategory,
@@ -167,6 +176,15 @@ class EditIncomeEventModel extends ChangeNotifier {
   }
 
   Future <void> spendingEventUpdate() async {
+
+    if (price == null || price == "") {
+      throw 'Priceが入力されていません';
+    } else if (double.tryParse(price) == null) {
+      throw '半角数字のみでご入力ください';
+    } else if (price.contains('.')) {
+      throw '半角数字のみでご入力ください';
+    }
+
     await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').doc(event.id).update({
       'date': selectedDate,
       'smallCategory': spendingCategory,

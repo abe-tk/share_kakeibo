@@ -173,6 +173,10 @@ class AddEventViewModel extends ChangeNotifier {
 
     if (price == null || price == "") {
       throw '金額が入力されていません';
+    } else if (double.tryParse(price!) == null) {
+      throw '半角数字のみでご入力ください';
+    } else if (price!.contains('.')) {
+      throw '半角数字のみでご入力ください';
     }
 
     await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').add({
@@ -193,6 +197,10 @@ class AddEventViewModel extends ChangeNotifier {
 
     if (price == null || price == "") {
       throw 'Priceが入力されていません';
+    } else if (double.tryParse(price!) == null) {
+      throw '半角数字のみでご入力ください';
+    } else if (price!.contains('.')) {
+      throw '半角数字のみでご入力ください';
     }
 
     await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').add({

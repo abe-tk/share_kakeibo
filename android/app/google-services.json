@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:502008914076:android:7ec5ef8cf91bbad5ac8d59",
         "android_client_info": {
-          "package_name": "com.example.share_kakeibo"
+          "package_name": "com.myApp.shareKakeibo"
         }
       },
       "oauth_client": [
