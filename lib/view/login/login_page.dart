@@ -1,15 +1,15 @@
-/// components
-import 'package:share_kakeibo/components/auth_fire.dart';
+// components
 import 'package:share_kakeibo/components/indicator.dart';
-
-/// view
-import 'package:share_kakeibo/view/register/register_page.dart';
-
-/// view_model
+// constant
+import 'package:share_kakeibo/constant/colors.dart';
+// firebase
+import 'package:share_kakeibo/firebase/auth_fire.dart';
+// view
+import 'package:share_kakeibo/view/login/register_page.dart';
+// view_model
 import 'package:share_kakeibo/view_model/login/login_view_model.dart';
-import 'package:share_kakeibo/view_model/register/register_view_model.dart';
-
-/// packages
+import 'package:share_kakeibo/view_model/login/register_view_model.dart';
+// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,14 +24,20 @@ class LoginPage extends StatefulHookConsumerWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(loginViewModelProvider.notifier).setInitialize();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _isObscure = useState(true);
-    final loginViewModel = ref.watch(loginViewModelProvider);
-    final registerViewModel = ref.watch(registerViewModelProvider);
+    final loginViewModelNotifier = ref.watch(loginViewModelProvider.notifier);
+    final registerViewModelNotifier = ref.watch(registerViewModelProvider.notifier);
     final indicator = ref.watch(indicatorProvider);
-    return SafeArea(
-      child: Scaffold(
-        body: Center(
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -48,17 +54,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: TextFormField(
-                    controller: loginViewModel.emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'メールアドレス',
-                      enabledBorder: UnderlineInputBorder(
+                    controller: loginViewModelNotifier.emailController,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: Colors.transparent,
+                          color: textFieldBorderSideColor,
+                          width: 2.0,
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        fontSize: 12,
+                        color: textFieldTextColor,
+                      ),
+                      labelText: 'メールアドレス',
+                      floatingLabelStyle: const TextStyle(fontSize: 12),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: textFieldBorderSideColor,
+                          width: 1.0,
                         ),
                       ),
                     ),
                     onChanged: (text) {
-                      loginViewModel.setEmail(text);
+                      loginViewModelNotifier.setEmail(text);
                     },
                   ),
                 ),
@@ -70,9 +90,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: TextFormField(
-                    controller: loginViewModel.passwordController,
+                    controller: loginViewModelNotifier.passwordController,
                     obscureText: _isObscure.value,
                     decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: textFieldBorderSideColor,
+                          width: 2.0,
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        fontSize: 12,
+                        color: textFieldTextColor,
+                      ),
                       labelText: 'パスワード（6〜20文字）',
                       suffixIcon: IconButton(
                         icon: Icon(_isObscure.value
@@ -82,14 +113,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           _isObscure.value = !_isObscure.value;
                         },
                       ),
-                      enabledBorder: const UnderlineInputBorder(
+                      floatingLabelStyle: const TextStyle(fontSize: 12),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: Colors.transparent,
+                          color: textFieldBorderSideColor,
+                          width: 1.0,
                         ),
                       ),
                     ),
                     onChanged: (text) {
-                      loginViewModel.setPassword(text);
+                      loginViewModelNotifier.setPassword(text);
                     },
                     maxLength: 20,
                   ),
@@ -101,17 +135,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     onPressed: () async {
                       indicator.showProgressDialog(context);
                       try {
-                        await loginViewModel.login();
+                        await loginViewModelNotifier.login();
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
-                        loginViewModel.clearEmail();
-                        loginViewModel.clearPassword();
-                        /// uidをログインユーザのものに変更
+                        loginViewModelNotifier.clearTextController();
+                        // uidをログインユーザのものに変更
                         changeUid();
                       } catch (e) {
                         Navigator.of(context).pop();
                         final snackBar = SnackBar(
-                          backgroundColor: Colors.red,
+                          backgroundColor: negativeSnackBarColor,
+                          behavior: SnackBarBehavior.floating,
                           content: Text(e.toString()),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -119,7 +153,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     },
                     child: const Text('ログイン'),
                     style: ElevatedButton.styleFrom(
-                      elevation: 0,
+                      primary: elevatedButtonColor,
+                      side: BorderSide(
+                        color: elevatedButtonBorderSideColor,
+                        width: 1,
+                      ),
                     ),
                   ),
                 ),
@@ -136,11 +174,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         fullscreenDialog: true,
                       ),
                     );
-                    loginViewModel.clearEmail();
-                    loginViewModel.clearPassword();
-                    registerViewModel.clearUserName();
-                    registerViewModel.clearEmail();
-                    registerViewModel.clearPassword();
+                    loginViewModelNotifier.clearTextController();
+                    registerViewModelNotifier.clearTextController();
                   },
                   child: const Text(
                     'アカウントの新規登録はこちらから',

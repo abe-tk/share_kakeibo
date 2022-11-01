@@ -1,54 +1,47 @@
-/// packages
+//constant
+import 'package:share_kakeibo/constant/validation.dart';
+// firebase
+import 'package:share_kakeibo/firebase/login_fire.dart';
+// packages
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:share_kakeibo/components/auth_fire.dart';
+import 'package:share_kakeibo/firebase/auth_fire.dart';
 
-final loginViewModelProvider = ChangeNotifierProvider((ref) => LoginViewModel());
+final loginViewModelProvider =
+StateNotifierProvider<LoginViewModeNotifier, Map<String, dynamic>>((ref) {
+  return LoginViewModeNotifier();
+});
 
-class LoginViewModel extends ChangeNotifier {
-
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+class LoginViewModeNotifier extends StateNotifier<Map<String, dynamic>> {
+  LoginViewModeNotifier() : super({});
 
   String? email;
   String? password;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void setInitialize() {
+    state['email'];
+    state['password'];
+  }
 
   void setEmail(String email) {
-    this.email = email;
-    notifyListeners();
+    state['email'] = email;
   }
 
   void setPassword(String password) {
-    this.password = password;
-    notifyListeners();
+    state['password'] = password;
   }
 
-  void clearEmail() {
+  void clearTextController() {
     emailController.clear();
-    notifyListeners();
-  }
-
-  void clearPassword() {
     passwordController.clear();
-    notifyListeners();
   }
 
-  Future login() async {
-    email = emailController.text;
-    password = passwordController.text;
-
-    if (email == null || email == "") {
-      throw 'メールアドレスが入力されていません';
-    } else if (password == null || password == "") {
-      throw 'パスワードが入力されていません';
-    } else {
-      registered(true);
-      if (email != null && password != null) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
-      }
-    }
-    notifyListeners();
+  Future<void> login() async {
+    loginValidation(state['email'], state['password']);
+    changeLoginState(true); // app.dartでサインインの状態で判定されるようにする
+    await loginFire(state['email'], state['password']);
   }
 
 }

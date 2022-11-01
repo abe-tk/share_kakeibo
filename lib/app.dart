@@ -1,16 +1,25 @@
-/// components
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/components/auth_fire.dart';
-import 'components/theme.dart';
+// components
 import 'package:share_kakeibo/components/bottom_navi.dart';
-
-/// view
+// constant
+import 'package:share_kakeibo/constant/colors.dart';
+// firebase
+import 'package:share_kakeibo/firebase/auth_fire.dart';
+// route
+import 'package:share_kakeibo/route/route.dart';
+// state
+import 'package:share_kakeibo/state/room/room_member_state.dart';
+import 'package:share_kakeibo/state/room/room_name_state.dart';
+import 'package:share_kakeibo/state/user/user_state.dart';
+// view
 import 'package:share_kakeibo/view/login/login_page.dart';
-
-/// packages
+// view_model
+import 'package:share_kakeibo/view_model/memo/memo_state.dart';
+// packages
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MyApp extends HookConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -29,9 +38,12 @@ class MyApp extends HookConsumerWidget {
         Locale("ja"),
       ],
       theme: ThemeData(
-        primarySwatch: customPrimarySwatch,
-        scaffoldBackgroundColor: customScaffoldBackgroundColor,
-      ),
+          primarySwatch: customPrimarySwatch,
+          scaffoldBackgroundColor: customScaffoldBackgroundColor,
+          textTheme: GoogleFonts.notoSansTextTheme(
+            Theme.of(context).textTheme,
+          )),
+      onGenerateRoute: RouteGenerator.generateRoute,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
@@ -41,7 +53,11 @@ class MyApp extends HookConsumerWidget {
           }
           if (snapshot.hasData && loginState == true) {
             // User が null ではない、つまりサインイン済みのホーム画面へ
-            return BottomNavi();
+            ref.read(roomNameProvider.notifier).fetchRoomName();
+            ref.read(roomMemberProvider.notifier).fetchRoomMember();
+            ref.read(userProvider.notifier).fetchUser();
+            ref.read(memoViewModelProvider.notifier).fetchMemo();
+            return const BottomNavi();
           }
           // User が null である、つまり未サインインのサインイン画面へ
           return const LoginPage();

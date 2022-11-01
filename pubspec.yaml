@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+3
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
@@ -43,6 +43,13 @@ dependencies:
   # app_tracking_transparency
   app_tracking_transparency: ^2.0.2+4
 
+  # Freezed
+  freezed: ^2.0.4
+  build_runner: ^2.2.0
+
+  # fonts
+  google_fonts: ^3.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -53,7 +60,7 @@ flutter_icons:
   android: true
   ios: true
   image_path: 'assets/image/app_icon_512.png'
-  adaptive_icon_background: '#FCF6EC'
+  adaptive_icon_background: '#FFFFFF'
   adaptive_icon_foreground: 'assets/image/app_icon_256_background_opacity0.png'
 
 flutter:
@@ -62,3 +69,5 @@ flutter:
 
   assets:
     - assets/image/app_theme.png
+    - assets/image/app_theme_gray.png
+    - assets/image/user_icon.png
