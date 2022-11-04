@@ -1,7 +1,7 @@
 // constant
 import 'package:share_kakeibo/constant/colors.dart';
 // view
-import 'package:share_kakeibo/view/setting/personal_setting/widgets/delete_account_password_dialog.dart';
+import 'package:share_kakeibo/view/setting/personal_setting/widgets/delete_account_dialog.dart';
 // view_model
 import 'package:share_kakeibo/view_model/setting/personal_setting/widgets/password_dialog_view_model.dart';
 // packages
@@ -32,7 +32,7 @@ class AccountPage extends HookConsumerWidget {
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.all(16),
               child: Text(
-                'メールアドレス',
+                '基本情報',
                 style: TextStyle(
                   color: detailTextColor,
                 ),
@@ -46,44 +46,25 @@ class AccountPage extends HookConsumerWidget {
               color: dividerColor,
             ),
             ListTile(
-              title: const Text('メールアドレスを変更'),
+              title: const Text('メールアドレス'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.pushNamed(context, '/emailPage');
               },
             ),
+            ListTile(
+              title: const Text('パスワード'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.pushNamed(context, '/passwordPage');
+              },
+            ),
             const Divider(),
-            /// アカウントのパスワード変更の機能を追加予定
-            // Container(
-            //   alignment: Alignment.centerLeft,
-            //   margin: const EdgeInsets.all(16),
-            //   child: const Text(
-            //     'パスワード',
-            //     style: TextStyle(
-            //       color: Color.fromRGBO(65, 65, 65, 0.8),
-            //     ),
-            //   ),
-            // ),
-            // const Divider(
-            //   height: 0,
-            //   thickness: 1,
-            //   indent: 16,
-            //   endIndent: 16,
-            //   color: Colors.grey,
-            // ),
-            // ListTile(
-            //   title: const Text('パスワードを変更'),
-            //   trailing: const Icon(Icons.chevron_right),
-            //   onTap: () {
-            //     // Navigator.pushNamed(context, '/roomInfoPage');
-            //   },
-            // ),
-            // const Divider(),
             Container(
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.all(16),
               child: Text(
-                'ログイン',
+                '管理',
                 style: TextStyle(
                   color: detailTextColor,
                 ),
@@ -127,27 +108,9 @@ class AccountPage extends HookConsumerWidget {
                 },
               ),
             ),
-            const Divider(),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: const EdgeInsets.all(16),
-              child: Text(
-                'アカウント',
-                style: TextStyle(
-                  color: detailTextColor,
-                ),
-              ),
-            ),
-            Divider(
-              height: 0,
-              thickness: 1,
-              indent: 16,
-              endIndent: 16,
-              color: dividerColor,
-            ),
             GestureDetector(
               child: ListTile(
-                title: Text('アカウントを削除', style: TextStyle(color: negativeTextColor),),
+                title: Text('アカウント削除', style: TextStyle(color: negativeTextColor),),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () async {
                   showDialog(
@@ -169,7 +132,7 @@ class AccountPage extends HookConsumerWidget {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return const DeleteAccountPasswordDialog();
+                                    return const DeleteAccountDialog();
                                   },
                                 );
                                 passwordDialogViewModelNotifier.clearPassword();

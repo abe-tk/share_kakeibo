@@ -3,10 +3,13 @@ import 'package:share_kakeibo/firebase/auth_fire.dart';
 // firebase
 import 'package:share_kakeibo/firebase/memo_fire.dart';
 import 'package:share_kakeibo/firebase/room_fire.dart';
+// state
+import 'package:share_kakeibo/state/memo/memo_state.dart';
 // model
 import 'package:share_kakeibo/model/memo/memo.dart';
 // packages
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final memoViewModelProvider =
 StateNotifierProvider<MemoViewModelNotifier, List<Memo>>((ref) {
@@ -56,13 +59,21 @@ class MemoViewModelNotifier extends StateNotifier<List<Memo>> {
 
   Future<void> fetchMemo() async {
     roomCode = await setRoomCodeFire(uid);
-    List<Memo> memos = await setMemoFire(roomCode);
+    final List<Memo> memos = MemoNotifier().state.map((doc) => Memo(
+      id: doc.id,
+      memo: doc['memo'],
+      date: (doc['registerDate'] as Timestamp).toDate(),
+      completed: false,
+    ))
+        .toList();
+    memos.sort((a, b) => a.date.compareTo(b.date));
     state = memos;
   }
 
   Future<void> addMemo() async {
     validationMemo();
     addMemoFire(roomCode, memo!);
+    await MemoNotifier().setMemo();
     fetchMemo();
   }
 

@@ -39,6 +39,11 @@ Future<void> updateUserEmailFire(newEmail) async {
   });
 }
 
+// userのpasswordを変更
+Future<void> updateUserPasswordFire(newPassword) async {
+  await FirebaseAuth.instance.currentUser!.updatePassword(newPassword!);
+}
+
 // Userのプロフィール画像を更新
 Future<void> updateUserImgURLFire(imgURL, code) async {
   await fire.doc(uid).update({

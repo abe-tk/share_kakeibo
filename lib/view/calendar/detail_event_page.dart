@@ -1,11 +1,10 @@
 // constant
 import 'package:share_kakeibo/constant/number_format.dart';
 import 'package:share_kakeibo/constant/colors.dart';
-// state
-import 'package:share_kakeibo/state/event/detail_event_state.dart';
 // view
 import 'package:share_kakeibo/view/event/edit_event_page.dart';
 // view_model
+import 'package:share_kakeibo/view_model/calendar/detail_event_view_model.dart';
 import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
@@ -24,12 +23,16 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(detailEventProvider.notifier).fetchEventListEvent();
+    // ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // エラーの出ていた処理
+      ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final detailEventState = ref.watch(detailEventProvider);
+    final detailEventState = ref.watch(detailEventViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(

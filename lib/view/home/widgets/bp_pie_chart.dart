@@ -3,7 +3,8 @@ import 'package:share_kakeibo/constant/number_format.dart';
 import 'package:share_kakeibo/constant/colors.dart';
 // state
 import 'package:share_kakeibo/state/current_month/home_current_month_state.dart';
-import 'package:share_kakeibo/state/pie_chart/bp_pie_chart_state.dart';
+// view_model
+import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,13 +23,16 @@ class _BpPieChartState extends ConsumerState<BpPieChart> {
   @override
   void initState() {
     super.initState();
-    ref.read(bpPieChartProvider.notifier).bpPieChartCalc();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // エラーの出ていた処理
+      ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final bpPieChartNotifier = ref.watch(bpPieChartProvider.notifier);
-    final bpPieChartState = ref.watch(bpPieChartProvider);
+    final bpPieChartNotifier = ref.watch(bpPieChartViewModelProvider.notifier);
+    final bpPieChartState = ref.watch(bpPieChartViewModelProvider);
     final homePieChartState = ref.watch(homeCurrentMonthProvider);
     final homePieChartNotifier = ref.watch(homeCurrentMonthProvider.notifier);
     return Column(

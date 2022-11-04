@@ -28,7 +28,7 @@ class PasswordDialogViewModelNotifier extends StateNotifier<String> {
 
   Future <void> reSignIn() async {
     passwordValidation(state);
-    signInAuth(UserNotifier().state['email'], state);
+    await signInAuth(UserNotifier().state['email'], state);
     passwordController.clear();
   }
 

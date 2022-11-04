@@ -1,5 +1,4 @@
 // constant
-import 'package:share_kakeibo/constant/number_format.dart';
 import 'package:share_kakeibo/constant/validation.dart';
 // firebase
 import 'package:share_kakeibo/firebase/auth_fire.dart';
@@ -9,6 +8,7 @@ import 'package:share_kakeibo/firebase/room_fire.dart';
 import 'package:share_kakeibo/model/event/event.dart';
 // state
 import 'package:share_kakeibo/state/room/room_member_state.dart';
+import 'package:share_kakeibo/state/event/event_state.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -88,16 +88,6 @@ class EditEventViewModelNotifier extends StateNotifier<Map<String, dynamic>> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2015),
       lastDate: DateTime(2035),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF725B51),
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
     if (selected != null) {
       state['date'] = selected;
@@ -130,6 +120,7 @@ class EditEventViewModelNotifier extends StateNotifier<Map<String, dynamic>> {
       state['registerDate'],
       state['paymentUser'],
     );
+    await EventNotifier().setEvent();
   }
 
 }

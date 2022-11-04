@@ -32,7 +32,7 @@ Future<void> registerFire(email, password, userName) async {
   });
 }
 
-// アカウントのログアウト、削除時に再ログイン
+// アカウントのログアウト、削除時に再ログイン確認
 Future<void> signInAuth(email, password) async {
   await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
 }

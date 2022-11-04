@@ -3,14 +3,16 @@ import 'package:share_kakeibo/constant/colors.dart';
 // state
 import 'package:share_kakeibo/state/room/room_member_state.dart';
 import 'package:share_kakeibo/state/room/room_name_state.dart';
-import 'package:share_kakeibo/state/price/total_assets_state.dart';
-import 'package:share_kakeibo/state/event/calendar_event_state.dart';
-import 'package:share_kakeibo/state/pie_chart/bp_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/income_category_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_category_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/income_user_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_user_pie_chart_state.dart';
+import 'package:share_kakeibo/state/event/event_state.dart';
 // view_model
+import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
+import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/memo/memo_view_model.dart';
 import 'package:share_kakeibo/view_model/setting/room_setting/participate_room_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
@@ -43,16 +45,19 @@ class _ParticipateRoomPageState extends ConsumerState<ParticipateRoomPage> {
                 await participationRoomViewModelNotifier.joinRoom();
 
                 // 収支円グラフの再計算
-                ref.read(bpPieChartProvider.notifier).bpPieChartCalc();
+                ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
                 // 総資産額の再計算
-                ref.read(totalAssetsProvider.notifier).calcTotalAssets();
+                ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
                 // カレンダーのイベントを更新
-                ref.read(calendarEventProvider.notifier).fetchCalendarEvent();
+                ref.read(eventProvider.notifier).setEvent();
+                // ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
                 // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc();
-                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc();
-                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
-                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc();
+                ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
+                ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
+                ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+                ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
+                // メモの更新
+                ref.read(memoViewModelProvider.notifier).fetchMemo();
                 // roomNameの更新
                 ref.read(roomNameProvider.notifier).fetchRoomName();
                 // roomMemberの更新

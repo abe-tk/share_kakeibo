@@ -5,7 +5,7 @@ import 'package:share_kakeibo/constant/colors.dart';
 // model
 import 'package:share_kakeibo/model/memo/memo.dart';
 // view_model
-import 'package:share_kakeibo/view_model/memo/memo_state.dart';
+import 'package:share_kakeibo/view_model/memo/memo_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

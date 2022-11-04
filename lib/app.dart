@@ -10,10 +10,12 @@ import 'package:share_kakeibo/route/route.dart';
 import 'package:share_kakeibo/state/room/room_member_state.dart';
 import 'package:share_kakeibo/state/room/room_name_state.dart';
 import 'package:share_kakeibo/state/user/user_state.dart';
+import 'package:share_kakeibo/state/event/event_state.dart';
+import 'package:share_kakeibo/state/memo/memo_state.dart';
 // view
 import 'package:share_kakeibo/view/login/login_page.dart';
 // view_model
-import 'package:share_kakeibo/view_model/memo/memo_state.dart';
+import 'package:share_kakeibo/view_model/memo/memo_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -42,7 +44,8 @@ class MyApp extends HookConsumerWidget {
           scaffoldBackgroundColor: customScaffoldBackgroundColor,
           textTheme: GoogleFonts.notoSansTextTheme(
             Theme.of(context).textTheme,
-          )),
+          ),
+      ),
       onGenerateRoute: RouteGenerator.generateRoute,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -56,7 +59,9 @@ class MyApp extends HookConsumerWidget {
             ref.read(roomNameProvider.notifier).fetchRoomName();
             ref.read(roomMemberProvider.notifier).fetchRoomMember();
             ref.read(userProvider.notifier).fetchUser();
+            ref.read(memoProvider.notifier).setMemo();
             ref.read(memoViewModelProvider.notifier).fetchMemo();
+            ref.read(eventProvider.notifier).setEvent();
             return const BottomNavi();
           }
           // User が null である、つまり未サインインのサインイン画面へ

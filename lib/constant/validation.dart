@@ -25,6 +25,17 @@ void updateEmailValidation(newEmail, email) {
   }
 }
 
+// passwordの変更
+void updatePasswordValidation(password, checkPassword) {
+  if (password == '') {
+    throw 'パスワードを入力してください';
+  } else if (checkPassword == '') {
+    throw 'パスワード（確認用）を入力してください';
+  } else if (password != checkPassword) {
+    throw 'パスワードが一致していません';
+  }
+}
+
 // パスワード入力
 void passwordValidation(password) {
   if (password == null || password == "") {

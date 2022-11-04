@@ -8,8 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class DeleteAccountPasswordDialog extends HookConsumerWidget {
-  const DeleteAccountPasswordDialog({Key? key}) : super(key: key);
+class DeleteAccountDialog extends HookConsumerWidget {
+  const DeleteAccountDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -5,6 +5,7 @@ import 'package:share_kakeibo/view/chart/year_chart_page.dart';
 import 'package:share_kakeibo/view/event/add_event_page.dart';
 import 'package:share_kakeibo/view/setting/setting_page.dart';
 import 'package:share_kakeibo/view/setting/personal_setting/email_page.dart';
+import 'package:share_kakeibo/view/setting/personal_setting/password_page.dart';
 import 'package:share_kakeibo/view/setting/personal_setting/account_page.dart';
 import 'package:share_kakeibo/view/setting/personal_setting/profile_page.dart';
 import 'package:share_kakeibo/view/setting/room_setting/room_info_page.dart';
@@ -20,6 +21,7 @@ class RouteGenerator {
   static const String profilePage = '/profilePage';
   static const String accountPage = '/accountPage';
   static const String emailPage = '/emailPage';
+  static const String passwordPage = '/passwordPage';
   static const String roomInfoPage = '/roomInfoPage';
   static const String invitationRoomPage = '/invitationRoomPage';
   static const String detailEventPage = '/detailEventPage';
@@ -64,6 +66,11 @@ class RouteGenerator {
       case emailPage:
         return MaterialPageRoute(
           builder: (_) => const EmailPage(),
+          fullscreenDialog: true,
+        );
+      case passwordPage:
+        return MaterialPageRoute(
+          builder: (_) => const PasswordPage(),
           fullscreenDialog: true,
         );
       case roomInfoPage:

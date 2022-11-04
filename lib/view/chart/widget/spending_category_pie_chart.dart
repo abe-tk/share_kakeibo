@@ -1,8 +1,8 @@
 // constant
 import 'package:share_kakeibo/constant/number_format.dart';
 import 'package:share_kakeibo/constant/colors.dart';
-// state
-import 'package:share_kakeibo/state/pie_chart/spending_category_pie_chart_state.dart';
+// view_model
+import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,13 +20,16 @@ class _SpendingCategoryPieChartState extends ConsumerState<SpendingCategoryPieCh
   @override
   void initState() {
     super.initState();
-    ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // エラーの出ていた処理
+      ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final spendingCategoryPieChartState = ref.watch(spendingCategoryPieChartStateProvider);
-    final spendingCategoryPieChartNotifier = ref.watch(spendingCategoryPieChartStateProvider.notifier);
+    final spendingCategoryPieChartState = ref.watch(spendingCategoryPieChartViewModelStateProvider);
+    final spendingCategoryPieChartNotifier = ref.watch(spendingCategoryPieChartViewModelStateProvider.notifier);
     return Column(
       children: [
         Container(

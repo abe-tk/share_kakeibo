@@ -1,5 +1,7 @@
 // constant
 import 'package:share_kakeibo/constant/colors.dart';
+// state
+import 'package:share_kakeibo/state/user/user_state.dart';
 // view_model
 import 'package:share_kakeibo/view_model/setting/personal_setting/email_view_model.dart';
 import 'package:share_kakeibo/view_model/setting/personal_setting/widgets/password_dialog_view_model.dart';
@@ -8,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class ChangeEmailPasswordDialog extends HookConsumerWidget {
-  const ChangeEmailPasswordDialog({Key? key}) : super(key: key);
+class ChangeEmailDialog extends HookConsumerWidget {
+  const ChangeEmailDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,8 +62,9 @@ class ChangeEmailPasswordDialog extends HookConsumerWidget {
             SimpleDialogOption(
               onPressed: () async {
                 try {
-                  await passwordDialogViewModelNotifier.reSignIn();
+                  passwordDialogViewModelNotifier.reSignIn();
                   await emailViewModelNotifier.updateEmail();
+                  await ref.read(userProvider.notifier).fetchUser();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(

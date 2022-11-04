@@ -1,21 +1,11 @@
-import 'package:share_kakeibo/model/memo/memo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final fire = FirebaseFirestore.instance.collection('users');
 
 // メモの一覧を取得
-Future<List<Memo>> setMemoFire(String roomCode) async {
+Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getMemoFire(String roomCode) async {
   final snapshot = await fire.doc(roomCode).collection('memo').get();
-  final List<Memo> memos = snapshot.docs
-      .map((doc) => Memo(
-            id: doc.id,
-            memo: doc['memo'],
-            date: (doc['registerDate'] as Timestamp).toDate(),
-            completed: false,
-          ))
-      .toList();
-  memos.sort((a, b) => a.date.compareTo(b.date));
-  return memos;
+  return snapshot.docs;
 }
 
 // メモの追加

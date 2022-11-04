@@ -5,14 +5,15 @@ import 'package:share_kakeibo/firebase/event_fire.dart';
 // model
 import 'package:share_kakeibo/model/event/event.dart';
 // state
-import 'package:share_kakeibo/state/event/calendar_event_state.dart';
-import 'package:share_kakeibo/state/pie_chart/bp_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/income_user_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_user_pie_chart_state.dart';
-import 'package:share_kakeibo/state/price/total_assets_state.dart';
-import 'package:share_kakeibo/state/pie_chart/income_category_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_category_pie_chart_state.dart';
+import 'package:share_kakeibo/state/event/event_state.dart';
 // view_model
+import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
+import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
 import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
@@ -66,17 +67,18 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                         onPressed: () async {
                           try {
                             await deleteEventFire(editEventNotifier.roomCode, event.id);
+                            await ref.read(eventProvider.notifier).setEvent();
                             // ホーム画面の収支円グラフを再計算
-                            ref.read(bpPieChartProvider.notifier).bpPieChartCalc();
+                            ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
                             // 総資産額の再計算
-                            ref.read(totalAssetsProvider.notifier).calcTotalAssets();
+                            ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
                             // カレンダーのイベントを更新
-                            ref.read(calendarEventProvider.notifier).fetchCalendarEvent();
+                            ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
                             // 統計の円グラフを更新
-                            ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc();
-                            ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc();
-                            ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
-                            ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc();
+                            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
+                            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
+                            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+                            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -109,16 +111,16 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
               try {
                 await editEventNotifier.updateEvent();
                 // ホーム画面の収支円グラフを再計算
-                ref.read(bpPieChartProvider.notifier).bpPieChartCalc();
+                ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
                 // 総資産額の再計算
-                ref.read(totalAssetsProvider.notifier).calcTotalAssets();
+                ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
                 // カレンダーのイベントを更新
-                ref.read(calendarEventProvider.notifier).fetchCalendarEvent();
+                ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
                 // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc();
-                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc();
-                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
-                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc();
+                ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
+                ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
+                ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+                ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

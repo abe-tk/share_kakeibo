@@ -3,11 +3,11 @@ import 'package:share_kakeibo/components/drawer_menu.dart';
 // constant
 import 'package:share_kakeibo/constant/number_format.dart';
 import 'package:share_kakeibo/constant/colors.dart';
-//state
-import 'package:share_kakeibo/state/event/calendar_event_state.dart';
-import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
 // view
 import 'package:share_kakeibo/view/event/edit_event_page.dart';
+// view_model
+import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
+import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,12 +34,16 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(calendarEventProvider.notifier).fetchCalendarEvent();
+    // ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // エラーの出ていた処理
+      ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final calendarEventState = ref.watch(calendarEventProvider);
+    final calendarEventState = ref.watch(calendarViewModelProvider);
 
     final _events = LinkedHashMap<DateTime, List>(
       equals: isSameDay,
@@ -157,7 +161,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
             ),
 
             Visibility(
-              visible: ref.read(calendarEventProvider.notifier).checkExistenceEvent(_selectedDay),
+              visible: ref.read(calendarViewModelProvider.notifier).checkExistenceEvent(_selectedDay),
               child: Column(
                 children: [
                   const SizedBox(height: 16),

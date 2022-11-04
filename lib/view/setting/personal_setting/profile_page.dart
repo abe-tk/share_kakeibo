@@ -3,12 +3,13 @@ import 'package:share_kakeibo/constant/colors.dart';
 // state
 import 'package:share_kakeibo/state/user/user_state.dart';
 import 'package:share_kakeibo/state/room/room_member_state.dart';
-import 'package:share_kakeibo/state/event/calendar_event_state.dart';
-import 'package:share_kakeibo/state/pie_chart/income_category_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_category_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/income_user_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_user_pie_chart_state.dart';
+import 'package:share_kakeibo/state/event/event_state.dart';
 // view_model
+import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
 import 'package:share_kakeibo/view_model/setting/personal_setting/profile_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
@@ -52,12 +53,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               try {
                 await profileViewModelNotifier.updateProfile();
                 // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc();
-                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc();
-                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
-                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc();
+                ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
+                ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
+                ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+                ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
                 // カレンダーのイベントを更新
-                ref.read(calendarEventProvider.notifier).fetchCalendarEvent();
+                ref.read(eventProvider.notifier).setEvent();
+                // ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
                 // user情報の再取得
                 ref.read(userProvider.notifier).fetchUser();
                 // roomMemberの情報を更新

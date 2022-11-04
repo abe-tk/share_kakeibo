@@ -1,8 +1,9 @@
 // constant
 import 'package:share_kakeibo/constant/colors.dart';
 // state
-import 'package:share_kakeibo/state/bar_chart/bar_chart_state.dart';
 import 'package:share_kakeibo/state/current_month/bar_chart_year_state.dart';
+// view_model
+import 'package:share_kakeibo/view_model/chart/bar_chart_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +22,10 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(yearChartProvider.notifier).setBarChartData();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // エラーの出ていた処理
+      ref.read(yearChartViewModelProvider.notifier).setBarChartData();
+    });
   }
 
   @override
@@ -43,7 +47,7 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
                 IconButton(
                   onPressed: () {
                     ref.read(currentYearProvider.notifier).oneYearAgo();
-                    ref.read(yearChartProvider.notifier).setBarChartData();
+                    ref.read(yearChartViewModelProvider.notifier).setBarChartData();
                   },
                   icon: Icon(
                     Icons.chevron_left,
@@ -56,7 +60,7 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
                 IconButton(
                   onPressed: () {
                     ref.read(currentYearProvider.notifier).oneYearLater();
-                    ref.read(yearChartProvider.notifier).setBarChartData();
+                    ref.read(yearChartViewModelProvider.notifier).setBarChartData();
                   },
                   icon: Icon(
                     Icons.chevron_right,
@@ -114,40 +118,40 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
                                 groupsSpace: 10,
                                 barGroups: [
                                   BarChartGroupData(x: 1, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[0], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[0], width: 10),
                                   ]),
                                   BarChartGroupData(x: 2, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[1], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[1], width: 10),
                                   ]),
                                   BarChartGroupData(x: 3, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[2], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[2], width: 10),
                                   ]),
                                   BarChartGroupData(x: 4, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[3], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[3], width: 10),
                                   ]),
                                   BarChartGroupData(x: 5, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[4], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[4], width: 10),
                                   ]),
                                   BarChartGroupData(x: 6, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[5] , width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[5] , width: 10),
                                   ]),
                                   BarChartGroupData(x: 7, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[6], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[6], width: 10),
                                   ]),
                                   BarChartGroupData(x: 8, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[7], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[7], width: 10),
                                   ]),
                                   BarChartGroupData(x: 9, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[8], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[8], width: 10),
                                   ]),
                                   BarChartGroupData(x: 10, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[9], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[9], width: 10),
                                   ]),
                                   BarChartGroupData(x: 11, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[10], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[10], width: 10),
                                   ]),
                                   BarChartGroupData(x: 12, barRods: [
-                                    BarChartRodData(y: ref.watch(yearChartProvider)[11], width: 10),
+                                    BarChartRodData(y: ref.watch(yearChartViewModelProvider)[11], width: 10),
                                   ]),
                                 ]),
                             swapAnimationDuration: const Duration(milliseconds: 150),

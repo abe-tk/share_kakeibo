@@ -1,6 +1,6 @@
-/// packages
+// packages
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../model/room_member/room_member.dart';
+import 'package:share_kakeibo/model/room_member/room_member.dart';
 import 'auth_fire.dart';
 
 final fire = FirebaseFirestore.instance.collection('users');

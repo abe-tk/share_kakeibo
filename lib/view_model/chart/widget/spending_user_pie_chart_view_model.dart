@@ -1,28 +1,25 @@
-// firebase
-import 'package:share_kakeibo/firebase/auth_fire.dart';
-import 'package:share_kakeibo/firebase/price_fire.dart';
-import 'package:share_kakeibo/firebase/room_fire.dart';
 // model
 import 'package:share_kakeibo/model/pie_data/pie_data.dart';
 // state
+import 'package:share_kakeibo/state/event/event_state.dart';
 import 'package:share_kakeibo/state/current_month/chart_current_month_state.dart';
 import 'package:share_kakeibo/state/room/room_member_state.dart';
 // utility
+import 'package:share_kakeibo/utility/price_utility.dart';
 import 'package:share_kakeibo/utility/pie_chart_utility.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-final incomeUserPieChartStateProvider =
-StateNotifierProvider<IncomeUserPieChartState, List<PieChartSectionData>>((ref) {
-  return IncomeUserPieChartState();
+final spendingUserPieChartViewModelStateProvider =
+StateNotifierProvider<SpendingUserPieChartViewModelState, List<PieChartSectionData>>((ref) {
+  return SpendingUserPieChartViewModelState();
 });
 
-class IncomeUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
-  IncomeUserPieChartState() : super([]);
+class SpendingUserPieChartViewModelState extends StateNotifier<List<PieChartSectionData>> {
+  SpendingUserPieChartViewModelState() : super([]);
 
-  late String roomCode;
   int totalPrice = 0;
   double nonDataCase = 0.0;
   List<Color> userColor = [];
@@ -36,21 +33,20 @@ class IncomeUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
     chartSourceData = [];
   }
 
-  // 当月の収入（ユーザー）算出
-  Future<void> incomeUserChartCalc() async {
+  // 当月の支出（ユーザー）算出
+  void spendingUserChartCalc() {
 
     setInitialize();
-    roomCode = await setRoomCodeFire(uid);
     setUserColor();
     setChartData();
 
-    // 当月の収入（ユーザー）の合計金額をセット
-    totalPrice = await setCurrentMonthLargeCategoryPriceFire('収入', roomCode, ChartCurrentMonthNotifier().state);
+    // 当月の支出（ユーザー）の合計金額をセット
+    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, ChartCurrentMonthNotifier().state, '支出');
 
     // 各ユーザーの金額を算出
     for (int i = 0; i < chartSourceData.length; i++) {
       int price = 0;
-      price = await setUserPriceFire(roomCode, ChartCurrentMonthNotifier().state, '収入', chartSourceData[i]['category']);
+      price = setUserPriceFire(EventNotifier().state, ChartCurrentMonthNotifier().state, '支出', chartSourceData[i]['category']);
       chartSourceData[i]['price'] = price;
     }
 
@@ -72,13 +68,13 @@ class IncomeUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
   void setChartData() {
     for (int i = 0; i < RoomMemberNotifier().state.length; i++) {
       chartSourceData.add(
-        {
-          'category': RoomMemberNotifier().state[i].userName,
-          'price': 0,
-          'percent': 0.0,
-          'imgURL': RoomMemberNotifier().state[i].imgURL,
-          'color': userColor[i],
-        }
+          {
+            'category': RoomMemberNotifier().state[i].userName,
+            'price': 0,
+            'percent': 0.0,
+            'imgURL': RoomMemberNotifier().state[i].imgURL,
+            'color': userColor[i],
+          }
       );
     }
   }

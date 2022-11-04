@@ -1,8 +1,8 @@
 // constant
 import 'package:share_kakeibo/constant/number_format.dart';
 import 'package:share_kakeibo/constant/colors.dart';
-// state
-import 'package:share_kakeibo/state/price/total_assets_state.dart';
+// view_model
+import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,12 +20,16 @@ class _TotalAssetsState extends ConsumerState<TotalAssets> {
   @override
   void initState() {
     super.initState();
-    ref.read(totalAssetsProvider.notifier).calcTotalAssets();
+    // ref.read(totalAssetsProvider.notifier).calcTotalAssets();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // エラーの出ていた処理
+      ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final total = ref.watch(totalAssetsProvider);
+    final total = ref.watch(totalAssetsViewModelProvider);
     final _isObscure = useState(true);
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 60, right: 16, bottom: 16),

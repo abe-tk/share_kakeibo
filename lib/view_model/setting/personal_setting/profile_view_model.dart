@@ -47,7 +47,6 @@ class ProfileViewModelNotifier extends StateNotifier<Map<String, dynamic>> {
     nameController.text = userName!;
     oldName = userName!;
     roomCode = await setRoomCodeFire(uid);
-    print(roomCode);
   }
 
   Future<void> updateProfile() async {

@@ -1,26 +1,22 @@
-// firebase
-import 'package:share_kakeibo/firebase/auth_fire.dart';
-import 'package:share_kakeibo/firebase/price_fire.dart';
-import 'package:share_kakeibo/firebase/room_fire.dart';
 // model
 import 'package:share_kakeibo/model/pie_data/pie_data.dart';
 // state
+import 'package:share_kakeibo/state/event/event_state.dart';
 import 'package:share_kakeibo/state/current_month/home_current_month_state.dart';
 // utility
+import 'package:share_kakeibo/utility/price_utility.dart';
 import 'package:share_kakeibo/utility/pie_chart_utility.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-final bpPieChartProvider = StateNotifierProvider<BpPieChartNotifier, List<PieChartSectionData>>((ref) {
-  return BpPieChartNotifier();
+final bpPieChartViewModelProvider = StateNotifierProvider<BpPieChartViewModelNotifier, List<PieChartSectionData>>((ref) {
+  return BpPieChartViewModelNotifier();
 });
 
-class BpPieChartNotifier extends StateNotifier<List<PieChartSectionData>> {
-  BpPieChartNotifier() : super([]);
-
-  late String roomCode;
+class BpPieChartViewModelNotifier extends StateNotifier<List<PieChartSectionData>> {
+  BpPieChartViewModelNotifier() : super([]);
 
   int incomePrice = 0;
   int spendingPrice = 0;
@@ -42,17 +38,14 @@ class BpPieChartNotifier extends StateNotifier<List<PieChartSectionData>> {
     pieData = [];
   }
 
-  Future <void> bpPieChartCalc() async {
+  void bpPieChartCalc() {
 
     // イニシャライズ
     setInitialize();
 
-    // ルームコードのセット
-    roomCode = await setRoomCodeFire(uid);
-
     // 当月の収入、支出、合計の金額を算出
-    incomePrice = await setCurrentMonthLargeCategoryPriceFire('収入', roomCode, HomeCurrentMonthNotifier().state);
-    spendingPrice = await setCurrentMonthLargeCategoryPriceFire('支出', roomCode, HomeCurrentMonthNotifier().state);
+    incomePrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, HomeCurrentMonthNotifier().state, '収入');
+    spendingPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, HomeCurrentMonthNotifier().state, '支出');
     calcTotalPrice = incomePrice + spendingPrice;
     totalPrice = incomePrice - spendingPrice;
 

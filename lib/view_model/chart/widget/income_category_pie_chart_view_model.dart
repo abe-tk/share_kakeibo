@@ -1,27 +1,24 @@
-// firebase
-import 'package:fl_chart/fl_chart.dart';
-import 'package:share_kakeibo/firebase/auth_fire.dart';
-import 'package:share_kakeibo/firebase/price_fire.dart';
-import 'package:share_kakeibo/firebase/room_fire.dart';
 // model
 import 'package:share_kakeibo/model/pie_data/pie_data.dart';
 // state
+import 'package:share_kakeibo/state/event/event_state.dart';
 import 'package:share_kakeibo/state/current_month/chart_current_month_state.dart';
 // utility
+import 'package:share_kakeibo/utility/price_utility.dart';
 import 'package:share_kakeibo/utility/pie_chart_utility.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:fl_chart/fl_chart.dart';
 
-final incomeCategoryPieChartStateProvider =
-StateNotifierProvider<IncomeCategoryPieChartState, List<PieChartSectionData>>((ref) {
-  return IncomeCategoryPieChartState();
+final incomeCategoryPieChartViewModelStateProvider =
+StateNotifierProvider<IncomeCategoryPieChartViewModelState, List<PieChartSectionData>>((ref) {
+  return IncomeCategoryPieChartViewModelState();
 });
 
-class IncomeCategoryPieChartState extends StateNotifier<List<PieChartSectionData>> {
-  IncomeCategoryPieChartState() : super([]);
+class IncomeCategoryPieChartViewModelState extends StateNotifier<List<PieChartSectionData>> {
+  IncomeCategoryPieChartViewModelState() : super([]);
 
-  late String roomCode;
   int totalPrice = 0;
   double nonDataCase = 0.0;
   List<PieData> pieData = [];
@@ -39,18 +36,17 @@ class IncomeCategoryPieChartState extends StateNotifier<List<PieChartSectionData
   }
 
   // 当月の収入（カテゴリー）算出
-  Future<void> incomeCategoryChartCalc() async {
+  void incomeCategoryChartCalc() {
 
     setInitialize();
-    roomCode = await setRoomCodeFire(uid);
 
     // 当月の収入（カテゴリー）の合計金額をセット
-    totalPrice = await setCurrentMonthLargeCategoryPriceFire('収入', roomCode, ChartCurrentMonthNotifier().state);
+    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, ChartCurrentMonthNotifier().state, '収入');
 
     // 各カテゴリーの金額を算出
     for (int i = 0; i < chartSourceData.length; i++) {
       int price = 0;
-      price = await setCategoryPriceFire(roomCode, ChartCurrentMonthNotifier().state, '収入', chartSourceData[i]['category']);
+      price = calcCategoryPrice(EventNotifier().state, ChartCurrentMonthNotifier().state, '収入', chartSourceData[i]['category']);
       chartSourceData[i]['price'] = price;
     }
 

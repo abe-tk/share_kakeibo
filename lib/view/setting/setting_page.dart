@@ -86,6 +86,39 @@ class SettingPage extends HookConsumerWidget {
               },
             ),
             const Divider(),
+            /// 課金機能で設定できるようにする予定
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   margin: const EdgeInsets.all(16),
+            //   child: Text(
+            //     '家計簿の設定',
+            //     style: TextStyle(
+            //       color: detailTextColor,
+            //     ),
+            //   ),
+            // ),
+            // Divider(
+            //   height: 0,
+            //   thickness: 1,
+            //   indent: 16,
+            //   endIndent: 16,
+            //   color: dividerColor,
+            // ),
+            // ListTile(
+            //   title: const Text('カテゴリー'),
+            //   trailing: const Icon(Icons.chevron_right),
+            //   onTap: () {
+            //     // Navigator.pushNamed(context, '/roomInfoPage');
+            //   },
+            // ),
+            // ListTile(
+            //   title: const Text('支払い元'),
+            //   trailing: const Icon(Icons.chevron_right),
+            //   onTap: () {
+            //     // Navigator.pushNamed(context, '/roomInfoPage');
+            //   },
+            // ),
+            // const Divider(),
           ],
         ),
       ),

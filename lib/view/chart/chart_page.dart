@@ -3,16 +3,17 @@ import 'package:share_kakeibo/components/drawer_menu.dart';
 // constant
 import 'package:share_kakeibo/constant/colors.dart';
 // state
-import 'package:share_kakeibo/state/pie_chart/income_category_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_category_pie_chart_state.dart';
 import 'package:share_kakeibo/state/current_month/chart_current_month_state.dart';
-import 'package:share_kakeibo/state/pie_chart/income_user_pie_chart_state.dart';
-import 'package:share_kakeibo/state/pie_chart/spending_user_pie_chart_state.dart';
 // view
 import 'package:share_kakeibo/view/chart/widget/income_category_pie_chart.dart';
 import 'package:share_kakeibo/view/chart/widget/income_user_pie_chart.dart';
 import 'package:share_kakeibo/view/chart/widget/spending_category_pie_chart.dart';
 import 'package:share_kakeibo/view/chart/widget/spending_user_pie_chart.dart';
+// view_model
+import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -186,10 +187,10 @@ class _ChartPageNowMonthState extends ConsumerState<ChartPageNowMonth> {
           ),
           onPressed: () async {
             await currentMonthNotifier.oneMonthAgo();
-            ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc();
-            ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc();
-            ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
-            ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc();
+            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
+            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
+            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
           },
         ),
         TextButton(
@@ -202,10 +203,10 @@ class _ChartPageNowMonthState extends ConsumerState<ChartPageNowMonth> {
           ),
           onPressed: () async {
             await currentMonthNotifier.selectMonth(context);
-            ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc();
-            ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc();
-            ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
-            ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc();
+            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
+            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
+            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
           },
         ),
         IconButton(
@@ -215,10 +216,10 @@ class _ChartPageNowMonthState extends ConsumerState<ChartPageNowMonth> {
           ),
           onPressed: () async {
             await currentMonthNotifier.oneMonthLater();
-            ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc();
-            ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc();
-            ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc();
-            ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc();
+            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
+            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
+            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
+            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
           },
         ),
       ],
