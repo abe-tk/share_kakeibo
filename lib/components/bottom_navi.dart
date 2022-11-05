@@ -1,5 +1,6 @@
 // constant
 import 'package:share_kakeibo/constant/colors.dart';
+import 'package:share_kakeibo/state/memo/memo_state.dart';
 // view
 import 'package:share_kakeibo/view/home/home_page.dart';
 import 'package:share_kakeibo/view/calendar/calendar_page.dart';
@@ -184,7 +185,7 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
               children: [
                 const Icon(Icons.featured_play_list_outlined),
                 Visibility(
-                  visible: (ref.watch(memoViewModelProvider).isNotEmpty) ? true : false,
+                  visible: (ref.watch(memoProvider).isNotEmpty) ? true : false,
                   child: Positioned(
                     right: 0,
                     child: AnimatedContainer(
@@ -197,7 +198,7 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
                       height: 16.0,
                       child: Center(
                         child: Text(
-                          '${ref.watch(memoViewModelProvider).length}',
+                          '${ref.watch(memoProvider).length}',
                           style: const TextStyle().copyWith(
                             color: batchTextColor,
                             fontSize: 12.0,

@@ -41,3 +41,38 @@ Future<void> updateEventFire(code, Event event, date, price, largeCategory,
     'paymentUser': paymentUser,
   });
 }
+
+// アプリ起動直後、Home画面の収支円グラフを正常に表示するために使用
+Future<int> firstCalcLargeCategoryPrice(String code, DateTime currentMonth, String largeCategory) async {
+  int calcResult = 0;
+  List<int> prices = [];
+  final snapshot = await FirebaseFirestore.instance.collection('users').doc(code).collection('events')
+      .where('registerDate', isEqualTo: currentMonth)
+      .where('largeCategory', isEqualTo: largeCategory)
+      .get();
+  for (final document in snapshot.docs) {
+    final event = document.data();
+    final price = event['price'];
+    prices.add(int.parse(price));
+    int calcResults = prices.reduce((a, b) => a + b);
+    calcResult = calcResults;
+  }
+  return calcResult;
+}
+
+// アプリ起動直後、Home画面の累計金額を正常に表示するために使用
+Future<int> firstCalcLageCategoryPrice(String code, String largeCategory) async {
+  int calcResult = 0;
+  List<int> prices = [];
+  final snapshot = await FirebaseFirestore.instance.collection('users').doc(code).collection('events')
+      .where('largeCategory', isEqualTo: largeCategory)
+      .get();
+  for (final document in snapshot.docs) {
+    final event = document.data();
+    final price = event['price'];
+    prices.add(int.parse(price));
+    int calcResults = prices.reduce((a, b) => a + b);
+    calcResult = calcResults;
+  }
+  return calcResult;
+}

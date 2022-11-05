@@ -136,8 +136,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       indicator.showProgressDialog(context);
                       try {
                         await loginViewModelNotifier.login();
-                        Navigator.popUntil(
-                            context, (Route<dynamic> route) => route.isFirst);
+                        Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
                         loginViewModelNotifier.clearTextController();
                         // uidをログインユーザのものに変更
                         changeUid();

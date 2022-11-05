@@ -29,9 +29,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void initState() {
     super.initState();
     ref.read(profileViewModelProvider.notifier).fetchProfile();
-    // Future(() async {
-    //   await ref.read(profileViewModelProvider.notifier).fetchProfile();
-    // });
   }
 
   @override

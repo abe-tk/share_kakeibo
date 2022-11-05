@@ -15,7 +15,8 @@ import 'package:share_kakeibo/state/memo/memo_state.dart';
 // view
 import 'package:share_kakeibo/view/login/login_page.dart';
 // view_model
-import 'package:share_kakeibo/view_model/memo/memo_view_model.dart';
+import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
+import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -56,12 +57,15 @@ class MyApp extends HookConsumerWidget {
           }
           if (snapshot.hasData && loginState == true) {
             // User が null ではない、つまりサインイン済みのホーム画面へ
+            // 各Stateを更新
             ref.read(roomNameProvider.notifier).fetchRoomName();
             ref.read(roomMemberProvider.notifier).fetchRoomMember();
             ref.read(userProvider.notifier).fetchUser();
-            ref.read(memoProvider.notifier).setMemo();
-            ref.read(memoViewModelProvider.notifier).fetchMemo();
             ref.read(eventProvider.notifier).setEvent();
+            ref.read(memoProvider.notifier).setMemo();
+            // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
+            ref.read(bpPieChartViewModelProvider.notifier).bpPieChartFirstCalc();
+            ref.read(totalAssetsViewModelProvider.notifier).firstCalcTotalAssets();
             return const BottomNavi();
           }
           // User が null である、つまり未サインインのサインイン画面へ

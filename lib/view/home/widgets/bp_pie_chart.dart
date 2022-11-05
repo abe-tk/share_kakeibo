@@ -21,20 +21,11 @@ class BpPieChart extends StatefulHookConsumerWidget {
 class _BpPieChartState extends ConsumerState<BpPieChart> {
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // エラーの出ていた処理
-      ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final bpPieChartNotifier = ref.watch(bpPieChartViewModelProvider.notifier);
     final bpPieChartState = ref.watch(bpPieChartViewModelProvider);
-    final homePieChartState = ref.watch(homeCurrentMonthProvider);
-    final homePieChartNotifier = ref.watch(homeCurrentMonthProvider.notifier);
+    final homeCurrentMonthState = ref.watch(homeCurrentMonthProvider);
+    final homeCurrentMonthNotifier = ref.watch(homeCurrentMonthProvider.notifier);
     return Column(
       children: [
         // 対象月の表示
@@ -43,7 +34,7 @@ class _BpPieChartState extends ConsumerState<BpPieChart> {
           children: [
             IconButton(
               onPressed: () async {
-                await homePieChartNotifier.oneMonthAgo();
+                await homeCurrentMonthNotifier.oneMonthAgo();
                 bpPieChartNotifier.bpPieChartCalc();
               },
               icon: Icon(
@@ -53,19 +44,19 @@ class _BpPieChartState extends ConsumerState<BpPieChart> {
             ),
             TextButton(
               child: Text(
-                '${DateFormat.yMMM('ja').format(homePieChartState)}の家計簿',
+                '${DateFormat.yMMM('ja').format(homeCurrentMonthState)}の家計簿',
                 style: TextStyle(
                   color: normalTextColor,
                 ),
               ),
               onPressed: () async {
-                await homePieChartNotifier.selectMonth(context);
+                await homeCurrentMonthNotifier.selectMonth(context);
                 bpPieChartNotifier.bpPieChartCalc();
               },
             ),
             IconButton(
               onPressed: () async {
-                await homePieChartNotifier.oneMonthLater();
+                await homeCurrentMonthNotifier.oneMonthLater();
                 bpPieChartNotifier.bpPieChartCalc();
               },
               icon: Icon(

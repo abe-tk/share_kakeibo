@@ -35,7 +35,7 @@ class SpendingCategoryPieChartViewModelState extends StateNotifier<List<PieChart
     {'category': 'レジャー費', 'price': 0, 'percent': 0.0, 'icon': Icons.music_note, 'color': Color(0xFF3cb371)},
     {'category': '教育費', 'price': 0, 'percent': 0.0, 'icon': Icons.school, 'color': Color(0xFF9370db)},
     {'category': '医療費', 'price': 0, 'percent': 0.0, 'icon': Icons.local_hospital_outlined, 'color': Color(0xFFff7f50)},
-    {'category': 'ファッション費', 'price': 0, 'percent': 0.0, 'icon': Icons.vaccines, 'color': Color(0xFFffc0cb)},
+    {'category': 'ファッション費', 'price': 0, 'percent': 0.0, 'icon': Icons.checkroom, 'color': Color(0xFFffc0cb)},
     {'category': '美容費', 'price': 0, 'percent': 0.0, 'icon': Icons.spa, 'color': Color(0xFFee82ee)},
     {'category': '未分類', 'price': 0, 'percent': 0.0, 'icon': Icons.question_mark, 'color': Colors.grey},
   ];

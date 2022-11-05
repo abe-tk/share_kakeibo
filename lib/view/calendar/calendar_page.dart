@@ -231,7 +231,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                                             : (event.smallCategory == 'レジャー費') ? Icon(Icons.music_note, color: Color(0xFF3cb371), size: 30)
                                             : (event.smallCategory == '教育費') ? Icon(Icons.school, color: Color(0xFF9370db), size: 30)
                                             : (event.smallCategory == '医療費') ? Icon(Icons.local_hospital_outlined, color: Color(0xFFff7f50), size: 30)
-                                            : (event.smallCategory == 'ファッション費') ? Icon(Icons.vaccines, color: Color(0xFFffc0cb), size: 30)
+                                            : (event.smallCategory == 'ファッション費') ? Icon(Icons.checkroom, color: Color(0xFFffc0cb), size: 30)
                                             : Icon(Icons.spa, color: Color(0xFFee82ee), size: 30), // 美容費
                                         const SizedBox(width: 16),
                                         SizedBox(

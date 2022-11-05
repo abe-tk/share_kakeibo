@@ -10,6 +10,7 @@ import 'package:share_kakeibo/state/event/event_state.dart';
 import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
 import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
 import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
+import 'package:share_kakeibo/view_model/calendar/detail_event_view_model.dart';
 import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
 import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
 import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
@@ -74,6 +75,7 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                             ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
                             // カレンダーのイベントを更新
                             ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
+                            ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
                             // 統計の円グラフを更新
                             ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
                             ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();

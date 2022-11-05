@@ -17,15 +17,15 @@ class TotalAssets extends StatefulHookConsumerWidget {
 
 class _TotalAssetsState extends ConsumerState<TotalAssets> {
 
-  @override
-  void initState() {
-    super.initState();
-    // ref.read(totalAssetsProvider.notifier).calcTotalAssets();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // エラーの出ていた処理
-      ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // ref.read(totalAssetsProvider.notifier).calcTotalAssets();
+  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
+  //     // エラーの出ていた処理
+  //     ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
