@@ -4,15 +4,10 @@ import 'package:share_kakeibo/constant/colors.dart';
 import 'package:share_kakeibo/state/room/room_member_state.dart';
 import 'package:share_kakeibo/state/room/room_name_state.dart';
 import 'package:share_kakeibo/state/event/event_state.dart';
+import 'package:share_kakeibo/state/memo/memo_state.dart';
 // view_model
 import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
 import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
-import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/memo/memo_view_model.dart';
 import 'package:share_kakeibo/view_model/setting/room_setting/participate_room_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
@@ -43,26 +38,14 @@ class _ParticipateRoomPageState extends ConsumerState<ParticipateRoomPage> {
             onPressed: () async {
               try {
                 await participationRoomViewModelNotifier.joinRoom();
-
-                // 収支円グラフの再計算
-                ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
-                // 総資産額の再計算
-                ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
-                // カレンダーのイベントを更新
-                ref.read(eventProvider.notifier).setEvent();
-                // ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
-                // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-                ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
-                ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
-                ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
-                // メモの更新
-                ref.read(memoViewModelProvider.notifier).fetchMemo();
-                // roomNameの更新
+                // 各Stateを更新
                 ref.read(roomNameProvider.notifier).fetchRoomName();
-                // roomMemberの更新
                 ref.read(roomMemberProvider.notifier).fetchRoomMember();
-
+                ref.read(eventProvider.notifier).setEvent();
+                ref.read(memoProvider.notifier).setMemo();
+                // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
+                ref.read(bpPieChartViewModelProvider.notifier).bpPieChartFirstCalc();
+                ref.read(totalAssetsViewModelProvider.notifier).firstCalcTotalAssets();
                 Navigator.popUntil(context,
                         (Route<dynamic> route) => route.isFirst);
 

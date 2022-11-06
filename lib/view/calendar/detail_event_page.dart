@@ -36,7 +36,7 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('明細の一覧'),
+        title: const Text('過去の明細'),
         centerTitle: true,
         elevation: 0,
         backgroundColor: appBarBackGroundColor,

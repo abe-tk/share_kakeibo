@@ -36,6 +36,29 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
         centerTitle: true,
         backgroundColor: appBarBackGroundColor,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return AlertDialog(
+                    title: const Text('支出額の単位について'),
+                    content: const Text('1K = 1,000 円\n1M = 1,000,000 円'),
+                    actions: [
+                      TextButton(
+                        child: const Text("OK"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.contact_support_outlined),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -171,19 +194,6 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
                 ),
               ),
             ),
-            // Container(
-            //   padding: EdgeInsets.only(right: 16.0),
-            //   alignment: Alignment.centerRight,
-            //   width: MediaQuery.of(context).size.width,
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.end,
-            //     children: [
-            //       // Text('※注釈'),
-            //       Text('1K = 1,000'),
-            //       Text('1m = 1,000,000'),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
