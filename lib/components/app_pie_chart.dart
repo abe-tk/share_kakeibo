@@ -1,35 +1,28 @@
-// constant
-import 'package:share_kakeibo/constant/number_format.dart';
-import 'package:share_kakeibo/constant/colors.dart';
-// view_model
-import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:share_kakeibo/impoter.dart';
 
-class IncomeCategoryPieChart extends StatefulHookConsumerWidget {
-  const IncomeCategoryPieChart({Key? key}) : super(key: key);
+class AppPieChart extends ConsumerWidget {
+  final String largeCategory;
+  final bool category;
+  final List<PieChartSectionData> pieChartSectionData;
+  final int totalPrice;
+  final int length;
+  final List<Map<String, dynamic>> chartSourceData;
+
+  const AppPieChart({
+    Key? key,
+    required this.largeCategory,
+    required this.category,
+    required this.pieChartSectionData,
+    required this.totalPrice,
+    required this.length,
+    required this.chartSourceData,
+  }) : super(key: key);
 
   @override
-  _IncomeCategoryPieChartState createState() => _IncomeCategoryPieChartState();
-}
-
-class _IncomeCategoryPieChartState extends ConsumerState<IncomeCategoryPieChart> {
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // エラーの出ていた処理
-      ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final incomeCategoryPieChartState = ref.watch(incomeCategoryPieChartViewModelStateProvider);
-    final incomeCategoryPieChartNotifier = ref.watch(incomeCategoryPieChartViewModelStateProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Container(
@@ -54,7 +47,7 @@ class _IncomeCategoryPieChartState extends ConsumerState<IncomeCategoryPieChart>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '収入',
+                    largeCategory,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -62,7 +55,7 @@ class _IncomeCategoryPieChartState extends ConsumerState<IncomeCategoryPieChart>
                     ),
                   ),
                   Text(
-                    '${formatter.format(incomeCategoryPieChartNotifier.totalPrice)}円',
+                    '${formatter.format(totalPrice)}円',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -80,7 +73,7 @@ class _IncomeCategoryPieChartState extends ConsumerState<IncomeCategoryPieChart>
                         borderData: FlBorderData(show: false),
                         sectionsSpace: 1,
                         centerSpaceRadius: 50,
-                        sections: incomeCategoryPieChartState,
+                        sections: pieChartSectionData,
                       ),
                     ),
                   ),
@@ -92,15 +85,15 @@ class _IncomeCategoryPieChartState extends ConsumerState<IncomeCategoryPieChart>
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: incomeCategoryPieChartNotifier.chartSourceData.length + 1,
+            itemCount: length + 1,
             itemBuilder: (context, index) {
-              if (index == incomeCategoryPieChartNotifier.chartSourceData.length) {
+              if (index == length) {
                 return Container(
                   alignment: Alignment.centerRight,
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.only(bottom: 30, right: 8),
                   child: Text(
-                    '合計 ${formatter.format(incomeCategoryPieChartNotifier.totalPrice)} 円',
+                    '合計 ${formatter.format(totalPrice)} 円',
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -109,7 +102,7 @@ class _IncomeCategoryPieChartState extends ConsumerState<IncomeCategoryPieChart>
                 );
               }
               return Visibility(
-                visible: incomeCategoryPieChartNotifier.chartSourceData[index]['price'] != 0 ? true : false,
+                visible: chartSourceData[index]['price'] != 0 ? true : false,
                 child: Column(
                   children: [
                     Padding(
@@ -118,20 +111,27 @@ class _IncomeCategoryPieChartState extends ConsumerState<IncomeCategoryPieChart>
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                incomeCategoryPieChartNotifier.chartSourceData[index]['icon'],
-                                color: incomeCategoryPieChartNotifier.chartSourceData[index]['color'],
+                              category == true
+                              ? Icon(
+                                chartSourceData[index]['icon'],
+                                color: chartSourceData[index]['color'],
+                              )
+                              : CircleAvatar(
+                                radius: 12,
+                                backgroundImage: NetworkImage(
+                                  chartSourceData[index]['imgURL'],
+                                ),
                               ),
                               const SizedBox(width: 10),
-                              Text(incomeCategoryPieChartNotifier.chartSourceData[index]['category']),
-                              Text(' / ${double.parse((incomeCategoryPieChartNotifier.chartSourceData[index]['percent']).toString()).toStringAsFixed(1)}%'),
+                              Text(chartSourceData[index]['category']),
+                              Text(' / ${double.parse((chartSourceData[index]['percent']).toString()).toStringAsFixed(1)}%'),
                             ],
                           ),
                           Container(
                             alignment: Alignment.centerRight,
                             width: MediaQuery.of(context).size.width,
                             child: Text(
-                              '${formatter.format(incomeCategoryPieChartNotifier.chartSourceData[index]['price'])} 円',
+                              '${formatter.format(chartSourceData[index]['price'])} 円',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),

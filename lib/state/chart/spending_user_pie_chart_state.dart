@@ -1,8 +1,7 @@
 // model
-import 'package:share_kakeibo/model/pie_data/pie_data.dart';
+import 'package:share_kakeibo/model/pie_data.dart';
 // state
 import 'package:share_kakeibo/state/event/event_state.dart';
-import 'package:share_kakeibo/state/current_month/chart_current_month_state.dart';
 import 'package:share_kakeibo/state/room/room_member_state.dart';
 // utility
 import 'package:share_kakeibo/utility/price_utility.dart';
@@ -12,13 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-final spendingUserPieChartViewModelStateProvider =
-StateNotifierProvider<SpendingUserPieChartViewModelState, List<PieChartSectionData>>((ref) {
-  return SpendingUserPieChartViewModelState();
+final spendingUserPieChartStateProvider =
+StateNotifierProvider<SpendingUserPieChartState, List<PieChartSectionData>>((ref) {
+  return SpendingUserPieChartState();
 });
 
-class SpendingUserPieChartViewModelState extends StateNotifier<List<PieChartSectionData>> {
-  SpendingUserPieChartViewModelState() : super([]);
+class SpendingUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
+  SpendingUserPieChartState() : super([]);
 
   int totalPrice = 0;
   double nonDataCase = 0.0;
@@ -34,19 +33,19 @@ class SpendingUserPieChartViewModelState extends StateNotifier<List<PieChartSect
   }
 
   // 当月の支出（ユーザー）算出
-  void spendingUserChartCalc() {
+  void spendingUserChartCalc(DateTime date) {
 
     setInitialize();
     setUserColor();
     setChartData();
 
     // 当月の支出（ユーザー）の合計金額をセット
-    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, ChartCurrentMonthNotifier().state, '支出');
+    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '支出');
 
     // 各ユーザーの金額を算出
     for (int i = 0; i < chartSourceData.length; i++) {
       int price = 0;
-      price = setUserPriceFire(EventNotifier().state, ChartCurrentMonthNotifier().state, '支出', chartSourceData[i]['category']);
+      price = setUserPriceFire(EventNotifier().state, date, '支出', chartSourceData[i]['category']);
       chartSourceData[i]['price'] = price;
     }
 

@@ -1,23 +1,25 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// state
-import 'package:share_kakeibo/state/user/user_state.dart';
-// view_model
-import 'package:share_kakeibo/view_model/setting/personal_setting/email_view_model.dart';
-import 'package:share_kakeibo/view_model/setting/personal_setting/widgets/password_dialog_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:share_kakeibo/impoter.dart';
 
-class ChangeEmailDialog extends HookConsumerWidget {
-  const ChangeEmailDialog({Key? key}) : super(key: key);
+class ReSingInDialog extends HookConsumerWidget {
+  final Function function;
+  final Function navigator;
+  final String text;
+
+  const ReSingInDialog({
+    Key? key,
+    required this.function,
+    required this.navigator,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final emailViewModelNotifier = ref.watch(emailViewModelProvider.notifier);
-    final passwordDialogViewModelNotifier = ref.watch(passwordDialogViewModelProvider.notifier);
     final _isObscure = useState(true);
+    final password = useState('');
+    final passwordController = useState(TextEditingController());
     return SimpleDialog(
       title: const Text("パスワードを入力"),
       children: [
@@ -25,7 +27,7 @@ class ChangeEmailDialog extends HookConsumerWidget {
           onPressed: () => Navigator.pop(context),
           child: ListTile(
             title: TextFormField(
-              controller: passwordDialogViewModelNotifier.passwordController,
+              controller: passwordController.value,
               obscureText: _isObscure.value,
               decoration: InputDecoration(
                 hintText: 'パスワード',
@@ -44,11 +46,10 @@ class ChangeEmailDialog extends HookConsumerWidget {
                 ),
               ),
               onChanged: (text) {
-                passwordDialogViewModelNotifier.setPassword(text);
+                password.value = text;
               },
               maxLength: 20,
             ),
-            // leading: const Icon(Icons.note),
           ),
         ),
         Row(
@@ -62,16 +63,15 @@ class ChangeEmailDialog extends HookConsumerWidget {
             SimpleDialogOption(
               onPressed: () async {
                 try {
-                  passwordDialogViewModelNotifier.reSignIn();
-                  await emailViewModelNotifier.updateEmail();
-                  await ref.read(userProvider.notifier).fetchUser();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
+                  passwordValidation(password.value);
+                  await signInAuth(ref.watch(userProvider)['email'], password.value);
+                  await function();
+                  navigator();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: positiveSnackBarColor,
                       behavior: SnackBarBehavior.floating,
-                      content: const Text('メールアドレスを変更しました'),
+                      content: Text(text),
                     ),
                   );
                 } catch (e) {

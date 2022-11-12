@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final fire = FirebaseFirestore.instance.collection('users');
+// final fire = FirebaseFirestore.instance.collection('users');
 
 // メモの一覧を取得
 Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getMemoFire(String roomCode) async {
-  final snapshot = await fire.doc(roomCode).collection('memo').get();
+  final snapshot = await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('memo').get();
   return snapshot.docs;
 }
 
 // メモの追加
 Future<void> addMemoFire(String roomCode, String memo) async {
-  await fire.doc(roomCode).collection('memo').add({
+  await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('memo').add({
     'memo': memo,
     'registerDate': DateTime.now(),
   });
@@ -18,5 +18,5 @@ Future<void> addMemoFire(String roomCode, String memo) async {
 
 // メモの削除
 Future<void> deleteMemoFire(String roomCode, String id) async {
-  await fire.doc(roomCode).collection('memo').doc(id).delete();
+  await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('memo').doc(id).delete();
 }

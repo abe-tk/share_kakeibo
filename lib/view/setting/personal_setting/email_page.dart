@@ -1,14 +1,6 @@
-// constant
-import 'package:share_kakeibo/constant/validation.dart';
-import 'package:share_kakeibo/constant/colors.dart';
-// view
-import 'package:share_kakeibo/view/setting/personal_setting/widgets/change_email_dialog.dart';
-// view_model
-import 'package:share_kakeibo/view_model/setting/personal_setting/email_view_model.dart';
-import 'package:share_kakeibo/view_model/setting/personal_setting/widgets/password_dialog_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class EmailPage extends StatefulHookConsumerWidget {
   const EmailPage({Key? key}) : super(key: key);
@@ -30,7 +22,6 @@ class _EmailPageState extends ConsumerState<EmailPage> {
   Widget build(BuildContext context) {
     final emailViewModelState = ref.watch(emailViewModelProvider);
     final emailViewModelNotifier = ref.watch(emailViewModelProvider.notifier);
-    final passwordDialogViewModelNotifier = ref.watch(passwordDialogViewModelProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -47,10 +38,19 @@ class _EmailPageState extends ConsumerState<EmailPage> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const ChangeEmailDialog();
+                    return ReSingInDialog(
+                      function: () async {
+                        await emailViewModelNotifier.updateEmail();
+                        await ref.read(userProvider.notifier).fetchUser();
+                      },
+                      navigator: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      text: 'メールアドレスを変更しました',
+                    );
                   },
                 );
-                passwordDialogViewModelNotifier.clearPassword();
               } catch (e) {
                 final snackBar = SnackBar(
                   backgroundColor: negativeSnackBarColor,

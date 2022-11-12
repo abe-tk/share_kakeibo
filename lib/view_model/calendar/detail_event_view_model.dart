@@ -1,7 +1,7 @@
 // state
 import 'package:share_kakeibo/state/event/event_state.dart';
 // model
-import 'package:share_kakeibo/model/event/event.dart';
+import 'package:share_kakeibo/model/event.dart';
 // packages
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

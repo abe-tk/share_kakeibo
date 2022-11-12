@@ -6,15 +6,17 @@ import 'package:share_kakeibo/state/room/room_member_state.dart';
 import 'package:share_kakeibo/state/event/event_state.dart';
 // view_model
 import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
+import 'package:share_kakeibo/state/chart/income_category_pie_chart_state.dart';
+import 'package:share_kakeibo/state/chart/spending_category_pie_chart_state.dart';
+import 'package:share_kakeibo/state/chart/income_user_pie_chart_state.dart';
+import 'package:share_kakeibo/state/chart/spending_user_pie_chart_state.dart';
 import 'package:share_kakeibo/view_model/setting/personal_setting/profile_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+
 
 class ProfilePage extends StatefulHookConsumerWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -50,10 +52,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               try {
                 await profileViewModelNotifier.updateProfile();
                 // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-                ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
-                ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
-                ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
+                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
                 // カレンダーのイベントを更新
                 ref.read(eventProvider.notifier).setEvent();
                 // ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();

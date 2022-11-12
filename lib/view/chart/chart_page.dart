@@ -1,23 +1,7 @@
-// components
-import 'package:share_kakeibo/components/drawer_menu.dart';
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// state
-import 'package:share_kakeibo/state/current_month/chart_current_month_state.dart';
-// view
-import 'package:share_kakeibo/view/chart/widget/income_category_pie_chart.dart';
-import 'package:share_kakeibo/view/chart/widget/income_user_pie_chart.dart';
-import 'package:share_kakeibo/view/chart/widget/spending_category_pie_chart.dart';
-import 'package:share_kakeibo/view/chart/widget/spending_user_pie_chart.dart';
-// view_model
-import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:share_kakeibo/impoter.dart';
 import 'package:intl/intl.dart';
 
 class ChartPage extends StatefulHookConsumerWidget {
@@ -29,26 +13,82 @@ class ChartPage extends StatefulHookConsumerWidget {
 
 class _ChartPageState extends ConsumerState<ChartPage> {
 
+  void reCalc(DateTime date) {
+    ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(date);
+    ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(date);
+    ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(date);
+    ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(date);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // エラーの出ていた処理
+      ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final month = useState(DateTime(DateTime.now().year, DateTime.now().month));
     final isSelected = useState(<bool>[true, false]);
     final isDisplay = useState(true);
+    final incomeCategoryPieChartState = ref.watch(incomeCategoryPieChartStateProvider);
+    final incomeCategoryPieChartNotifier = ref.watch(incomeCategoryPieChartStateProvider.notifier);
+    final spendingCategoryPieChartState = ref.watch(spendingCategoryPieChartStateProvider);
+    final spendingCategoryPieChartNotifier = ref.watch(spendingCategoryPieChartStateProvider.notifier);
+    final incomeUserPieChartState = ref.watch(incomeUserPieChartStateProvider);
+    final incomeUserPieChartNotifier = ref.watch(incomeUserPieChartStateProvider.notifier);
+    final spendingUserPieChartState = ref.watch(spendingUserPieChartStateProvider);
+    final spendingUserPieChartNotifier = ref.watch(spendingUserPieChartStateProvider.notifier);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const ChartPageNowMonth(),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/yearChartPage');
-              },
-              icon: const Icon(Icons.analytics_outlined),
-            ),
-          ],
           centerTitle: true,
           backgroundColor: appBarBackGroundColor,
           elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppIconButton(
+                icon: Icons.chevron_left,
+                color: detailIconColor,
+                function: () {
+                  month.value = DateTime(month.value.year, month.value.month - 1);
+                  reCalc(month.value);
+                },
+              ),
+              AppTextButton(
+                text: DateFormat.yMMM('ja').format(month.value),
+                function: () async {
+                  month.value = await selectMonth(context, month.value);
+                  reCalc(month.value);
+                },
+              ),
+              AppIconButton(
+                icon: Icons.chevron_right,
+                color: detailIconColor,
+                function: () {
+                  month.value = DateTime(month.value.year, month.value.month + 1);
+                  reCalc(month.value);
+                },
+              ),
+            ],
+          ),
+          actions: [
+            AppIconButton(
+              icon: Icons.analytics_outlined,
+              color: normalTextColor,
+              function: () {
+                Navigator.pushNamed(context, '/yearChartPage');
+              },
+            ),
+          ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(50.0),
             child: Row(
@@ -62,23 +102,23 @@ class _ChartPageState extends ConsumerState<ChartPage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: TabBar(
-                          indicatorColor: tabBarIndicatorColor,
+                            indicatorColor: tabBarIndicatorColor,
                             tabs: const [
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              '収入',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              '支出',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ]),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  '収入',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  '支出',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ]),
                       ),
                     ],
                   ),
@@ -93,8 +133,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
                     ),
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                     child: ToggleButtons(
                       fillColor: toggleFillColor,
                       borderWidth: 2,
@@ -148,81 +187,43 @@ class _ChartPageState extends ConsumerState<ChartPage> {
           child: TabBarView(
             children: [
               isDisplay.value == true
-                  ? const IncomeCategoryPieChart()
-                  : const IncomeUserPieChart(),
+                  ? AppPieChart(
+                largeCategory: '収入',
+                category: true,
+                pieChartSectionData: incomeCategoryPieChartState,
+                totalPrice: incomeCategoryPieChartNotifier.totalPrice,
+                length: incomeCategoryPieChartNotifier.chartSourceData.length,
+                chartSourceData: incomeCategoryPieChartNotifier.chartSourceData,
+              )
+                  : AppPieChart(
+                largeCategory: '収入',
+                category: false,
+                pieChartSectionData: incomeUserPieChartState,
+                totalPrice: incomeUserPieChartNotifier.totalPrice,
+                length: incomeUserPieChartNotifier.chartSourceData.length,
+                chartSourceData: incomeUserPieChartNotifier.chartSourceData,
+              ),
               isDisplay.value == true
-                  ? const SpendingCategoryPieChart()
-                  : const SpendingUserPieChart(),
-              // IncomeChart(),
-              // SpendingChart(),
+                  ? AppPieChart(
+                largeCategory: '支出',
+                category: true,
+                pieChartSectionData: spendingCategoryPieChartState,
+                totalPrice: spendingCategoryPieChartNotifier.totalPrice,
+                length: spendingCategoryPieChartNotifier.chartSourceData.length,
+                chartSourceData: spendingCategoryPieChartNotifier.chartSourceData,
+              )
+                  : AppPieChart(
+                largeCategory: '支出',
+                category: false,
+                pieChartSectionData: spendingUserPieChartState,
+                totalPrice: spendingUserPieChartNotifier.totalPrice,
+                length: spendingUserPieChartNotifier.chartSourceData.length,
+                chartSourceData: spendingUserPieChartNotifier.chartSourceData,
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-// 対象月の変更
-class ChartPageNowMonth extends StatefulHookConsumerWidget {
-  const ChartPageNowMonth({Key? key}) : super(key: key);
-
-  @override
-  _ChartPageNowMonthState createState() => _ChartPageNowMonthState();
-}
-
-class _ChartPageNowMonthState extends ConsumerState<ChartPageNowMonth> {
-
-  @override
-  Widget build(BuildContext context) {
-    final currentMonthNotifier = ref.watch(chartCurrentMonthProvider.notifier);
-    final currentMonthState = ref.watch(chartCurrentMonthProvider);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          icon: Icon(
-            Icons.chevron_left,
-            color: detailIconColor,
-          ),
-          onPressed: () async {
-            await currentMonthNotifier.oneMonthAgo();
-            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
-            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
-            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
-          },
-        ),
-        TextButton(
-          child: Text(
-            DateFormat.yMMM('ja').format(currentMonthState),
-            style: TextStyle(
-              fontSize: 20,
-              color: normalTextColor,
-            ),
-          ),
-          onPressed: () async {
-            await currentMonthNotifier.selectMonth(context);
-            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
-            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
-            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.chevron_right,
-            color: detailIconColor,
-          ),
-          onPressed: () async {
-            await currentMonthNotifier.oneMonthLater();
-            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
-            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
-            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
-          },
-        ),
-      ],
     );
   }
 }

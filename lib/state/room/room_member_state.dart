@@ -4,7 +4,7 @@ import 'package:share_kakeibo/firebase/auth_fire.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/firebase/room_fire.dart';
 
-import '../../model/room_member/room_member.dart';
+import '../../model/room_member.dart';
 
 List<RoomMember> roomMemberList = [];
 

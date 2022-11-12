@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-final fire = FirebaseFirestore.instance.collection('users');
+// final fire = FirebaseFirestore.instance.collection('users');
 
 // アカウントへログイン
 Future<void> loginFire(email, password) async {
@@ -15,7 +15,7 @@ Future<void> registerFire(email, password, userName) async {
   final user = userCredential.user;
   final uid = user?.uid;
   // userの登録
-  final userDoc = fire.doc(uid);
+  final userDoc = FirebaseFirestore.instance.collection('users').doc(uid);
   await userDoc.set({
     'userName': userName,
     'email': email,
@@ -24,7 +24,7 @@ Future<void> registerFire(email, password, userName) async {
     'roomName': '$userNameのルーム',
   });
   // roomの登録
-  final roomDoc = fire.doc(uid).collection('room').doc(uid);
+  final roomDoc = FirebaseFirestore.instance.collection('users').doc(uid).collection('room').doc(uid);
   await roomDoc.set({
     'userName': userName,
     'imgURL': 'https://firebasestorage.googleapis.com/v0/b/sharekakeibo-59b13.appspot.com/o/users%2Fuser_icon.png?alt=media&token=a3bd368c-58d4-4945-bf38-f8bc57fc4144',

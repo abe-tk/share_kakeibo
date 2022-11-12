@@ -1,15 +1,7 @@
-// constant
-import 'package:share_kakeibo/constant/validation.dart';
-import 'package:share_kakeibo/constant/colors.dart';
-// view
-import 'package:share_kakeibo/view/setting/personal_setting/widgets/change_password_dialog.dart';
-// view_model
-import 'package:share_kakeibo/view_model/setting/personal_setting/password_view_model.dart';
-import 'package:share_kakeibo/view_model/setting/personal_setting/widgets/password_dialog_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class PasswordPage extends StatefulHookConsumerWidget {
   const PasswordPage({Key? key}) : super(key: key);
@@ -32,7 +24,6 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
     final passwordViewModelNotifier = ref.watch(passwordViewModelProvider.notifier);
     final _isObscurePassword = useState(true);
     final _isObscureCheckPassword = useState(true);
-    final passwordDialogViewModelNotifier = ref.watch(passwordDialogViewModelProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -49,10 +40,18 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const ChangePasswordDialog();
+                    return ReSingInDialog(
+                      function: () async {
+                        await passwordViewModelNotifier.updatePassword();
+                      },
+                      navigator: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      text: 'パスワードを変更しました',
+                    );
                   },
                 );
-                passwordDialogViewModelNotifier.clearPassword();
               } catch (e) {
                 final snackBar = SnackBar(
                   backgroundColor: negativeSnackBarColor,

@@ -3,24 +3,26 @@ import 'package:share_kakeibo/constant/colors.dart';
 // firebase
 import 'package:share_kakeibo/firebase/event_fire.dart';
 // model
-import 'package:share_kakeibo/model/event/event.dart';
+import 'package:share_kakeibo/model/event.dart';
 // state
 import 'package:share_kakeibo/state/event/event_state.dart';
 // view_model
-import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
+import 'package:share_kakeibo/state/chart/bp_pie_chart_state.dart';
+import 'package:share_kakeibo/state/price/total_assets_state.dart';
 import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
 import 'package:share_kakeibo/view_model/calendar/detail_event_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/income_user_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_user_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/income_category_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/chart/widget/spending_category_pie_chart_view_model.dart';
+import 'package:share_kakeibo/state/chart/income_user_pie_chart_state.dart';
+import 'package:share_kakeibo/state/chart/spending_user_pie_chart_state.dart';
+import 'package:share_kakeibo/state/chart/income_category_pie_chart_state.dart';
+import 'package:share_kakeibo/state/chart/spending_category_pie_chart_state.dart';
 import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+
+
 
 class EditEventPage extends StatefulHookConsumerWidget {
   EditEventPage(this.event);
@@ -70,17 +72,17 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                             await deleteEventFire(editEventNotifier.roomCode, event.id);
                             await ref.read(eventProvider.notifier).setEvent();
                             // ホーム画面の収支円グラフを再計算
-                            ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
+                            ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
                             // 総資産額の再計算
-                            ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
+                            ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
                             // カレンダーのイベントを更新
                             ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
                             ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
                             // 統計の円グラフを更新
-                            ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-                            ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
-                            ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
-                            ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
+                            ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                            ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                            ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                            ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -113,16 +115,16 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
               try {
                 await editEventNotifier.updateEvent();
                 // ホーム画面の収支円グラフを再計算
-                ref.read(bpPieChartViewModelProvider.notifier).bpPieChartCalc();
+                ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
                 // 総資産額の再計算
-                ref.read(totalAssetsViewModelProvider.notifier).calcTotalAssets();
+                ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
                 // カレンダーのイベントを更新
                 ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
                 // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartViewModelStateProvider.notifier).incomeCategoryChartCalc();
-                ref.read(incomeUserPieChartViewModelStateProvider.notifier).incomeUserChartCalc();
-                ref.read(spendingCategoryPieChartViewModelStateProvider.notifier).spendingCategoryChartCalc();
-                ref.read(spendingUserPieChartViewModelStateProvider.notifier).spendingUserChartCalc();
+                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

@@ -5,7 +5,7 @@ import 'package:share_kakeibo/firebase/auth_fire.dart';
 import 'package:share_kakeibo/firebase/event_fire.dart';
 import 'package:share_kakeibo/firebase/room_fire.dart';
 // model
-import 'package:share_kakeibo/model/event/event.dart';
+import 'package:share_kakeibo/model/event.dart';
 // state
 import 'package:share_kakeibo/state/room/room_member_state.dart';
 import 'package:share_kakeibo/state/event/event_state.dart';

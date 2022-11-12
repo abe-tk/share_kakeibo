@@ -1,18 +1,7 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-import 'package:share_kakeibo/state/memo/memo_state.dart';
-// view
-import 'package:share_kakeibo/view/home/home_page.dart';
-import 'package:share_kakeibo/view/calendar/calendar_page.dart';
-import 'package:share_kakeibo/view/chart/chart_page.dart';
-import 'package:share_kakeibo/view/memo/memo_page.dart';
-// view_model
-import 'package:share_kakeibo/view_model/event/add_event_view_model.dart';
-import 'package:share_kakeibo/view_model/memo/memo_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class BottomNavi extends StatefulHookConsumerWidget {
   const BottomNavi({Key? key}) : super(key: key);

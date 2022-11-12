@@ -1,26 +1,16 @@
-// firebase
-import 'package:share_kakeibo/firebase/auth_fire.dart';
-import 'package:share_kakeibo/firebase/room_fire.dart';
-import 'package:share_kakeibo/firebase/event_fire.dart';
-// model
-import 'package:share_kakeibo/model/pie_data/pie_data.dart';
-// state
-import 'package:share_kakeibo/state/event/event_state.dart';
-import 'package:share_kakeibo/state/current_month/home_current_month_state.dart';
-// utility
-import 'package:share_kakeibo/utility/price_utility.dart';
-import 'package:share_kakeibo/utility/pie_chart_utility.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:share_kakeibo/impoter.dart';
 
-final bpPieChartViewModelProvider = StateNotifierProvider<BpPieChartViewModelNotifier, List<PieChartSectionData>>((ref) {
-  return BpPieChartViewModelNotifier();
+final bpPieChartStateProvider = StateNotifierProvider<BpPieChartStateNotifier, List<PieChartSectionData>>((ref) {
+  return BpPieChartStateNotifier();
 });
 
-class BpPieChartViewModelNotifier extends StateNotifier<List<PieChartSectionData>> {
-  BpPieChartViewModelNotifier() : super([]);
+class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
+  BpPieChartStateNotifier() : super([]);
+
+  var first = true;
 
   late String roomCode;
 
@@ -44,14 +34,29 @@ class BpPieChartViewModelNotifier extends StateNotifier<List<PieChartSectionData
     pieData = [];
   }
 
-  void bpPieChartCalc() {
+  void calc(DateTime date) {
+    switch(first) {
+      case true:
+        bpPieChartFirstCalc(date);
+        first = false;
+        break;
+      case false:
+        bpPieChartCalc(date);
+        break;
+      default:
+        print('error');
+        break;
+    }
+  }
+
+  void bpPieChartCalc(DateTime date) {
 
     // イニシャライズ
     setInitialize();
 
     // 当月の収入、支出、合計の金額を算出
-    incomePrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, HomeCurrentMonthNotifier().state, '収入');
-    spendingPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, HomeCurrentMonthNotifier().state, '支出');
+    incomePrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '収入');
+    spendingPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '支出');
     calcTotalPrice = incomePrice + spendingPrice;
     totalPrice = incomePrice - spendingPrice;
 
@@ -79,7 +84,7 @@ class BpPieChartViewModelNotifier extends StateNotifier<List<PieChartSectionData
   }
 
   // アプリ起動直後のみ使用
-  Future<void> bpPieChartFirstCalc() async {
+  Future<void> bpPieChartFirstCalc(DateTime date) async {
 
     // roomCodeの取得
     roomCode = await setRoomCodeFire(uid);
@@ -88,8 +93,8 @@ class BpPieChartViewModelNotifier extends StateNotifier<List<PieChartSectionData
     setInitialize();
 
     // 当月の収入、支出、合計の金額を算出
-    incomePrice = await firstCalcLargeCategoryPrice(roomCode, HomeCurrentMonthNotifier().state, '収入');
-    spendingPrice = await firstCalcLargeCategoryPrice(roomCode, HomeCurrentMonthNotifier().state, '支出');
+    incomePrice = await firstCalcLargeCategoryPrice(roomCode, date, '収入');
+    spendingPrice = await firstCalcLargeCategoryPrice(roomCode, date, '支出');
 
     calcTotalPrice = incomePrice + spendingPrice;
     totalPrice = incomePrice - spendingPrice;
@@ -115,6 +120,10 @@ class BpPieChartViewModelNotifier extends StateNotifier<List<PieChartSectionData
           color: const Color.fromRGBO(130, 132, 130, 1.0)),
     ];
     state = getCategory(pieData);
+  }
+
+  void boolChange() {
+    first = true;
   }
 
 }

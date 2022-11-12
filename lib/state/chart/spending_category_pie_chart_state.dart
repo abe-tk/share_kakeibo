@@ -1,8 +1,7 @@
 // model
-import 'package:share_kakeibo/model/pie_data/pie_data.dart';
+import 'package:share_kakeibo/model/pie_data.dart';
 // state
 import 'package:share_kakeibo/state/event/event_state.dart';
-import 'package:share_kakeibo/state/current_month/chart_current_month_state.dart';
 // utility
 import 'package:share_kakeibo/utility/price_utility.dart';
 import 'package:share_kakeibo/utility/pie_chart_utility.dart';
@@ -11,13 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-final spendingCategoryPieChartViewModelStateProvider =
-StateNotifierProvider<SpendingCategoryPieChartViewModelState, List<PieChartSectionData>>((ref) {
-  return SpendingCategoryPieChartViewModelState();
+final spendingCategoryPieChartStateProvider =
+StateNotifierProvider<SpendingCategoryPieChartState, List<PieChartSectionData>>((ref) {
+  return SpendingCategoryPieChartState();
 });
 
-class SpendingCategoryPieChartViewModelState extends StateNotifier<List<PieChartSectionData>> {
-  SpendingCategoryPieChartViewModelState() : super([]);
+class SpendingCategoryPieChartState extends StateNotifier<List<PieChartSectionData>> {
+  SpendingCategoryPieChartState() : super([]);
 
   int totalPrice = 0;
   double nonDataCase = 0.0;
@@ -47,17 +46,17 @@ class SpendingCategoryPieChartViewModelState extends StateNotifier<List<PieChart
   }
 
   // 当月の支出（カテゴリー）算出
-  void spendingCategoryChartCalc() {
+  void spendingCategoryChartCalc(DateTime date) {
 
     setInitialize();
 
     // 当月の支出（カテゴリー）の合計金額をセット
-    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, ChartCurrentMonthNotifier().state, '支出');
+    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '支出');
 
     // 各カテゴリーの金額を算出
     for (int i = 0; i < chartSourceData.length; i++) {
       int price = 0;
-      price = calcCategoryPrice(EventNotifier().state, ChartCurrentMonthNotifier().state, '支出', chartSourceData[i]['category']);
+      price = calcCategoryPrice(EventNotifier().state, date, '支出', chartSourceData[i]['category']);
       chartSourceData[i]['price'] = price;
     }
 

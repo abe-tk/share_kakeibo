@@ -9,8 +9,8 @@ import 'package:share_kakeibo/state/memo/memo_state.dart';
 // view
 import 'package:share_kakeibo/view/setting/room_setting/room_name_page.dart';
 // view_model
-import 'package:share_kakeibo/view_model/home/widgets/bp_pie_chart_view_model.dart';
-import 'package:share_kakeibo/view_model/home/widgets/total_assets_view_model.dart';
+import 'package:share_kakeibo/state/chart/bp_pie_chart_state.dart';
+import 'package:share_kakeibo/state/price/total_assets_state.dart';
 import 'package:share_kakeibo/view_model/setting/room_setting/room_info_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
@@ -88,8 +88,8 @@ class _RoomInfoPageState extends ConsumerState<RoomInfoPage> {
                                           ref.read(eventProvider.notifier).setEvent();
                                           ref.read(memoProvider.notifier).setMemo();
                                           // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
-                                          ref.read(bpPieChartViewModelProvider.notifier).bpPieChartFirstCalc();
-                                          ref.read(totalAssetsViewModelProvider.notifier).firstCalcTotalAssets();
+                                          ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                                          ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
                                           Navigator.popUntil(
                                               context,
                                               (Route<dynamic> route) =>

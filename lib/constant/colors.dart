@@ -1,4 +1,3 @@
-// packages
 import 'package:flutter/material.dart';
 
 const MaterialColor customPrimarySwatch = MaterialColor(

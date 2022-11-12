@@ -1,21 +1,13 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// view
-import 'package:share_kakeibo/view/setting/personal_setting/widgets/delete_account_dialog.dart';
-// view_model
-import 'package:share_kakeibo/view_model/setting/personal_setting/widgets/password_dialog_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class AccountPage extends HookConsumerWidget {
   const AccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final passwordDialogViewModelNotifier = ref.watch(passwordDialogViewModelProvider.notifier);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -97,6 +89,8 @@ class AccountPage extends HookConsumerWidget {
                             child: const Text("OK"),
                             onPressed: () async {
                               await FirebaseAuth.instance.signOut();
+                              ref.read(bpPieChartStateProvider.notifier).boolChange();
+                              ref.read(totalAssetsStateProvider.notifier).boolChange();
                               Navigator.popUntil(context,
                                       (Route<dynamic> route) => route.isFirst);
                             },
@@ -132,10 +126,20 @@ class AccountPage extends HookConsumerWidget {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return const DeleteAccountDialog();
+                                    return ReSingInDialog(
+                                      function: () async {
+                                        await FirebaseAuth.instance.currentUser!.delete();
+                                        ref.read(bpPieChartStateProvider.notifier).boolChange();
+                                        ref.read(totalAssetsStateProvider.notifier).boolChange();
+                                      },
+                                      navigator: () {
+                                        Navigator.popUntil(context,
+                                                (Route<dynamic> route) => route.isFirst);
+                                      },
+                                      text: 'アカウントを削除しました',
+                                    );
                                   },
                                 );
-                                passwordDialogViewModelNotifier.clearPassword();
                               } catch (e) {
                                 final snackBar = SnackBar(
                                   backgroundColor: negativeSnackBarColor,

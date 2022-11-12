@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/model/pie_data/pie_data.dart';
+import 'package:share_kakeibo/model/pie_data.dart';
 
 // パーセントの算出
 double setPercent(smallPrice, largePrice) {
