@@ -8,23 +8,24 @@ import 'package:share_kakeibo/state/memo/memo_state.dart';
 // view_model
 import 'package:share_kakeibo/state/chart/bp_pie_chart_state.dart';
 import 'package:share_kakeibo/state/price/total_assets_state.dart';
-import 'package:share_kakeibo/view_model/setting/room_setting/participate_room_view_model.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ParticipateRoomPage extends StatefulHookConsumerWidget {
-  const ParticipateRoomPage({Key? key}) : super(key: key);
+import '../../../../view_model/setting/room_setting/participation/input_code_view_model.dart';
+
+class InputCodePage extends StatefulHookConsumerWidget {
+  const InputCodePage({Key? key}) : super(key: key);
 
   @override
-  _ParticipateRoomPageState createState() => _ParticipateRoomPageState();
+  _InputCodePageState createState() => _InputCodePageState();
 }
 
-class _ParticipateRoomPageState extends ConsumerState<ParticipateRoomPage> {
+class _InputCodePageState extends ConsumerState<InputCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    final participationRoomViewModelNotifier = ref.watch(participationRoomViewModelProvider.notifier);
+    final inputCodeViewModelNotifier = ref.watch(inputCodeViewModelProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -37,7 +38,7 @@ class _ParticipateRoomPageState extends ConsumerState<ParticipateRoomPage> {
           IconButton(
             onPressed: () async {
               try {
-                await participationRoomViewModelNotifier.joinRoom();
+                await inputCodeViewModelNotifier.joinRoom();
                 // 各Stateを更新
                 ref.read(roomNameProvider.notifier).fetchRoomName();
                 ref.read(roomMemberProvider.notifier).fetchRoomMember();
@@ -53,7 +54,7 @@ class _ParticipateRoomPageState extends ConsumerState<ParticipateRoomPage> {
                   SnackBar(
                     backgroundColor: positiveSnackBarColor,
                     behavior: SnackBarBehavior.floating,
-                    content: Text('【${participationRoomViewModelNotifier.ownerRoomName}】に参加しました！'),
+                    content: Text('【${inputCodeViewModelNotifier.ownerRoomName}】に参加しました！'),
                   ),
                 );
               } catch (e) {
@@ -88,13 +89,13 @@ class _ParticipateRoomPageState extends ConsumerState<ParticipateRoomPage> {
                 child: ListTile(
                   title: TextField(
                     textAlign: TextAlign.left,
-                    controller: participationRoomViewModelNotifier.roomCodeController,
+                    controller: inputCodeViewModelNotifier.roomCodeController,
                     decoration: const InputDecoration(
                       hintText: '招待コード',
                       border: InputBorder.none,
                     ),
                     onChanged: (text) {
-                      participationRoomViewModelNotifier.setRoomCode(text);
+                      inputCodeViewModelNotifier.setRoomCode(text);
                     },
                   ),
                 ),

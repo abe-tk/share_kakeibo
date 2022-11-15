@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/components/bottom_navi.dart';
-import 'package:share_kakeibo/view/calendar/detail_event_page.dart';
-import 'package:share_kakeibo/view/chart/year_chart_page.dart';
-import 'package:share_kakeibo/view/event/add_event_page.dart';
-import 'package:share_kakeibo/view/setting/setting_page.dart';
-import 'package:share_kakeibo/view/setting/personal_setting/email_page.dart';
-import 'package:share_kakeibo/view/setting/personal_setting/password_page.dart';
-import 'package:share_kakeibo/view/setting/personal_setting/account_page.dart';
-import 'package:share_kakeibo/view/setting/personal_setting/profile_page.dart';
-import 'package:share_kakeibo/view/setting/room_setting/room_info_page.dart';
-import 'package:share_kakeibo/view/setting/room_setting/invitaiton_room_page.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class RouteGenerator {
   static const String homeScreen = '/';
@@ -26,12 +16,14 @@ class RouteGenerator {
   static const String invitationRoomPage = '/invitationRoomPage';
   static const String detailEventPage = '/detailEventPage';
   static const String yearChartPage = '/yearChartPage';
+  static const String registerPage = '/registerPage';
+  static const String resetPasswordPage = '/resetPasswordPage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homeScreen:
         return MaterialPageRoute(
-          builder: (_) => BottomNavi(),
+          builder: (_) => const BottomNavi(),
         );
       case addIncomeEventPage:
         return MaterialPageRoute(
@@ -78,11 +70,11 @@ class RouteGenerator {
           builder: (_) => const RoomInfoPage(),
           fullscreenDialog: true,
         );
-      case invitationRoomPage:
-        return MaterialPageRoute(
-          builder: (_) => const InvitationRoomPage(),
-          fullscreenDialog: true,
-        );
+      // case invitationRoomPage:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const InvitationRoomPage(),
+      //     fullscreenDialog: true,
+      //   );
       case detailEventPage:
         return MaterialPageRoute(
           builder: (_) => const DetailEventPage(),
@@ -91,6 +83,16 @@ class RouteGenerator {
       case yearChartPage:
         return MaterialPageRoute(
           builder: (_) => const YearChartPage(),
+          fullscreenDialog: true,
+        );
+      case registerPage:
+        return MaterialPageRoute(
+          builder: (_) => const RegisterPage(),
+          fullscreenDialog: true,
+        );
+      case resetPasswordPage:
+        return MaterialPageRoute(
+          builder: (_) => const ResetPasswordPage(),
           fullscreenDialog: true,
         );
       default:

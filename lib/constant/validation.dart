@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 // イベント追加、編集時
 void addEventValidation(price) {
   if (price == null || price == "") {
@@ -45,21 +47,28 @@ void passwordValidation(password) {
 
 // login時
 void loginValidation(email, password) {
-  if (email == null || email == "") {
+  if (email == "") {
     throw 'メールアドレスが入力されていません';
-  } else if (password == null || password == "") {
+  } else if (password == "") {
     throw 'パスワードが入力されていません';
   }
 }
 
 // register時
 void registerValidation(userName, email, password) {
-  if (userName == null || userName == '') {
+  if (userName == '') {
     throw 'ユーザー名が入力されていません';
-  } else if (email == null || email == '') {
+  } else if (email == '') {
     throw 'メールアドレスが入力されていません';
-  } else if (password == null || password == '') {
+  } else if (password == '') {
     throw 'パスワードが入力されていません';
+  }
+}
+
+// パスワードリセット
+void resetPasswordValidation(String email) {
+  if (email == '') {
+    throw 'メールアドレスが入力されていません';
   }
 }
 
@@ -76,5 +85,23 @@ void invitationRoomValidation(roomCode, ownerRoomCode) {
     throw '招待コードが入力されていません';
   } else if (roomCode != ownerRoomCode || ownerRoomCode == null || ownerRoomCode == '') {
     throw '招待コードが正しくありません';
+  }
+}
+
+// FirebaseAuthException
+String authValidation(FirebaseAuthException e) {
+  switch(e.code) {
+    case 'invalid-email':
+      return 'メールアドレスが無効です';
+    case 'user-not-found':
+      return 'ユーザーが存在しません';
+    case 'wrong-password':
+      return 'パスワードが間違っています';
+    case 'weak-password':
+      return 'パスワードは6桁以上にしてください';
+    case 'email-already-in-use':
+      return 'すでに使用されているメールアドレスです';
+    default:
+      return 'エラー';
   }
 }

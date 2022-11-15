@@ -4,18 +4,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class RegisterPage extends HookConsumerWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class ResetPasswordPage extends HookConsumerWidget {
+  const ResetPasswordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userName = useState('');
     final email = useState('');
-    final password = useState('');
-    final userNameController = useState(TextEditingController());
     final emailController = useState(TextEditingController());
-    final passwordController = useState(TextEditingController());
-    final _isObscure = useState(true);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -23,16 +18,9 @@ class RegisterPage extends HookConsumerWidget {
             child: Column(
               children: [
                 const AppThemeImage(),
+                const SizedBox(height: 16),
+                const Text('パスワード再設定メールを送信',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
                 const SizedBox(height: 36),
-                AppTextField(
-                  controller: userNameController.value,
-                  suffix: false,
-                  obscure: false,
-                  text: 'ユーザー名',
-                  obscureChange: () {},
-                  textChange: (text) => userName.value = text,
-                ),
-                const SizedBox(height: 10),
                 AppTextField(
                   controller: emailController.value,
                   suffix: false,
@@ -41,26 +29,16 @@ class RegisterPage extends HookConsumerWidget {
                   obscureChange: () {},
                   textChange: (text) => email.value = text,
                 ),
-                const SizedBox(height: 10),
-                AppTextField(
-                  controller: passwordController.value,
-                  suffix: true,
-                  obscure: _isObscure.value,
-                  text: 'パスワード（6桁以上）',
-                  obscureChange: () => _isObscure.value = !_isObscure.value,
-                  textChange: (text) => password.value = text,
-                ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 36),
                 AppElevatedButton(
-                  text: '新規登録',
+                  text: '送信',
                   function: () async {
                     ref.watch(indicatorProvider).showProgressDialog(context);
-                    changeLoginState(false); // app.dartでサインインの状態で判定されないようにするため
                     try {
-                      await registerFire(email.value, password.value, userName.value);
-                      await FirebaseAuth.instance.signOut(); // app.dartでサインインの状態で判定されないようにするため
+                      resetPasswordValidation(email.value);
+                      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.value);
                       Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-                      positiveSnackBar(context, 'アカウントを作成しました！\nこちらからログインしてください');
+                      positiveSnackBar(context, 'パスワード再設定メールを送信しました');
                     } on FirebaseAuthException catch (e) {
                       Navigator.of(context).pop();
                       negativeSnackBar(context, authValidation(e));
@@ -74,7 +52,7 @@ class RegisterPage extends HookConsumerWidget {
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: const Divider(thickness: 3)),
                 AppTextButton(
-                  text: '既にアカウントをお持ちの方はこちら',
+                  text: 'ログイン画面へ戻る',
                   size: 14,
                   color: Colors.grey,
                   function: () => Navigator.of(context).pop(),

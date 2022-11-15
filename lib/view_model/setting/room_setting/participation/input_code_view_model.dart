@@ -9,13 +9,13 @@ import 'package:share_kakeibo/state/user/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final participationRoomViewModelProvider =
-StateNotifierProvider<ParticipationRoomViewModelNotifier, String>((ref) {
-  return ParticipationRoomViewModelNotifier();
+final inputCodeViewModelProvider =
+StateNotifierProvider<InputCodeViewModelNotifier, String>((ref) {
+  return InputCodeViewModelNotifier();
 });
 
-class ParticipationRoomViewModelNotifier extends StateNotifier<String> {
-  ParticipationRoomViewModelNotifier() : super('');
+class InputCodeViewModelNotifier extends StateNotifier<String> {
+  InputCodeViewModelNotifier() : super('');
 
   // String? roomCode;
   TextEditingController roomCodeController = TextEditingController();

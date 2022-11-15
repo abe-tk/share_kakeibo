@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-// final fire = FirebaseFirestore.instance.collection('users');
+import 'package:share_kakeibo/impoter.dart';
 
 // アカウントへログイン
 Future<void> loginFire(email, password) async {
-  await FirebaseAuth.instance
-      .signInWithEmailAndPassword(email: email!, password: password!);
+  loginValidation(email, password);
+  await FirebaseAuth.instance.signInWithEmailAndPassword(email: email!, password: password!);
 }
 
 // アカウントの新規登録
 Future<void> registerFire(email, password, userName) async {
+  registerValidation(userName, email, password);
   final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: password!);
   final user = userCredential.user;
   final uid = user?.uid;

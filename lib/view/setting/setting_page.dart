@@ -1,8 +1,8 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/view/setting/room_setting/invitation/invitation_page.dart';
+import 'package:share_kakeibo/view/setting/room_setting/participation/participation_page.dart';
 
 class SettingPage extends HookConsumerWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -58,7 +58,7 @@ class SettingPage extends HookConsumerWidget {
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.all(16),
               child: Text(
-                'Room設定',
+                'ROOM設定',
                 style: TextStyle(
                   color: detailTextColor,
                 ),
@@ -79,10 +79,29 @@ class SettingPage extends HookConsumerWidget {
               },
             ),
             ListTile(
-              title: const Text('ROOMに招待・参加'),
+              title: const Text('ROOMに招待する'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                Navigator.pushNamed(context, '/invitationRoomPage');
+                // Navigator.pushNamed(context, '/invitationRoomPage');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InvitationPage(),
+                      fullscreenDialog: true,
+                    ));
+              },
+            ),
+            ListTile(
+              title: const Text('ROOMに参加する'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                // Navigator.pushNamed(context, '/invitationRoomPage');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ParticipationPage(),
+                      fullscreenDialog: true,
+                    ));
               },
             ),
             const Divider(),

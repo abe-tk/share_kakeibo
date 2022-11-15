@@ -1,38 +1,30 @@
 // constant
 import 'package:share_kakeibo/constant/colors.dart';
 // view
-import 'package:share_kakeibo/view/setting/room_setting/participate_room_page.dart';
-// view_model
-import 'package:share_kakeibo/view_model/setting/room_setting/invitation_room_view_model.dart';
-import 'package:share_kakeibo/view_model/setting/room_setting/participate_room_view_model.dart';
+import 'package:share_kakeibo/view/setting/room_setting/participation/input_code_page.dart';
+import 'package:share_kakeibo/view/setting/room_setting/participation/qr_scan_page.dart';
 // packages
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 
-class InvitationRoomPage extends StatefulHookConsumerWidget {
-  const InvitationRoomPage({Key? key}) : super(key: key);
+import '../../../../view_model/setting/room_setting/participation/input_code_view_model.dart';
+
+class ParticipationPage extends StatefulHookConsumerWidget {
+  const ParticipationPage({Key? key}) : super(key: key);
 
   @override
-  _InvitationRoomPageState createState() => _InvitationRoomPageState();
+  _ParticipationPageState createState() => _ParticipationPageState();
 }
 
-class _InvitationRoomPageState extends ConsumerState<InvitationRoomPage> {
-
-  @override
-  void initState() {
-    super.initState();
-    ref.read(invitationRoomViewModelProvider.notifier).fetchRoomInfo();
-  }
+class _ParticipationPageState extends ConsumerState<ParticipationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final invitationRoomViewModelState = ref.watch(invitationRoomViewModelProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'ROOMに招待・参加',
+          'ROOMに参加',
         ),
         centerTitle: true,
         backgroundColor: appBarBackGroundColor,
@@ -47,23 +39,22 @@ class _InvitationRoomPageState extends ConsumerState<InvitationRoomPage> {
                 alignment: Alignment.centerLeft,
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  'ROOMへの招待コード',
+                  'QRコード',
                   style: TextStyle(color: detailTextColor),
                 ),
               ),
               const Divider(),
               ListTile(
-                leading: const Icon(Icons.copy),
-                title: Text(invitationRoomViewModelState, style: const TextStyle(fontSize: 16),),
-                subtitle: const Text('タップしてコピー'),
+                leading: const Icon(Icons.qr_code_scanner),
+                title: const Text('QRコードを読み取る'),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  Clipboard.setData(ClipboardData(text: invitationRoomViewModelState));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('招待コードをコピーしました！'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QrScanPage(),
+                        fullscreenDialog: true,
+                      ));
                 },
               ),
               const Divider(),
@@ -72,7 +63,7 @@ class _InvitationRoomPageState extends ConsumerState<InvitationRoomPage> {
                 alignment: Alignment.centerLeft,
                 width: MediaQuery.of(context).size.width,
                 child: Text(
-                  '他のROOMへ参加する',
+                  '招待コード',
                   style: TextStyle(color: detailTextColor),
                 ),
               ),
@@ -85,13 +76,13 @@ class _InvitationRoomPageState extends ConsumerState<InvitationRoomPage> {
                   Navigator.push(
                     context,
                     PageTransition(
-                      child: const ParticipateRoomPage(),
+                      child: const InputCodePage(),
                       type: PageTransitionType.rightToLeft,
                       duration: const Duration(milliseconds: 150),
                       reverseDuration: const Duration(milliseconds: 150),
                     ),
                   );
-                  ref.read(participationRoomViewModelProvider.notifier).clearRoomCode();
+                  ref.read(inputCodeViewModelProvider.notifier).clearRoomCode();
                 },
               ),
               const Divider(),

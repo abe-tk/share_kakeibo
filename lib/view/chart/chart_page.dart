@@ -65,6 +65,8 @@ class _ChartPageState extends ConsumerState<ChartPage> {
               ),
               AppTextButton(
                 text: DateFormat.yMMM('ja').format(month.value),
+                color: normalTextColor,
+                size: 20,
                 function: () async {
                   month.value = await selectMonth(context, month.value);
                   reCalc(month.value);
