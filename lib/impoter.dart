@@ -26,6 +26,7 @@ export 'firebase/user_fire.dart';
 // model
 export 'model/event.dart';
 export 'model/event.dart';
+export 'model/memo.dart';
 export 'model/pie_data.dart';
 export 'model/room_member.dart';
 export 'model/user.dart';
@@ -54,6 +55,7 @@ export 'view/calendar/detail_event_page.dart';
 export 'view/chart/chart_page.dart';
 export 'view/chart/year_chart_page.dart';
 export 'view/event/add_event_page.dart';
+export 'view/event/edit_event_page.dart';
 export 'view/home/home_page.dart';
 export 'view/login/login_page.dart';
 export 'view/login/register_page.dart';
@@ -64,9 +66,22 @@ export 'view/setting/personal_setting/account_page.dart';
 export 'view/setting/personal_setting/email_page.dart';
 export 'view/setting/personal_setting/password_page.dart';
 export 'view/setting/personal_setting/profile_page.dart';
+export 'view/setting/room_setting/invitation/invitation_page.dart';
+export 'view/setting/room_setting/participation/input_code_page.dart';
+export 'view/setting/room_setting/participation/participation_page.dart';
+export 'view/setting/room_setting/participation/qr_scan_page.dart';
 export 'view/setting/room_setting/room_info/room_info_page.dart';
+export 'view/setting/room_setting/room_info/room_name_page.dart';
 // view_model
+export 'view_model/calendar/calendar_view_model.dart';
+export 'view_model/calendar/detail_event_view_model.dart';
 export 'view_model/event/add_event_view_model.dart';
+export 'view_model/event/edit_event_view_model.dart';
 export 'view_model/memo/memo_view_model.dart';
 export 'view_model/setting/personal_setting/email_view_model.dart';
 export 'view_model/setting/personal_setting/password_view_model.dart';
+export 'view_model/setting/personal_setting/profile_view_model.dart';
+export 'view_model/setting/room_setting/participation/input_code_view_model.dart';
+export 'view_model/setting/room_setting/participation/qr_scan_view_model.dart';
+export 'view_model/setting/room_setting/room_info/room_info_view_model.dart';
+

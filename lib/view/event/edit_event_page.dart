@@ -1,28 +1,8 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// firebase
-import 'package:share_kakeibo/firebase/event_fire.dart';
-// model
-import 'package:share_kakeibo/model/event.dart';
-// state
-import 'package:share_kakeibo/state/event/event_state.dart';
-// view_model
-import 'package:share_kakeibo/state/chart/bp_pie_chart_state.dart';
-import 'package:share_kakeibo/state/price/total_assets_state.dart';
-import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
-import 'package:share_kakeibo/view_model/calendar/detail_event_view_model.dart';
-import 'package:share_kakeibo/state/chart/income_user_pie_chart_state.dart';
-import 'package:share_kakeibo/state/chart/spending_user_pie_chart_state.dart';
-import 'package:share_kakeibo/state/chart/income_category_pie_chart_state.dart';
-import 'package:share_kakeibo/state/chart/spending_category_pie_chart_state.dart';
-import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-
-
+import 'package:share_kakeibo/impoter.dart';
 
 class EditEventPage extends StatefulHookConsumerWidget {
   EditEventPage(this.event);

@@ -1,30 +1,12 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// state
-import 'package:share_kakeibo/state/room/room_member_state.dart';
-import 'package:share_kakeibo/state/room/room_name_state.dart';
-import 'package:share_kakeibo/state/event/event_state.dart';
-import 'package:share_kakeibo/state/memo/memo_state.dart';
-// view_model
-import 'package:share_kakeibo/state/chart/bp_pie_chart_state.dart';
-import 'package:share_kakeibo/state/price/total_assets_state.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/impoter.dart';
 
-import '../../../../view_model/setting/room_setting/participation/input_code_view_model.dart';
-
-class InputCodePage extends StatefulHookConsumerWidget {
+class InputCodePage extends ConsumerWidget {
   const InputCodePage({Key? key}) : super(key: key);
 
   @override
-  _InputCodePageState createState() => _InputCodePageState();
-}
-
-class _InputCodePageState extends ConsumerState<InputCodePage> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final inputCodeViewModelNotifier = ref.watch(inputCodeViewModelProvider.notifier);
     return Scaffold(
       appBar: AppBar(

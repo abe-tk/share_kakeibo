@@ -1,10 +1,6 @@
-// state
-import 'package:share_kakeibo/state/event/event_state.dart';
-// model
-import 'package:share_kakeibo/model/event.dart';
-// packages
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 final calendarViewModelProvider =
 StateNotifierProvider<CalendarViewModelNotifier, Map<DateTime, List<Event>>>((ref) {

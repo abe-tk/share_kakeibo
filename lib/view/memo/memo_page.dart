@@ -1,18 +1,8 @@
-// components
-import 'package:share_kakeibo/components/drawer_menu.dart';
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// model
-import 'package:share_kakeibo/model/memo.dart';
-// state
-import 'package:share_kakeibo/state/memo/memo_state.dart';
-// view_model
-import 'package:share_kakeibo/view_model/memo/memo_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class MemoPage extends StatefulHookConsumerWidget {
   const MemoPage({Key? key}) : super(key: key);

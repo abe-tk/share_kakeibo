@@ -1,26 +1,13 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// view
-import 'package:share_kakeibo/view/setting/room_setting/participation/input_code_page.dart';
-import 'package:share_kakeibo/view/setting/room_setting/participation/qr_scan_page.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:share_kakeibo/impoter.dart';
 
-import '../../../../view_model/setting/room_setting/participation/input_code_view_model.dart';
-
-class ParticipationPage extends StatefulHookConsumerWidget {
+class ParticipationPage extends ConsumerWidget {
   const ParticipationPage({Key? key}) : super(key: key);
 
   @override
-  _ParticipationPageState createState() => _ParticipationPageState();
-}
-
-class _ParticipationPageState extends ConsumerState<ParticipationPage> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(

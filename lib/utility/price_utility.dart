@@ -1,4 +1,3 @@
-// packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // 全期間の「収入」または「支出」の累計金額を計算

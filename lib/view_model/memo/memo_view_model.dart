@@ -1,15 +1,6 @@
-// components
-import 'package:share_kakeibo/firebase/auth_fire.dart';
-// firebase
-import 'package:share_kakeibo/firebase/memo_fire.dart';
-import 'package:share_kakeibo/firebase/room_fire.dart';
-// state
-import 'package:share_kakeibo/state/memo/memo_state.dart';
-// model
-import 'package:share_kakeibo/model/memo.dart';
-// packages
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 final memoViewModelProvider =
 StateNotifierProvider<MemoViewModelNotifier, List<Memo>>((ref) {

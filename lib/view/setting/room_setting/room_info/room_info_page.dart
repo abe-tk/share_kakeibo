@@ -1,21 +1,7 @@
-// constant
-import 'package:share_kakeibo/constant/colors.dart';
-// state
-import 'package:share_kakeibo/state/room/room_name_state.dart';
-import 'package:share_kakeibo/state/room/room_member_state.dart';
-import 'package:share_kakeibo/state/user/user_state.dart';
-import 'package:share_kakeibo/state/event/event_state.dart';
-import 'package:share_kakeibo/state/memo/memo_state.dart';
-// view
-import 'package:share_kakeibo/view/setting/room_setting/room_info/room_name_page.dart';
-// view_model
-import 'package:share_kakeibo/state/chart/bp_pie_chart_state.dart';
-import 'package:share_kakeibo/state/price/total_assets_state.dart';
-import 'package:share_kakeibo/view_model/setting/room_setting/room_info/room_info_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class RoomInfoPage extends StatefulHookConsumerWidget {
   const RoomInfoPage({Key? key}) : super(key: key);
@@ -25,6 +11,7 @@ class RoomInfoPage extends StatefulHookConsumerWidget {
 }
 
 class _RoomInfoPageState extends ConsumerState<RoomInfoPage> {
+
   @override
   void initState() {
     super.initState();

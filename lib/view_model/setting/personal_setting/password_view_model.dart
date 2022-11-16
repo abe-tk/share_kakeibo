@@ -1,8 +1,6 @@
-// firebase
-import 'package:share_kakeibo/firebase/user_fire.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 final passwordViewModelProvider =
 StateNotifierProvider<PasswordViewModeNotifier, Map<String, String>>((ref) {

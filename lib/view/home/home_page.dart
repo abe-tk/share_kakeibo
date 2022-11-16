@@ -35,11 +35,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/settingPage');
-              },
-              icon: const Icon(Icons.settings),
+          AppIconButton(
+            icon: Icons.settings,
+            color: Colors.black,
+            function: () => Navigator.pushNamed(context, '/settingPage'),
           ),
         ],
         centerTitle: true,
@@ -106,6 +105,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
                     ),
+                    // 当月の収支グラフ
                     Padding(
                       padding: const EdgeInsets.only(left: 16, right: 16),
                       child: Container(
@@ -120,44 +120,36 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           ],
                         ),
-                        // 当月の収支グラフ
                         child: Column(
                           children: [
                             // 対象月の表示
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                IconButton(
-                                  onPressed: () {
+                                AppIconButton(
+                                  icon: Icons.chevron_left,
+                                  color: detailIconColor,
+                                  function: () {
                                     month.value = DateTime(month.value.year, month.value.month - 1);
                                     bpPieChartNotifier.bpPieChartCalc(month.value);
                                   },
-                                  icon: Icon(
-                                    Icons.chevron_left,
-                                    color: detailIconColor,
-                                  ),
                                 ),
-                                TextButton(
-                                  child: Text(
-                                    '${DateFormat.yMMM('ja').format(month.value)}の家計簿',
-                                    style: TextStyle(
-                                      color: normalTextColor,
-                                    ),
-                                  ),
-                                  onPressed: () async {
+                                AppTextButton(
+                                  text: '${DateFormat.yMMM('ja').format(month.value)}の家計簿',
+                                  size: 16,
+                                  color: normalTextColor,
+                                  function: () async {
                                     month.value = await selectMonth(context, month.value);
                                     bpPieChartNotifier.bpPieChartCalc(month.value);
                                   },
                                 ),
-                                IconButton(
-                                  onPressed: () {
+                                AppIconButton(
+                                  icon: Icons.chevron_right,
+                                  color: detailIconColor,
+                                  function: () {
                                     month.value = DateTime(month.value.year, month.value.month + 1);
                                     bpPieChartNotifier.bpPieChartCalc(month.value);
                                   },
-                                  icon: Icon(
-                                    Icons.chevron_right,
-                                    color: detailIconColor,
-                                  ),
                                 ),
                               ],
                             ),
@@ -225,16 +217,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             children: [
                                               Text(
                                                 '支出',
-                                                style: TextStyle(
-                                                  color: detailTextColor,),
+                                                style: TextStyle(color: detailTextColor),
                                               ),
                                               Text(
                                                 ' / ${double.parse((bpPieChartNotifier.spendingPercent).toString()).toStringAsFixed(1)}%',
                                                 style: TextStyle(
-                                                  color: detailTextColor,),
+                                                  color: detailTextColor),
                                               )
                                             ],
-                                          )),
+                                          ),
+                                      ),
                                       Container(
                                         alignment: Alignment.centerRight,
                                         width:
@@ -289,8 +281,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     children: [
                                       Container(
                                         alignment: Alignment.centerRight,
-                                        width:
-                                        MediaQuery.of(context).size.width * 0.9,
+                                        width: MediaQuery.of(context).size.width * 0.9,
                                         child: Text(
                                           '合計 ${formatter.format(bpPieChartNotifier.totalPrice)} 円',
                                           style: const TextStyle(

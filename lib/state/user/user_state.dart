@@ -1,4 +1,3 @@
-// packages
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/firebase/user_fire.dart';
 

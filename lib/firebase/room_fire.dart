@@ -1,7 +1,5 @@
-// packages
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:share_kakeibo/model/room_member.dart';
-import 'auth_fire.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 // final fire = FirebaseFirestore.instance.collection('users');
 

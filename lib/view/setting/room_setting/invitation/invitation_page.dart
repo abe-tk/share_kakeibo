@@ -4,17 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class InvitationPage extends StatefulHookConsumerWidget {
+class InvitationPage extends ConsumerWidget {
   const InvitationPage({Key? key}) : super(key: key);
 
   @override
-  _InvitationPageState createState() => _InvitationPageState();
-}
-
-class _InvitationPageState extends ConsumerState<InvitationPage> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(

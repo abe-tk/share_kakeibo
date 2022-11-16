@@ -1,10 +1,5 @@
-/// firebase
-import 'package:share_kakeibo/firebase/auth_fire.dart';
-/// packages
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/firebase/room_fire.dart';
-
-import '../../model/room_member.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 List<RoomMember> roomMemberList = [];
 

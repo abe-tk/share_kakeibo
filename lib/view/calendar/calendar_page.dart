@@ -1,20 +1,10 @@
-// components
-import 'package:share_kakeibo/components/drawer_menu.dart';
-// constant
-import 'package:share_kakeibo/constant/number_format.dart';
-import 'package:share_kakeibo/constant/colors.dart';
-// view
-import 'package:share_kakeibo/view/event/edit_event_page.dart';
-// view_model
-import 'package:share_kakeibo/view_model/calendar/calendar_view_model.dart';
-import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:collection';
+import 'package:share_kakeibo/impoter.dart';
 
 class CalendarPage extends StatefulHookConsumerWidget {
   const CalendarPage({Key? key}) : super(key: key);

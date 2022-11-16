@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/impoter.dart';
-import 'package:share_kakeibo/view/setting/room_setting/invitation/invitation_page.dart';
-import 'package:share_kakeibo/view/setting/room_setting/participation/participation_page.dart';
 
 class SettingPage extends HookConsumerWidget {
   const SettingPage({Key? key}) : super(key: key);

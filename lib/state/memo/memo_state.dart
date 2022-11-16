@@ -1,10 +1,6 @@
-// firebase
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:share_kakeibo/firebase/auth_fire.dart';
-import 'package:share_kakeibo/firebase/room_fire.dart';
-import 'package:share_kakeibo/firebase/memo_fire.dart';
-// packages
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 List<QueryDocumentSnapshot<Map<String, dynamic>>> memos = [];
 

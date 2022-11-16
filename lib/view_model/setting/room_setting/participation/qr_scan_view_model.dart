@@ -1,13 +1,5 @@
-// constant
-import 'package:share_kakeibo/constant/validation.dart';
-// firebase
-import 'package:share_kakeibo/firebase/room_fire.dart';
-import 'package:share_kakeibo/firebase/user_fire.dart';
-// state
-import 'package:share_kakeibo/state/user/user_state.dart';
-// packages
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 final qrScanViewModelProvider =
 StateNotifierProvider<QrScanViewModelNotifier, String>((ref) {

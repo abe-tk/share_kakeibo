@@ -1,16 +1,8 @@
-// constant
-import 'package:share_kakeibo/constant/number_format.dart';
-import 'package:share_kakeibo/constant/colors.dart';
-// view
-import 'package:share_kakeibo/view/event/edit_event_page.dart';
-// view_model
-import 'package:share_kakeibo/view_model/calendar/detail_event_view_model.dart';
-import 'package:share_kakeibo/view_model/event/edit_event_view_model.dart';
-// packages
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:intl/intl.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 class DetailEventPage extends StatefulHookConsumerWidget {
   const DetailEventPage({Key? key}) : super(key: key);

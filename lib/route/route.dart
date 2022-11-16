@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:share_kakeibo/impoter.dart';
 
 class RouteGenerator {
+  // EditEventPageへはCalendarPageから[event]を受け取る必要があるため、CalendarPageからNavigator.pushしている。
   static const String homeScreen = '/';
   static const String addIncomeEventPage = '/addIncomeEventPage';
   static const String addSpendingEventPage = '/addSpendingEventPage';
-  /// EditEventPageへはCalendarPageから[event]を受け取る必要があるため、CalendarPageからNavigator.pushしている。
-  // static const String editEventPage = '/editEventPage';
   static const String settingPage = '/settingPage';
   static const String profilePage = '/profilePage';
   static const String accountPage = '/accountPage';
@@ -35,11 +34,6 @@ class RouteGenerator {
           builder: (_) => const AddEventPage(largeCategory: '支出'),
           fullscreenDialog: true,
         );
-      // case editEventPage:
-      //   return MaterialPageRoute(
-      //     builder: (_) => EditEventPage(event),
-      //     fullscreenDialog: true,
-      //   );
       case settingPage:
         return MaterialPageRoute(
           builder: (_) => const SettingPage(),
@@ -70,11 +64,6 @@ class RouteGenerator {
           builder: (_) => const RoomInfoPage(),
           fullscreenDialog: true,
         );
-      // case invitationRoomPage:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const InvitationRoomPage(),
-      //     fullscreenDialog: true,
-      //   );
       case detailEventPage:
         return MaterialPageRoute(
           builder: (_) => const DetailEventPage(),

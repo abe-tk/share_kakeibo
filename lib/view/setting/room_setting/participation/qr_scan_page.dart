@@ -5,9 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:share_kakeibo/view_model/setting/room_setting/participation/qr_scan_view_model.dart';
-
-import '../../../../state/room/room_name_state.dart';
 import 'package:share_kakeibo/impoter.dart';
 
 class QrScanPage extends StatefulHookConsumerWidget {
