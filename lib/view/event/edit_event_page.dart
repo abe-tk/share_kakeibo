@@ -4,25 +4,83 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class EditEventPage extends StatefulHookConsumerWidget {
-  EditEventPage(this.event);
+class EditEventPage extends HookConsumerWidget {
+  const EditEventPage({Key? key, required this.event}) : super(key: key);
   final Event event;
 
   @override
-  _EditEventPageState createState() => _EditEventPageState(event);
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final price = useState(event.price);
+    final priceController = useState(TextEditingController(text: event.price));
+    final date = useState(event.date);
+    final smallCategory = useState('未分類');
+    final paymentUser = useState(event.paymentUser);
+    final memo = useState(event.memo);
+    final memoController = useState(TextEditingController(text: event.memo));
 
-class _EditEventPageState extends ConsumerState<EditEventPage> {
-  _EditEventPageState(this.event);
-  final Event event;
+    void updateState() {
+      // ホーム画面の収支円グラフを再計算
+      ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      // 総資産額の再計算
+      ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
+      // カレンダーのイベントを更新
+      ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
+      ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
+      // 統計の円グラフを更新
+      ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    final editEventState = ref.watch(editEventViewModelProvider);
-    final editEventNotifier = ref.watch(editEventViewModelProvider.notifier);
-    final smallCategory = useState(editEventState['smallCategory']);
-    final paymentUser = useState(editEventState['paymentUser']);
-    final selectedDate = useState(editEventState['date']);
+    Future<void> updateEvent() async {
+      try {
+        addEventValidation(price.value);
+        await updateEventFire(
+          ref.watch(roomCodeProvider),
+          event,
+          date.value,
+          price.value,
+          event.largeCategory,
+          smallCategory.value,
+          memo.value,
+          DateTime(date.value.year, date.value.month),
+          paymentUser.value,
+        );
+        await ref.read(eventProvider.notifier).setEvent();
+        updateState();
+        Navigator.of(context).pop();
+        positiveSnackBar(context, '${event.largeCategory}を編集しました！');
+      } catch (e) {
+        negativeSnackBar(context, e.toString());
+      }
+    }
+
+    Future<void> deleteEvent() async {
+      try {
+        await deleteEventFire(ref.watch(roomCodeProvider), event.id);
+        await ref.read(eventProvider.notifier).setEvent();
+        updateState();
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: negativeSnackBarColor,
+            behavior: SnackBarBehavior.floating,
+            content: Text('${event.largeCategory}を削除しました'),
+          ),
+        );
+      } catch (e) {
+        final snackBar = SnackBar(
+          backgroundColor: negativeSnackBarColor,
+          behavior: SnackBarBehavior.floating,
+          content: Text(e.toString()),
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,8 +90,10 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
         backgroundColor: appBarBackGroundColor,
         elevation: 1,
         actions: [
-          IconButton(
-            onPressed: () async {
+          AppIconButton(
+            icon: Icons.delete,
+            color: negativeIconColor,
+            function: () async {
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -47,83 +107,18 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
                       ),
                       TextButton(
                         child: const Text("OK"),
-                        onPressed: () async {
-                          try {
-                            await deleteEventFire(editEventNotifier.roomCode, event.id);
-                            await ref.read(eventProvider.notifier).setEvent();
-                            // ホーム画面の収支円グラフを再計算
-                            ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                            // 総資産額の再計算
-                            ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
-                            // カレンダーのイベントを更新
-                            ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
-                            ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
-                            // 統計の円グラフを更新
-                            ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                            ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                            ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                            ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: negativeSnackBarColor,
-                                behavior: SnackBarBehavior.floating,
-                                content: Text('${event.largeCategory}を削除しました'),
-                              ),
-                            );
-                          } catch (e) {
-                            final snackBar = SnackBar(
-                              backgroundColor: negativeSnackBarColor,
-                              behavior: SnackBarBehavior.floating,
-                              content: Text(e.toString()),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
+                        onPressed: () async => deleteEvent(),
                       ),
                     ],
                   );
                 },
               );
             },
-            icon: Icon(Icons.delete, color: negativeIconColor,),
           ),
-          IconButton(
-            onPressed: () async {
-              try {
-                await editEventNotifier.updateEvent();
-                // ホーム画面の収支円グラフを再計算
-                ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                // 総資産額の再計算
-                ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
-                // カレンダーのイベントを更新
-                ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
-                // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: positiveSnackBarColor,
-                    behavior: SnackBarBehavior.floating,
-                    content: Text('${event.largeCategory}を編集しました！'),
-                  ),
-                );
-              } catch (e) {
-                final snackBar = SnackBar(
-                  backgroundColor: negativeSnackBarColor,
-                  behavior: SnackBarBehavior.floating,
-                  content: Text(e.toString()),
-                );
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackBar);
-              }
-            },
-            icon: Icon(Icons.check,color: positiveIconColor,),
+          AppIconButton(
+            icon: Icons.check,
+            color: positiveIconColor,
+            function: () async => updateEvent(),
           ),
         ],
       ),
@@ -134,86 +129,34 @@ class _EditEventPageState extends ConsumerState<EditEventPage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Container(
-                    alignment: Alignment.center,
-                    height: 100,
-                    child: ListTile(
-                      title: TextField(
-                        controller: editEventNotifier.priceController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: '0',
-                          border: InputBorder.none,
-                        ),
-                        onChanged: (text) {
-                          editEventNotifier.setPrice(text);
-                        },
-                      ),
-                      leading: const Icon(Icons.currency_yen),
-                      trailing: const Text('円'),
-                    ),
+                  AppPriceTextField(
+                    controller: priceController.value,
+                    textChange: (text) => price.value = text,
                   ),
                   const Divider(),
                   ListTile(
-                    title: Text(
-                        DateFormat.MMMEd('ja').format(selectedDate.value)),
+                    title: Text(DateFormat.MMMEd('ja').format(date.value)),
                     leading: const Icon(Icons.calendar_today),
-                    onTap: () async {
-                      await editEventNotifier.selectDate(context);
-                      selectedDate.value = editEventState['date'];
-                    },
+                    onTap: () async => date.value = await selectDate(context, date.value),
                   ),
                   const Divider(),
-                  ListTile(
-                    title: DropdownButton<String>(
-                      value: smallCategory.value,
-                      onChanged: (String? value) {
-                        smallCategory.value = value!;
-                        editEventNotifier.setSmallCategory(value);
-                      },
-                      items:  (event.largeCategory == '収入'
-                          ? editEventNotifier.incomeCategoryList
-                          : editEventNotifier.spendingCategoryList)
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                    leading: const Icon(Icons.category),
+                  AppDropDownButton(
+                    value: smallCategory.value,
+                    function: (value) => smallCategory.value = value!,
+                    item: event.largeCategory == '収入' ? incomeCategoryList : spendingCategoryList,
+                    icon: const Icon(Icons.category),
                   ),
                   const Divider(),
-                  ListTile(
-                    title: DropdownButton<String>(
-                      value: paymentUser.value,
-                      onChanged: (String? value) {
-                        paymentUser.value = value!;
-                        editEventNotifier.setPaymentUser(value);
-                      },
-                      items: editEventNotifier.paymentUserList
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                    leading: const Icon(Icons.person),
+                  AppDropDownButton(
+                    value: paymentUser.value,
+                    function: (value) => paymentUser.value = value!,
+                    item: ref.watch(paymentUserProvider),
+                    icon: const Icon(Icons.person),
                   ),
                   const Divider(),
-                  ListTile(
-                    title: TextField(
-                      controller: editEventNotifier.memoController,
-                      decoration: const InputDecoration(
-                        hintText: 'メモ',
-                        border: InputBorder.none,
-                      ),
-                      onChanged: (text) {
-                        editEventNotifier.setMemo(text);
-                      },
-                    ),
-                    leading: const Icon(Icons.featured_play_list_rounded),
+                  AppMemoTextField(
+                    controller: memoController.value,
+                    textChange: (text) => memo.value = text,
                   ),
                   const Divider(),
                 ],

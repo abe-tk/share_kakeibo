@@ -38,8 +38,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     final _events = LinkedHashMap<DateTime, List>(
       equals: isSameDay,
       hashCode: getHashCode,
-    )
-      ..addAll(calendarEventState);
+    )..addAll(calendarEventState);
 
     List _getEventForDay(DateTime day) {
       return _events[day] ?? [];
@@ -294,11 +293,11 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                                 ],
                               ),
                               onTap: () async {
-                                await ref.read(editEventViewModelProvider.notifier).fetchPaymentUser(event);
+                                await ref.read(paymentUserProvider.notifier).fetchPaymentUser();
                                 Navigator.push(
                                   context,
                                   PageTransition(
-                                    child: EditEventPage(event),
+                                    child: EditEventPage(event: event),
                                     type: PageTransitionType.rightToLeft,
                                     duration: const Duration(milliseconds: 150),
                                     reverseDuration:

@@ -57,7 +57,7 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
                             leading: const Icon(Icons.add),
                             title: const Text('収入の追加'),
                             onTap: () async {
-                              await ref.read(addEventViewModelProvider.notifier).fetchPaymentUser();
+                              await ref.read(paymentUserProvider.notifier).fetchPaymentUser();
                               Navigator.pushNamed(context, '/addIncomeEventPage');
                             },
                           ),
@@ -66,7 +66,7 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
                             leading: const Icon(Icons.remove),
                             title: const Text('支出の追加'),
                             onTap: () async {
-                              await ref.read(addEventViewModelProvider.notifier).fetchPaymentUser();
+                              await ref.read(paymentUserProvider.notifier).fetchPaymentUser();
                               Navigator.pushNamed(context, '/addSpendingEventPage');
                             },
                           ),

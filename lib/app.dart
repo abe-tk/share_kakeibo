@@ -44,9 +44,7 @@ class MyApp extends HookConsumerWidget {
             ref.read(userProvider.notifier).fetchUser();
             ref.read(eventProvider.notifier).setEvent();
             ref.read(memoProvider.notifier).setMemo();
-            // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
-            // ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
-            // ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
+            ref.read(roomCodeProvider.notifier).fetchRoomCode();
             return const BottomNavi();
           }
           // User が null である、つまり未サインインのサインイン画面へ

@@ -120,11 +120,11 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
                         ),
                       ),
                       onTap: () async {
-                        await ref.read(editEventViewModelProvider.notifier).fetchPaymentUser(detailEventState[index]);
+                        await ref.read(paymentUserProvider.notifier).fetchPaymentUser();
                         Navigator.push(
                           context,
                           PageTransition(
-                            child: EditEventPage(detailEventState[index]),
+                            child: EditEventPage(event: detailEventState[index]),
                             type: PageTransitionType.rightToLeft,
                             duration: const Duration(milliseconds: 150),
                             reverseDuration:

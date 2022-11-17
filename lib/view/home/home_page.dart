@@ -246,8 +246,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     children: [
                                       Container(
                                           alignment: Alignment.centerLeft,
-                                          width: MediaQuery.of(context).size.width *
-                                              0.9,
+                                          width: MediaQuery.of(context).size.width * 0.9,
                                           child: Row(
                                             children: [
                                               Text(

@@ -14,3 +14,17 @@ Future<DateTime> selectMonth(BuildContext context, DateTime date) async {
     return selectedMonth;
   }
 }
+
+Future<DateTime> selectDate(BuildContext context, DateTime date) async {
+  final DateTime? selected = await showDatePicker(
+    context: context,
+    initialDate: date,
+    firstDate: DateTime(2015),
+    lastDate: DateTime(2035),
+  );
+  if (selected == null) {
+    return date;
+  } else {
+    return selected;
+  }
+}

@@ -4,73 +4,66 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class AddEventPage extends StatefulHookConsumerWidget {
+class AddEventPage extends HookConsumerWidget {
   const AddEventPage({Key? key, required this.largeCategory}) : super(key: key);
   final String largeCategory;
 
   @override
-  _AddEventPageState createState() => _AddEventPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final price = useState('');
+    final priceController = useState(TextEditingController());
+    final date = useState(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
+    final smallCategory = useState('未分類');
+    final paymentUser = useState(ref.watch(userProvider)['userName']);
+    final memo = useState('');
+    final memoController = useState(TextEditingController());
 
-class _AddEventPageState extends ConsumerState<AddEventPage> {
-  @override
-  void initState() {
-    super.initState();
-    ref.read(addEventViewModelProvider.notifier).setLargeCategory(widget.largeCategory);
-  }
+    Future<void> addEvent() async {
+      try {
+        addEventValidation(price.value);
+        await addEventFire(
+          ref.watch(roomCodeProvider),
+          date.value,
+          price.value,
+          largeCategory,
+          smallCategory.value,
+          memo.value,
+          DateTime(date.value.year, date.value.month),
+          paymentUser.value,
+        );
+        await EventNotifier().setEvent();
+        // ホーム画面の収支円グラフを再計算
+        ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+        // updateState();
+        // 総資産額の再計算
+        ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
+        // カレンダーのイベントを更新
+        ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
+        // 統計の円グラフを更新
+        ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+        ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+        ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+        ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        positiveSnackBar(context, '$largeCategoryを追加しました！');
+      } catch (e) {
+        negativeSnackBar(context, e.toString());
+      }
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    final addEventState = ref.watch(addEventViewModelProvider);
-    final addEventNotifier = ref.watch(addEventViewModelProvider.notifier);
-    final smallCategory = useState(addEventState['smallCategory']);
-    final paymentUser = useState(addEventState['paymentUser']);
-    final selectedDate = useState(addEventState['date']);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '${widget.largeCategory}の追加',
-        ),
+        title: Text('$largeCategoryの追加'),
         centerTitle: true,
         backgroundColor: appBarBackGroundColor,
         elevation: 1,
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.check,
-              color: positiveIconColor,
-            ),
-            onPressed: () async {
-              try {
-                await addEventNotifier.addEvent();
-                // ホーム画面の収支円グラフを再計算
-                ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                // 総資産額の再計算
-                ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
-                // カレンダーのイベントを更新
-                ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
-                // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: positiveSnackBarColor,
-                    behavior: SnackBarBehavior.floating,
-                    content: Text('${widget.largeCategory}を追加しました！'),
-                  ),
-                );
-              } catch (e) {
-                final snackBar = SnackBar(
-                  backgroundColor: negativeSnackBarColor,
-                  behavior: SnackBarBehavior.floating,
-                  content: Text(e.toString()),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
+          AppIconButton(
+            icon: Icons.check,
+            color: positiveIconColor,
+            function: () async {
+              await addEvent();
             },
           ),
         ],
@@ -82,85 +75,34 @@ class _AddEventPageState extends ConsumerState<AddEventPage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Container(
-                    alignment: Alignment.center,
-                    height: 100,
-                    child: ListTile(
-                      title: TextField(
-                        autofocus: true,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: '0',
-                          border: InputBorder.none,
-                        ),
-                        onChanged: (text) {
-                          addEventNotifier.setPrice(text);
-                        },
-                      ),
-                      leading: const Icon(Icons.currency_yen),
-                      trailing: const Text('円'),
-                    ),
+                  AppPriceTextField(
+                    controller: priceController.value,
+                    textChange: (text) => price.value = text,
                   ),
                   const Divider(),
                   ListTile(
-                    title:
-                        Text(DateFormat.MMMEd('ja').format(selectedDate.value)),
+                    title: Text(DateFormat.MMMEd('ja').format(date.value)),
                     leading: const Icon(Icons.calendar_today),
-                    onTap: () async {
-                      await addEventNotifier.selectDate(context);
-                      selectedDate.value = addEventState['date'];
-                    },
+                    onTap: () async => date.value = await selectDate(context, date.value),
                   ),
                   const Divider(),
-                  ListTile(
-                    title: DropdownButton<String>(
-                      value: smallCategory.value,
-                      onChanged: (String? value) {
-                        smallCategory.value = value!;
-                        addEventNotifier.setSmallCategory(value);
-                      },
-                      items: (widget.largeCategory == '収入'
-                              ? addEventNotifier.incomeCategoryList
-                              : addEventNotifier.spendingCategoryList)
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                    leading: const Icon(Icons.category),
+                  AppDropDownButton(
+                    value: smallCategory.value,
+                    function: (value) => smallCategory.value = value!,
+                    item: largeCategory == '収入' ? incomeCategoryList : spendingCategoryList,
+                    icon: const Icon(Icons.category),
                   ),
                   const Divider(),
-                  ListTile(
-                    title: DropdownButton<String>(
-                      value: paymentUser.value,
-                      onChanged: (String? value) {
-                        paymentUser.value = value!;
-                        addEventNotifier.setPaymentUser(value);
-                      },
-                      items: addEventNotifier.paymentUserList
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                    leading: const Icon(Icons.person),
+                  AppDropDownButton(
+                    value: paymentUser.value,
+                    function: (value) => paymentUser.value = value!,
+                    item: ref.watch(paymentUserProvider),
+                    icon: const Icon(Icons.person),
                   ),
                   const Divider(),
-                  ListTile(
-                    title: TextField(
-                      decoration: const InputDecoration(
-                        hintText: 'メモ',
-                        border: InputBorder.none,
-                      ),
-                      onChanged: (text) {
-                        addEventNotifier.setMemo(text);
-                      },
-                    ),
-                    leading: const Icon(Icons.featured_play_list_rounded),
+                  AppMemoTextField(
+                    controller: memoController.value,
+                    textChange: (text) => memo.value = text,
                   ),
                   const Divider(),
                 ],
