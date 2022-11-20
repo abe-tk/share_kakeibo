@@ -12,6 +12,7 @@ class MemoPage extends StatefulHookConsumerWidget {
 }
 
 class _MemoPageState extends ConsumerState<MemoPage> {
+
   @override
   void initState() {
     super.initState();
