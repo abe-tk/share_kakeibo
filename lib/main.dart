@@ -6,8 +6,9 @@ import 'package:share_kakeibo/impoter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //画面を縦向きに固定
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,//縦向き固定
+    DeviceOrientation.portraitUp,
   ]);
   await Firebase.initializeApp();
   runApp(

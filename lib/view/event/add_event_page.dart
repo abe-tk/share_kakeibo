@@ -89,7 +89,7 @@ class AddEventPage extends HookConsumerWidget {
                   AppDropDownButton(
                     value: smallCategory.value,
                     function: (value) => smallCategory.value = value!,
-                    item: largeCategory == '収入' ? incomeCategoryList : spendingCategoryList,
+                    item: largeCategory == '収入' ? Category.incomeCategory : Category.spendingCategory,
                     icon: const Icon(Icons.category),
                   ),
                   const Divider(),
