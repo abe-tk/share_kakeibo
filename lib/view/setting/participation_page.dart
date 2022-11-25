@@ -69,7 +69,7 @@ class ParticipationPage extends ConsumerWidget {
                       reverseDuration: const Duration(milliseconds: 150),
                     ),
                   );
-                  ref.read(inputCodeViewModelProvider.notifier).clearRoomCode();
+                  // ref.read(inputCodeViewModelProvider.notifier).clearRoomCode();
                 },
               ),
               const Divider(),

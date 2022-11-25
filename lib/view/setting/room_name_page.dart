@@ -2,23 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class RoomNamePage extends StatefulHookConsumerWidget {
+class RoomNamePage extends HookConsumerWidget {
   const RoomNamePage({Key? key}) : super(key: key);
 
   @override
-  _RoomNamePageState createState() => _RoomNamePageState();
-}
-
-class _RoomNamePageState extends ConsumerState<RoomNamePage> {
-
-  @override
-  void initState() {
-    super.initState();
-    ref.read(roomNameProvider.notifier).fetchRoomName();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final roomNameNotifier = ref.watch(roomNameProvider.notifier);
     return Scaffold(
       appBar: AppBar(

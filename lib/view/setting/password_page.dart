@@ -3,25 +3,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class PasswordPage extends StatefulHookConsumerWidget {
+class PasswordPage extends HookConsumerWidget {
   const PasswordPage({Key? key}) : super(key: key);
 
   @override
-  _PasswordPageState createState() => _PasswordPageState();
-}
-
-class _PasswordPageState extends ConsumerState<PasswordPage> {
-
-  @override
-  void initState() {
-    super.initState();
-    ref.read(passwordViewModelProvider.notifier).setInitialize();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final passwordViewModelState = ref.watch(passwordViewModelProvider);
-    final passwordViewModelNotifier = ref.watch(passwordViewModelProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final password = useState('');
+    final passwordController = useState(TextEditingController(text: ''));
+    final checkPassword = useState('');
+    final checkPasswordController = useState(TextEditingController(text: ''));
     final _isObscurePassword = useState(true);
     final _isObscureCheckPassword = useState(true);
     return Scaffold(
@@ -36,13 +26,13 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
           IconButton(
             onPressed: () async {
               try {
-                updatePasswordValidation(passwordViewModelState['password'], passwordViewModelState['checkPassword']);
+                updatePasswordValidation(password.value, checkPassword.value);
                 showDialog(
                   context: context,
                   builder: (context) {
                     return ReSingInDialog(
                       function: () async {
-                        await passwordViewModelNotifier.updatePassword();
+                        await updateUserPasswordFire(password.value);
                       },
                       navigator: () {
                         Navigator.of(context).pop();
@@ -84,7 +74,7 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ListTile(
                     title: TextFormField(
-                      controller: passwordViewModelNotifier.passwordController,
+                      controller: passwordController.value,
                       obscureText: _isObscurePassword.value,
                       decoration: InputDecoration(
                         hintText: 'パスワード（6〜20文字）',
@@ -99,7 +89,7 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
                         ),
                       ),
                       onChanged: (text) {
-                        passwordViewModelNotifier.setPassword(text);
+                        password.value = text;
                       },
                       // maxLength: 20,
                     ),
@@ -120,7 +110,7 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ListTile(
                     title: TextFormField(
-                      controller: passwordViewModelNotifier.checkPasswordController,
+                      controller: checkPasswordController.value,
                       obscureText: _isObscureCheckPassword.value,
                       decoration: InputDecoration(
                         hintText: 'パスワード（6〜20文字）',
@@ -135,7 +125,7 @@ class _PasswordPageState extends ConsumerState<PasswordPage> {
                         ),
                       ),
                       onChanged: (text) {
-                        passwordViewModelNotifier.setCheckPassword(text);
+                        checkPassword.value = text;
                       },
                       // maxLength: 20,
                     ),

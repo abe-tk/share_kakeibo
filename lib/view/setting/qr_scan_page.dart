@@ -76,6 +76,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    // final ownerRoomName = useState('');
     setState(() {
       this.controller = controller;
     });
@@ -108,8 +109,10 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                 onPressed: () async {
                   // ここでjoinRoomの処理
                   try {
-                    await ref.read(qrScanViewModelProvider.notifier).joinRoom((scanData.code).toString());
+                    updateUserRoomCodeFire((scanData.code).toString());
+                    joinRoomFire((scanData.code).toString(), ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
                     // 各Stateを更新
+                    ref.read(roomCodeProvider.notifier).fetchRoomCode();
                     ref.read(roomNameProvider.notifier).fetchRoomName();
                     ref.read(roomMemberProvider.notifier).fetchRoomMember();
                     ref.read(eventProvider.notifier).setEvent();
@@ -117,14 +120,13 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                     // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
                     ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
                     ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
-                    Navigator.popUntil(context,
-                            (Route<dynamic> route) => route.isFirst);
+                    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: positiveSnackBarColor,
                         behavior: SnackBarBehavior.floating,
-                        content: Text('【${ref.watch(qrScanViewModelProvider.notifier).ownerRoomName}】に参加しました！'),
+                        content: Text('【$roomName】に参加しました！'),
                       ),
                     );
                   } catch (e) {

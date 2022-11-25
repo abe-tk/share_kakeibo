@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class EmailPage extends StatefulHookConsumerWidget {
+class EmailPage extends HookConsumerWidget {
   const EmailPage({Key? key}) : super(key: key);
 
-  @override
-  _EmailPageState createState() => _EmailPageState();
-}
-
-class _EmailPageState extends ConsumerState<EmailPage> {
-  @override
-  void initState() {
-    super.initState();
-    Future(() async {
-      await ref.read(emailViewModelProvider.notifier).fetchEmail();
-    });
+  Future <void> updateEmail(String email, TextEditingController emailController) async {
+    email = emailController.text;
+    await updateUserEmailFire(email);
   }
 
   @override
-  Widget build(BuildContext context) {
-    final emailViewModelState = ref.watch(emailViewModelProvider);
-    final emailViewModelNotifier = ref.watch(emailViewModelProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final email = useState(ref.watch(userProvider)['email']);
+    final emailController = useState(TextEditingController(text: ref.watch(userProvider)['email']));
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -34,13 +27,13 @@ class _EmailPageState extends ConsumerState<EmailPage> {
           IconButton(
             onPressed: () async {
               try {
-                updateEmailValidation(emailViewModelState, emailViewModelNotifier.email);
+                updateEmailValidation(email.value, ref.watch(userProvider)['email']);
                 showDialog(
                   context: context,
                   builder: (context) {
                     return ReSingInDialog(
                       function: () async {
-                        await emailViewModelNotifier.updateEmail();
+                        await updateEmail(email.value, emailController.value);
                         await ref.read(userProvider.notifier).fetchUser();
                       },
                       navigator: () {
@@ -82,7 +75,7 @@ class _EmailPageState extends ConsumerState<EmailPage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ListTile(
-                    title: Text(emailViewModelNotifier.email ?? ''),
+                    title: Text(ref.watch(userProvider)['email']),
                   ),
                 ),
                 const Divider(),
@@ -101,14 +94,12 @@ class _EmailPageState extends ConsumerState<EmailPage> {
                   child: ListTile(
                     title: TextField(
                       textAlign: TextAlign.left,
-                      controller: emailViewModelNotifier.emailController,
+                      controller: emailController.value,
                       decoration: const InputDecoration(
                         hintText: 'メールアドレス',
                         border: InputBorder.none,
                       ),
-                      onChanged: (text) {
-                        emailViewModelNotifier.setEmail(text);
-                      },
+                      onChanged: (text) => email.value = text,
                     ),
                   ),
                 ),

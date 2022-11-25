@@ -19,9 +19,13 @@ Future<String> setOwnerRoomCodeFire(code) async {
 
 // ルーム名の取得
 Future<String> setRoomNameFire(code) async {
-  final snapshot = await FirebaseFirestore.instance.collection('users').doc(code).get();
-  final roomNameData = snapshot.data();
-  return roomNameData!['roomName'];
+  try {
+    final snapshot = await FirebaseFirestore.instance.collection('users').doc(code).get();
+    final roomNameData = snapshot.data();
+    return roomNameData!['roomName'];
+  } catch  (e) {
+    throw '入力した招待コードのルームが存在しません';
+  }
 }
 
 // ルーム名の変更

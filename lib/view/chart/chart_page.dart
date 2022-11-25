@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/impoter.dart';
-import 'package:intl/intl.dart';
 
 class ChartPage extends StatefulHookConsumerWidget {
   const ChartPage({Key? key}) : super(key: key);
@@ -12,7 +11,6 @@ class ChartPage extends StatefulHookConsumerWidget {
 }
 
 class _ChartPageState extends ConsumerState<ChartPage> {
-
   void reCalc(DateTime date) {
     ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(date);
     ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(date);
@@ -24,7 +22,6 @@ class _ChartPageState extends ConsumerState<ChartPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // エラーの出ていた処理
       ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
       ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
       ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
@@ -52,35 +49,20 @@ class _ChartPageState extends ConsumerState<ChartPage> {
           centerTitle: true,
           backgroundColor: appBarBackGroundColor,
           elevation: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppIconButton(
-                icon: Icons.chevron_left,
-                color: detailIconColor,
-                function: () {
-                  month.value = DateTime(month.value.year, month.value.month - 1);
-                  reCalc(month.value);
-                },
-              ),
-              AppTextButton(
-                text: DateFormat.yMMM('ja').format(month.value),
-                color: normalTextColor,
-                size: 20,
-                function: () async {
-                  month.value = await selectMonth(context, month.value);
-                  reCalc(month.value);
-                },
-              ),
-              AppIconButton(
-                icon: Icons.chevron_right,
-                color: detailIconColor,
-                function: () {
-                  month.value = DateTime(month.value.year, month.value.month + 1);
-                  reCalc(month.value);
-                },
-              ),
-            ],
+          title: SelectMonth(
+            month: month.value,
+            left: () {
+              month.value = DateTime(month.value.year, month.value.month - 1);
+              reCalc(month.value);
+            },
+            center: () async {
+              month.value = await selectMonth(context, month.value);
+              reCalc(month.value);
+            },
+            right: () {
+              month.value = DateTime(month.value.year, month.value.month + 1);
+              reCalc(month.value);
+            },
           ),
           actions: [
             AppIconButton(
@@ -135,7 +117,8 @@ class _ChartPageState extends ConsumerState<ChartPage> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                     child: ToggleButtons(
                       fillColor: toggleFillColor,
                       borderWidth: 2,
@@ -189,39 +172,39 @@ class _ChartPageState extends ConsumerState<ChartPage> {
           child: TabBarView(
             children: [
               isDisplay.value == true
-                  ? AppPieChart(
-                largeCategory: '収入',
-                category: true,
-                pieChartSectionData: incomeCategoryPieChartState,
-                totalPrice: incomeCategoryPieChartNotifier.totalPrice,
-                length: incomeCategoryPieChartNotifier.chartSourceData.length,
-                chartSourceData: incomeCategoryPieChartNotifier.chartSourceData,
-              )
-                  : AppPieChart(
-                largeCategory: '収入',
-                category: false,
-                pieChartSectionData: incomeUserPieChartState,
-                totalPrice: incomeUserPieChartNotifier.totalPrice,
-                length: incomeUserPieChartNotifier.chartSourceData.length,
-                chartSourceData: incomeUserPieChartNotifier.chartSourceData,
-              ),
+                  ? ChartPagePie(
+                      largeCategory: '収入',
+                      category: true,
+                      pieChartSectionData: incomeCategoryPieChartState,
+                      totalPrice: incomeCategoryPieChartNotifier.totalPrice,
+                      length: incomeCategoryPieChartNotifier.chartSourceData.length,
+                      chartSourceData: incomeCategoryPieChartNotifier.chartSourceData,
+                    )
+                  : ChartPagePie(
+                      largeCategory: '収入',
+                      category: false,
+                      pieChartSectionData: incomeUserPieChartState,
+                      totalPrice: incomeUserPieChartNotifier.totalPrice,
+                      length: incomeUserPieChartNotifier.chartSourceData.length,
+                      chartSourceData: incomeUserPieChartNotifier.chartSourceData,
+                    ),
               isDisplay.value == true
-                  ? AppPieChart(
-                largeCategory: '支出',
-                category: true,
-                pieChartSectionData: spendingCategoryPieChartState,
-                totalPrice: spendingCategoryPieChartNotifier.totalPrice,
-                length: spendingCategoryPieChartNotifier.chartSourceData.length,
-                chartSourceData: spendingCategoryPieChartNotifier.chartSourceData,
-              )
-                  : AppPieChart(
-                largeCategory: '支出',
-                category: false,
-                pieChartSectionData: spendingUserPieChartState,
-                totalPrice: spendingUserPieChartNotifier.totalPrice,
-                length: spendingUserPieChartNotifier.chartSourceData.length,
-                chartSourceData: spendingUserPieChartNotifier.chartSourceData,
-              ),
+                  ? ChartPagePie(
+                      largeCategory: '支出',
+                      category: true,
+                      pieChartSectionData: spendingCategoryPieChartState,
+                      totalPrice: spendingCategoryPieChartNotifier.totalPrice,
+                      length: spendingCategoryPieChartNotifier.chartSourceData.length,
+                      chartSourceData: spendingCategoryPieChartNotifier.chartSourceData,
+                    )
+                  : ChartPagePie(
+                      largeCategory: '支出',
+                      category: false,
+                      pieChartSectionData: spendingUserPieChartState,
+                      totalPrice: spendingUserPieChartNotifier.totalPrice,
+                      length: spendingUserPieChartNotifier.chartSourceData.length,
+                      chartSourceData: spendingUserPieChartNotifier.chartSourceData,
+                    ),
             ],
           ),
         ),

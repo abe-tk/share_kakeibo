@@ -24,8 +24,8 @@ class EditEventPage extends HookConsumerWidget {
       // 総資産額の再計算
       ref.read(totalAssetsStateProvider.notifier).calcTotalAssets();
       // カレンダーのイベントを更新
-      ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
-      ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
+      ref.read(calendarEventStateProvider.notifier).fetchCalendarEvent();
+      ref.read(detailEventStateProvider.notifier).fetchDetailEvent();
       // 統計の円グラフを更新
       ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
       ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));

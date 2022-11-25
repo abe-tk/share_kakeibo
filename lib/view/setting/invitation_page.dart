@@ -59,7 +59,7 @@ class InvitationPage extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: QrImage(
-                                data: UserNotifier().state['roomCode'],
+                                data: ref.watch(roomCodeProvider),
                                 version: QrVersions.auto,
                                 size: 200.0,
                               ),
@@ -85,10 +85,10 @@ class InvitationPage extends ConsumerWidget {
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.copy),
-                title: Text(UserNotifier().state['roomCode'], style: const TextStyle(fontSize: 16),),
+                title: Text(ref.watch(roomCodeProvider), style: const TextStyle(fontSize: 16),),
                 subtitle: const Text('タップしてコピー'),
                 onTap: () {
-                  Clipboard.setData(ClipboardData(text: UserNotifier().state['roomCode']));
+                  Clipboard.setData(ClipboardData(text: ref.watch(roomCodeProvider)));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('招待コードをコピーしました！'),

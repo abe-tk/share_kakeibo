@@ -23,6 +23,8 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
   @override
   Widget build(BuildContext context) {
     final selectIndex = useState(0);
+    final memo = useState('');
+    final memoController = useState(TextEditingController());
     return Scaffold(
       body: _pages[selectIndex.value],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -87,6 +89,7 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
                                         onPressed: () => Navigator.pop(context),
                                         child: ListTile(
                                           title: TextField(
+                                            controller: memoController.value,
                                             cursorColor: Colors.grey,
                                             autofocus: true,
                                             decoration: const InputDecoration(
@@ -94,7 +97,8 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
                                               border: InputBorder.none,
                                             ),
                                             onChanged: (text) {
-                                              ref.read(memoViewModelProvider.notifier).setMemo(text);
+                                              memo.value = text;
+                                              // ref.read(memoViewModelProvider.notifier).setMemo(text);
                                             },
                                           ),
                                           leading: const Icon(Icons.note),
@@ -109,7 +113,8 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
                                           SimpleDialogOption(
                                             onPressed: () async {
                                               try {
-                                                await ref.read(memoViewModelProvider.notifier).addMemo();
+                                                // await ref.read(memoViewModelProvider.notifier).addMemo();
+                                                await ref.read(memoProvider.notifier).addMemo(memo.value);
                                                 Navigator.of(context).pop();
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
@@ -135,7 +140,9 @@ class _BottomNaviState extends ConsumerState<BottomNavi> {
                                   );
                                 },
                               );
-                              ref.read(memoViewModelProvider.notifier).clearMemo();
+                              memoController.value.clear();
+                              memo.value = '';
+                              // ref.read(memoViewModelProvider.notifier).clearMemo();
                             },
                           ),
                         ],

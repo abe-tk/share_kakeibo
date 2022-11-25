@@ -15,13 +15,13 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(detailEventViewModelProvider.notifier).fetchDetailEvent();
+      ref.read(detailEventStateProvider.notifier).fetchDetailEvent();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final detailEventState = ref.watch(detailEventViewModelProvider);
+    final detailEventState = ref.watch(detailEventStateProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('過去の明細'),
@@ -63,7 +63,7 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
                   );
                 },
               )
-            : const NoDataCase(text: '取引'),
+            : const NoDataCase(text: '取引', height: 16),
       ),
     );
   }

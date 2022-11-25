@@ -23,13 +23,13 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(calendarViewModelProvider.notifier).fetchCalendarEvent();
+      ref.read(calendarEventStateProvider.notifier).fetchCalendarEvent();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final calendarEventState = ref.watch(calendarViewModelProvider);
+    final calendarEventState = ref.watch(calendarEventStateProvider);
     final _focusedDay = useState(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
     final _selectedDay = useState(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toUtc().add(const Duration(hours: 9)));
 
@@ -40,6 +40,17 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 
     List _getEventForDay(DateTime day) {
       return _events[day] ?? [];
+    }
+
+    bool checkExistenceEvent(DateTime selectedDate) {
+      bool value = true;
+      for (final eventDate in calendarEventState.keys) {
+        if (eventDate.toUtc().add(const Duration(hours: 9)) == selectedDate) {
+          value = false;
+          break;
+        }
+      }
+      return value;
     }
 
     return Scaffold(
@@ -101,8 +112,8 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
               ),
             ),
             Visibility(
-              visible: ref.read(calendarViewModelProvider.notifier).checkExistenceEvent(_selectedDay.value),
-              child: const NoDataCase(text: '取引'),
+              visible: checkExistenceEvent(_selectedDay.value),
+              child: const NoDataCase(text: '取引', height: 16),
             ),
             Expanded(
               child: ListView(

@@ -80,11 +80,9 @@ void changeRoomNameValidation(newRoomName) {
 }
 
 // ルーム参加時に招待コードの確認
-void invitationRoomValidation(roomCode, ownerRoomCode) {
+void invitationRoomValidation(roomCode) {
   if (roomCode == null || roomCode == "") {
     throw '招待コードが入力されていません';
-  } else if (roomCode != ownerRoomCode || ownerRoomCode == null || ownerRoomCode == '') {
-    throw '招待コードが正しくありません';
   }
 }
 
@@ -103,5 +101,12 @@ String authValidation(FirebaseAuthException e) {
       return 'すでに使用されているメールアドレスです';
     default:
       return 'エラー';
+  }
+}
+
+// メモの追加
+void validationMemo(String memo) {
+  if (memo == "") {
+    throw 'メモが入力されていません';
   }
 }

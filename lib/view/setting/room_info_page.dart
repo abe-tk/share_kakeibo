@@ -3,24 +3,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class RoomInfoPage extends StatefulHookConsumerWidget {
+class RoomInfoPage extends HookConsumerWidget {
   const RoomInfoPage({Key? key}) : super(key: key);
 
   @override
-  _RoomInfoPageState createState() => _RoomInfoPageState();
-}
-
-class _RoomInfoPageState extends ConsumerState<RoomInfoPage> {
-
-  @override
-  void initState() {
-    super.initState();
-    ref.read(roomInfoViewModelProvider.notifier).fetchRoomInfo();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final roomInfoViewModelNotifier = ref.watch(roomInfoViewModelProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
     final roomNameState = ref.watch(roomNameProvider);
     final roomMemberState = ref.watch(roomMemberProvider);
     final userState = ref.watch(userProvider);
@@ -51,7 +38,9 @@ class _RoomInfoPageState extends ConsumerState<RoomInfoPage> {
                         onPressed: () async {
                           try {
                             Navigator.of(context).pop();
-                            roomInfoViewModelNotifier.judgeOwner();
+                            if (uid == ref.watch(roomCodeProvider)) {
+                              throw 'RoomOwnerは退出できません';
+                            }
                             showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -68,8 +57,9 @@ class _RoomInfoPageState extends ConsumerState<RoomInfoPage> {
                                       child: const Text("OK"),
                                       onPressed: () async {
                                         try {
-                                          await roomInfoViewModelNotifier.exitRoom();
+                                          await exitRoomFire(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName']);
                                           // 各Stateを更新
+                                          ref.read(roomCodeProvider.notifier).fetchRoomCode();
                                           ref.read(roomNameProvider.notifier).fetchRoomName();
                                           ref.read(roomMemberProvider.notifier).fetchRoomMember();
                                           ref.read(eventProvider.notifier).setEvent();

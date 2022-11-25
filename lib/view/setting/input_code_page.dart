@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class InputCodePage extends ConsumerWidget {
+class InputCodePage extends HookConsumerWidget {
   const InputCodePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final inputCodeViewModelNotifier = ref.watch(inputCodeViewModelProvider.notifier);
+    final roomCode = useState('');
+    final roomCodeController = useState(TextEditingController());
+    final ownerRoomName = useState('');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -20,8 +24,13 @@ class InputCodePage extends ConsumerWidget {
           IconButton(
             onPressed: () async {
               try {
-                await inputCodeViewModelNotifier.joinRoom();
+                invitationRoomValidation(roomCode.value);
+                ownerRoomName.value = await setRoomNameFire(roomCode.value);
+                updateUserRoomCodeFire(roomCode.value);
+                joinRoomFire(roomCode.value, ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
+
                 // 各Stateを更新
+                ref.read(roomCodeProvider.notifier).fetchRoomCode();
                 ref.read(roomNameProvider.notifier).fetchRoomName();
                 ref.read(roomMemberProvider.notifier).fetchRoomMember();
                 ref.read(eventProvider.notifier).setEvent();
@@ -29,14 +38,13 @@ class InputCodePage extends ConsumerWidget {
                 // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
                 ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
                 ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
-                Navigator.popUntil(context,
-                        (Route<dynamic> route) => route.isFirst);
+                Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor: positiveSnackBarColor,
                     behavior: SnackBarBehavior.floating,
-                    content: Text('【${inputCodeViewModelNotifier.ownerRoomName}】に参加しました！'),
+                    content: Text('【${ownerRoomName.value}】に参加しました！'),
                   ),
                 );
               } catch (e) {
@@ -71,13 +79,13 @@ class InputCodePage extends ConsumerWidget {
                 child: ListTile(
                   title: TextField(
                     textAlign: TextAlign.left,
-                    controller: inputCodeViewModelNotifier.roomCodeController,
+                    controller: roomCodeController.value,
                     decoration: const InputDecoration(
                       hintText: '招待コード',
                       border: InputBorder.none,
                     ),
                     onChanged: (text) {
-                      inputCodeViewModelNotifier.setRoomCode(text);
+                      roomCode.value = text;
                     },
                   ),
                 ),

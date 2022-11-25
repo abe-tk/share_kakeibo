@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class AppPieChart extends ConsumerWidget {
+class ChartPagePie extends StatelessWidget {
   final String largeCategory;
   final bool category;
   final List<PieChartSectionData> pieChartSectionData;
@@ -11,7 +10,7 @@ class AppPieChart extends ConsumerWidget {
   final int length;
   final List<Map<String, dynamic>> chartSourceData;
 
-  const AppPieChart({
+  const ChartPagePie({
     Key? key,
     required this.largeCategory,
     required this.category,
@@ -22,7 +21,7 @@ class AppPieChart extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -40,47 +39,9 @@ class AppPieChart extends ConsumerWidget {
               ),
             ),
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    largeCategory,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: pieChartCenterTextColor,
-                    ),
-                  ),
-                  Text(
-                    '${formatter.format(totalPrice)}円',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: pieChartCenterTextColor,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: PieChart(
-                      PieChartData(
-                        borderData: FlBorderData(show: false),
-                        sectionsSpace: 1,
-                        centerSpaceRadius: 50,
-                        sections: pieChartSectionData,
-                      ),
-                    ),
-                  ),
-                  // const Divider(color: Colors.grey),
-                ],
-              ),
-            ],
+          child: AppPieChart(
+            pieChartSectionData: pieChartSectionData,
+            price: totalPrice,
           ),
         ),
         Expanded(

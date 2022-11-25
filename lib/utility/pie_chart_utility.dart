@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_kakeibo/model/pie_data.dart';
 
 // パーセントの算出
@@ -43,13 +44,13 @@ List<PieChartSectionData> getCategory(List<PieData> pieData) => pieData
     .asMap()
     .map<int, PieChartSectionData>((index, data) {
   // const double fontSize = 12;
-  const double radius = 50;
+  // const double radius = 50.w;
 
   var value = PieChartSectionData(
     color: data.color,
     value: data.percent,
     title: data.title,
-    radius: radius,
+    radius: 50,
     titleStyle: const TextStyle(
       // fontSize: fontSize,
       fontWeight: FontWeight.bold,

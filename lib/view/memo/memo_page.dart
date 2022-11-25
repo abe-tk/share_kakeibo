@@ -1,29 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:intl/intl.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class MemoPage extends StatefulHookConsumerWidget {
+class MemoPage extends HookConsumerWidget {
   const MemoPage({Key? key}) : super(key: key);
 
   @override
-  _MemoPageState createState() => _MemoPageState();
-}
-
-class _MemoPageState extends ConsumerState<MemoPage> {
-
-  @override
-  void initState() {
-    super.initState();
-    ref.read(memoViewModelProvider.notifier).fetchMemo();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    List<Memo> memos = ref.watch(memoViewModelProvider);
-    final memoViewModelNotifier = ref.watch(memoViewModelProvider.notifier);
-    final isComplete = useState(false);
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<Memo> memos = ref.watch(memoProvider);
+    final memoNotifier = ref.watch(memoProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('メモ'),
@@ -37,6 +22,20 @@ class _MemoPageState extends ConsumerState<MemoPage> {
           ),
           preferredSize: const Size.fromHeight(0.1),
         ),
+        actions: [
+          AppIconButton(
+            icon: Icons.delete,
+            color: negativeIconColor,
+            function: () async {
+              try {
+                await memoNotifier.removeMemo();
+                negativeSnackBar(context, 'メモを削除しました');
+              } catch (e) {
+                negativeSnackBar(context, e.toString());
+              }
+            },
+          ),
+        ],
       ),
       drawer: const DrawerMenu(),
       body: SafeArea(
@@ -50,42 +49,14 @@ class _MemoPageState extends ConsumerState<MemoPage> {
                 itemBuilder: (context, index) {
                   if (index == memos.length) {
                     return (memos.isEmpty)
-                        ? const NoMemoCase()
+                        ? const NoDataCase(text: 'メモ', height: 60)
                         : const SizedBox(height: 50);
                   }
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: boxColor,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: boxShadowColor,
-                            spreadRadius: 1.0,
-                          ),
-                        ],
-                      ),
-                      child: CheckboxListTile(
-                        controlAffinity: ListTileControlAffinity.leading,
-                        checkColor: checkboxChekColor,
-                        activeColor: checkboxActiveColor,
-                        value: memos[index].completed,
-                        onChanged: (value) {
-                          memoViewModelNotifier.toggle(memos[index].id);
-                          isComplete.value = memoViewModelNotifier.isCompletedChange();
-                        },
-                        title: Text(
-                          memos[index].memo,
-                          style: TextStyle(
-                            decoration: (memos[index].completed == true)
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                          ),
-                        ),
-                        subtitle: Text(DateFormat.MMMEd('ja').format(memos[index].date)),
-                      ),
-                    ),
+                  return AppMemoList(
+                    completed: memos[index].completed,
+                    memo: memos[index].memo,
+                    date: memos[index].date,
+                    function: (value) => memoNotifier.toggle(memos[index].id),
                   );
                 },
               ),
@@ -93,64 +64,6 @@ class _MemoPageState extends ConsumerState<MemoPage> {
           ),
         ),
       ),
-      floatingActionButton: Visibility(
-        visible: isComplete.value,
-        child: SizedBox(
-          width: 50,
-          child: FloatingActionButton(
-            child: Icon(Icons.delete, color: memoPageFabIconColor,),
-            backgroundColor: memoPageFabBackGroundColor,
-            onPressed: () async {
-              try {
-                await memoViewModelNotifier.removeMemo();
-                ref.read(memoProvider.notifier).setMemo();
-                isComplete.value = memoViewModelNotifier.isCompletedChange();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: negativeSnackBarColor,
-                    behavior: SnackBarBehavior.floating,
-                    content: const Text('メモを削除しました'),
-                  ),
-                );
-              } catch (e) {
-                final snackBar = SnackBar(
-                  backgroundColor: negativeSnackBarColor,
-                  behavior: SnackBarBehavior.floating,
-                  content: Text(e.toString()),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NoMemoCase extends ConsumerWidget {
-  const NoMemoCase({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        const SizedBox(height: 60),
-        SizedBox(
-          width: 150,
-          child: Image.asset('assets/image/app_theme_gray.png'),
-        ),
-        const Text('メモが存在しません', style: TextStyle(fontWeight: FontWeight.bold,),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('「', style: TextStyle(color: detailTextColor),),
-            Icon(Icons.edit, size: 16,color: detailTextColor,),
-            Text('入力」からメモを追加してください', style: TextStyle(color: detailTextColor),),
-          ],
-        ),
-      ],
     );
   }
 }

@@ -2,13 +2,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-final detailEventViewModelProvider =
-StateNotifierProvider<DetailEventViewModelNotifier, List<Event>>((ref) {
-  return DetailEventViewModelNotifier();
+final detailEventStateProvider =
+StateNotifierProvider<DetailEventStateNotifier, List<Event>>((ref) {
+  return DetailEventStateNotifier();
 });
 
-class DetailEventViewModelNotifier extends StateNotifier<List<Event>> {
-  DetailEventViewModelNotifier() : super([]);
+class DetailEventStateNotifier extends StateNotifier<List<Event>> {
+  DetailEventStateNotifier() : super([]);
 
   void fetchDetailEvent() {
     final events = EventNotifier().state.map((doc) => Event(

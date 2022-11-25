@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// final fire = FirebaseFirestore.instance.collection('users');
-
 // メモの一覧を取得
 Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getMemoFire(String roomCode) async {
   final snapshot = await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('memo').get();
