@@ -25,7 +25,7 @@ class InputCodePage extends HookConsumerWidget {
             onPressed: () async {
               try {
                 invitationRoomValidation(roomCode.value);
-                ownerRoomName.value = await setRoomNameFire(roomCode.value);
+                ownerRoomName.value = await getRoomNameFire(roomCode.value);
                 updateUserRoomCodeFire(roomCode.value);
                 joinRoomFire(roomCode.value, ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
 

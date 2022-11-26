@@ -9,12 +9,12 @@ StateNotifierProvider<PaymentUserNotifier, List<String>>((ref) {
 class PaymentUserNotifier extends StateNotifier<List<String>> {
   PaymentUserNotifier() : super([]);
 
-  Future fetchPaymentUser() async {
+  Future fetchPaymentUser(List<RoomMember> roomMember) async {
     // 支払い元ユーザのlistを作成
     List<String> paymentUserList = [];
-    for (int i = 0; i < RoomMemberNotifier().state.length; i++) {
+    for (int i = 0; i < roomMember.length; i++) {
       paymentUserList.add(
-          RoomMemberNotifier().state[i].userName
+          roomMember[i].userName
       );
     }
     state = paymentUserList;

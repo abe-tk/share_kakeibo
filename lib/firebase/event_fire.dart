@@ -1,18 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_kakeibo/model/event.dart';
 
-// final fire = FirebaseFirestore.instance.collection('users');
-
 // イベントを取得
-Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getEventFire(code) async {
-  final snapshot = await FirebaseFirestore.instance.collection('users').doc(code).collection('events').get();
+Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getEventFire(String roomCode) async {
+  final snapshot = await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').get();
   return snapshot.docs;
 }
 
 // イベントを追加
-Future<void> addEventFire(code, date, price, largeCategory, smallCategory, memo,
-    currentMonth, paymentUser) async {
-  await FirebaseFirestore.instance.collection('users').doc(code).collection('events').add({
+Future<void> addEventFire(String roomCode, DateTime date, String price, String largeCategory, String smallCategory, String memo, DateTime currentMonth, String paymentUser,) async {
+  await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').add({
     'date': date,
     'price': price,
     'largeCategory': largeCategory,
@@ -24,17 +21,15 @@ Future<void> addEventFire(code, date, price, largeCategory, smallCategory, memo,
 }
 
 // イベントを削除
-Future<void> deleteEventFire(code, id) async {
-  await FirebaseFirestore.instance.collection('users').doc(code).collection('events').doc(id).delete();
+Future<void> deleteEventFire(String roomCode, String id) async {
+  await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').doc(id).delete();
 }
 
 // イベントを編集
-Future<void> updateEventFire(code, Event event, date, price, largeCategory,
-    smallCategory, memo, currentMonth, paymentUser) async {
-  await FirebaseFirestore.instance.collection('users').doc(code).collection('events').doc(event.id).update({
+Future<void> updateEventFire(String roomCode, Event event, DateTime date, String price, String smallCategory, String memo, DateTime currentMonth, String paymentUser) async {
+  await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('events').doc(event.id).update({
     'date': date,
     'price': price,
-    // 'largeCategory': largeCategory,
     'smallCategory': smallCategory,
     'memo': memo,
     'registerDate': currentMonth,
@@ -43,10 +38,13 @@ Future<void> updateEventFire(code, Event event, date, price, largeCategory,
 }
 
 // アプリ起動直後、Home画面の収支円グラフを正常に表示するために使用
-Future<int> firstCalcLargeCategoryPrice(String code, DateTime currentMonth, String largeCategory) async {
+Future<int> firstCalcLargeCategoryPrice(String roomCode, DateTime currentMonth, String largeCategory) async {
   int calcResult = 0;
   List<int> prices = [];
-  final snapshot = await FirebaseFirestore.instance.collection('users').doc(code).collection('events')
+  final snapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(roomCode)
+      .collection('events')
       .where('registerDate', isEqualTo: currentMonth)
       .where('largeCategory', isEqualTo: largeCategory)
       .get();
@@ -61,10 +59,13 @@ Future<int> firstCalcLargeCategoryPrice(String code, DateTime currentMonth, Stri
 }
 
 // アプリ起動直後、Home画面の累計金額を正常に表示するために使用
-Future<int> firstCalcLageCategoryPrice(String code, String largeCategory) async {
+Future<int> firstCalcTotalPrice(String roomCode, String largeCategory) async {
   int calcResult = 0;
   List<int> prices = [];
-  final snapshot = await FirebaseFirestore.instance.collection('users').doc(code).collection('events')
+  final snapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(roomCode)
+      .collection('events')
       .where('largeCategory', isEqualTo: largeCategory)
       .get();
   for (final document in snapshot.docs) {

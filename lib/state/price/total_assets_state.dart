@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/impoter.dart';
 
@@ -13,14 +14,14 @@ class TotalAssetsStateNotifier extends StateNotifier<int> {
 
   late String roomCode;
 
-  void calc() {
+  void calc(List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
     switch(first) {
       case true:
         firstCalcTotalAssets();
         first = false;
         break;
       case false:
-        calcTotalAssets();
+        calcTotalAssets(event);
         break;
       default:
         print('error');
@@ -28,16 +29,16 @@ class TotalAssetsStateNotifier extends StateNotifier<int> {
     }
   }
 
-  void calcTotalAssets() {
-    int income = calcLageCategoryPrice(EventNotifier().state, '収入');
-    int spending = calcLageCategoryPrice(EventNotifier().state, '支出');
+  void calcTotalAssets(List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
+    int income = calcLageCategoryPrice(event, '収入');
+    int spending = calcLageCategoryPrice(event, '支出');
     state = income - spending;
   }
 
   Future<void> firstCalcTotalAssets() async {
-    roomCode = await setRoomCodeFire(uid);
-    int income = await firstCalcLageCategoryPrice(roomCode, '収入');
-    int spending = await firstCalcLageCategoryPrice(roomCode, '支出');
+    roomCode = await getRoomCodeFire(uid);
+    int income = await firstCalcTotalPrice(roomCode, '収入');
+    int spending = await firstCalcTotalPrice(roomCode, '支出');
     state = income - spending;
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/impoter.dart';
 
 class RoomNamePage extends HookConsumerWidget {
@@ -8,6 +9,8 @@ class RoomNamePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final roomNameNotifier = ref.watch(roomNameProvider.notifier);
+    final roomName = useState(ref.watch(roomNameProvider));
+    final roomNameController = useState(TextEditingController(text: ref.watch(roomNameProvider)));
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -20,7 +23,7 @@ class RoomNamePage extends HookConsumerWidget {
           IconButton(
             onPressed: () async {
               try {
-                await roomNameNotifier.changeRoomName();
+                await roomNameNotifier.changeRoomName(roomName.value);
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -63,14 +66,12 @@ class RoomNamePage extends HookConsumerWidget {
               child: ListTile(
                 title:TextField(
                   textAlign: TextAlign.left,
-                  controller: roomNameNotifier.roomNameController,
+                  controller: roomNameController.value,
                   decoration: const InputDecoration(
                     hintText: 'Room名を入力してください',
                     border: InputBorder.none,
                   ),
-                  onChanged: (text) {
-                    roomNameNotifier.setRoomName(text);
-                  },
+                  onChanged: (text) => roomName.value = text,
                 ),
               ),
             ),

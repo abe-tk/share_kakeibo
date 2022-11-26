@@ -10,9 +10,9 @@ StateNotifierProvider<CalendarEventStateNotifier, Map<DateTime, List<Event>>>((r
 class CalendarEventStateNotifier extends StateNotifier<Map<DateTime, List<Event>>> {
   CalendarEventStateNotifier() : super({});
 
-  void fetchCalendarEvent() {
+  void fetchCalendarEvent(List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
     Map<DateTime, List<Event>> eventMap = {};
-    for (final doc in EventNotifier().state) {
+    for (final doc in event) {
       final event = Event(
         id: doc.id,
         date: (doc['date'] as Timestamp).toDate(),

@@ -57,7 +57,7 @@ class RegisterPage extends HookConsumerWidget {
                     ref.watch(indicatorProvider).showProgressDialog(context);
                     changeLoginState(false); // app.dartでサインインの状態で判定されないようにするため
                     try {
-                      await registerFire(email.value, password.value, userName.value);
+                      await registerFire(userName.value, email.value, password.value);
                       await FirebaseAuth.instance.signOut(); // app.dartでサインインの状態で判定されないようにするため
                       Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
                       positiveSnackBar(context, 'アカウントを作成しました！\nこちらからログインしてください');

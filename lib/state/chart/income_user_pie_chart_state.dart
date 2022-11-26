@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -25,19 +26,19 @@ class IncomeUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
   }
 
   // 当月の収入（ユーザー）算出
-  void incomeUserChartCalc(DateTime date) {
+  void incomeUserChartCalc(DateTime date, List<QueryDocumentSnapshot<Map<String, dynamic>>> event, List<RoomMember> roomMember) {
 
     setInitialize();
-    setUserColor();
-    setChartData();
+    setUserColor(roomMember);
+    setChartData(roomMember);
 
     // 当月の収入（ユーザー）の合計金額をセット
-    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '収入');
+    totalPrice = calcCurrentMonthLargeCategoryPrice(event, date, '収入');
 
     // 各ユーザーの金額を算出
     for (int i = 0; i < chartSourceData.length; i++) {
       int price = 0;
-      price = setUserPriceFire(EventNotifier().state, date, '収入', chartSourceData[i]['category']);
+      price = setUserPriceFire(event, date, '収入', chartSourceData[i]['category']);
       chartSourceData[i]['price'] = price;
     }
 
@@ -56,14 +57,14 @@ class IncomeUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
   }
 
   // ルームメンバーの情報をchartDataにセット
-  void setChartData() {
-    for (int i = 0; i < RoomMemberNotifier().state.length; i++) {
+  void setChartData(List<RoomMember> roomMember) {
+    for (int i = 0; i < roomMember.length; i++) {
       chartSourceData.add(
         {
-          'category': RoomMemberNotifier().state[i].userName,
+          'category': roomMember[i].userName,
           'price': 0,
           'percent': 0.0,
-          'imgURL': RoomMemberNotifier().state[i].imgURL,
+          'imgURL': roomMember[i].imgURL,
           'color': userColor[i],
         }
       );
@@ -71,7 +72,7 @@ class IncomeUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
   }
 
   // userColorをセット
-  void setUserColor() {
+  void setUserColor(List<RoomMember> roomMember) {
     userColor = [
       const Color(0xFFff6347),
       const Color(0xFF6495ed),
@@ -83,7 +84,7 @@ class IncomeUserPieChartState extends StateNotifier<List<PieChartSectionData>> {
       const Color(0xFFdaa520),
     ];
     // ルームメンバーがuserColorより多かったらuserColorを追加
-    if (userColor.length < RoomMemberNotifier().state.length) {
+    if (userColor.length < roomMember.length) {
       userColor.addAll([
         const Color(0xFFff6347),
         const Color(0xFF6495ed),

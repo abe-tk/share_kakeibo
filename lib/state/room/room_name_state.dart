@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/impoter.dart';
 
@@ -10,24 +9,16 @@ class RoomNameNotifier extends StateNotifier<String> {
   RoomNameNotifier() : super('');
 
   late String roomCode;
-  String? newRoomName;
-  TextEditingController roomNameController = TextEditingController();
 
   Future<void> fetchRoomName() async {
-    roomCode = await setRoomCodeFire(uid);
-    state = await setRoomNameFire(roomCode);
-    newRoomName = state;
-    roomNameController.text = state;
+    roomCode = await getRoomCodeFire(uid);
+    state = await getRoomNameFire(roomCode);
   }
 
-  void setRoomName(String roomName) {
-    newRoomName = roomName;
-  }
-
-  Future<void> changeRoomName() async {
+  Future<void> changeRoomName(String newRoomName) async {
     changeRoomNameValidation(newRoomName);
     await updateRoomNameFire(roomCode, newRoomName);
-    state = newRoomName!;
+    state = newRoomName;
   }
 
 }

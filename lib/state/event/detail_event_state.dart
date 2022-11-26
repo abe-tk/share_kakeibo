@@ -10,8 +10,8 @@ StateNotifierProvider<DetailEventStateNotifier, List<Event>>((ref) {
 class DetailEventStateNotifier extends StateNotifier<List<Event>> {
   DetailEventStateNotifier() : super([]);
 
-  void fetchDetailEvent() {
-    final events = EventNotifier().state.map((doc) => Event(
+  void fetchDetailEvent(List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
+    final events = event.map((doc) => Event(
       id: doc.id,
       date: (doc['date'] as Timestamp).toDate(),
       price: doc['price'],

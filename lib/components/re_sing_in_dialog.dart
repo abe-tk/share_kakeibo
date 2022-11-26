@@ -64,7 +64,7 @@ class ReSingInDialog extends HookConsumerWidget {
               onPressed: () async {
                 try {
                   passwordValidation(password.value);
-                  await signInAuth(ref.watch(userProvider)['email'], password.value);
+                  await reSingInFire(ref.watch(userProvider)['email'], password.value);
                   await function();
                   navigator();
                   ScaffoldMessenger.of(context).showSnackBar(

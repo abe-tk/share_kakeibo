@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -39,17 +40,17 @@ class SpendingCategoryPieChartState extends StateNotifier<List<PieChartSectionDa
   }
 
   // 当月の支出（カテゴリー）算出
-  void spendingCategoryChartCalc(DateTime date) {
+  void spendingCategoryChartCalc(DateTime date, List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
 
     setInitialize();
 
     // 当月の支出（カテゴリー）の合計金額をセット
-    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '支出');
+    totalPrice = calcCurrentMonthLargeCategoryPrice(event, date, '支出');
 
     // 各カテゴリーの金額を算出
     for (int i = 0; i < chartSourceData.length; i++) {
       int price = 0;
-      price = calcCategoryPrice(EventNotifier().state, date, '支出', chartSourceData[i]['category']);
+      price = calcCategoryPrice(event, date, '支出', chartSourceData[i]['category']);
       chartSourceData[i]['price'] = price;
     }
 

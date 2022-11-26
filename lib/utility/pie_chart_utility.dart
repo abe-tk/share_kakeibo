@@ -1,23 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:share_kakeibo/model/pie_data.dart';
-
-// パーセントの算出
-double setPercent(smallPrice, largePrice) {
-  double calcResult = 0;
-  double percent = 0;
-  if (smallPrice != 0) {
-    percent = smallPrice / largePrice * 100;
-  } else {
-    percent = 0;
-  }
-  calcResult = percent;
-  return calcResult;
-}
+import 'package:share_kakeibo/impoter.dart';
 
 // 円グラフの値をセット
-List<PieData> setPieData(chartData, price) {
+List<PieData> setPieData(List<Map<String, dynamic>> chartData, int price) {
   List<PieData> pieData = [];
   for (int i = 0; i < chartData.length; i++) {
     pieData.add(

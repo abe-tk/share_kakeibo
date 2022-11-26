@@ -16,8 +16,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(totalAssetsStateProvider.notifier).calc();
-      ref.read(bpPieChartStateProvider.notifier).calc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(totalAssetsStateProvider.notifier).calc(ref.read(eventProvider));
+      ref.read(bpPieChartStateProvider.notifier).calc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
     });
   }
 
@@ -97,15 +97,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                               month: month.value,
                               left: () {
                                 month.value = DateTime(month.value.year, month.value.month - 1);
-                                bpPieChartNotifier.bpPieChartCalc(month.value);
+                                bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
                               },
                               center: () async {
                                 month.value = await selectMonth(context, month.value);
-                                bpPieChartNotifier.bpPieChartCalc(month.value);
+                                bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
                               },
                               right: () {
                                 month.value = DateTime(month.value.year, month.value.month + 1);
-                                bpPieChartNotifier.bpPieChartCalc(month.value);
+                                bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
                               },
                             ),
                             // 円グラフ

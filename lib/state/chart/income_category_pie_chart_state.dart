@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -28,17 +29,17 @@ class IncomeCategoryPieChartState extends StateNotifier<List<PieChartSectionData
   }
 
   // 当月の収入（カテゴリー）算出
-  void incomeCategoryChartCalc(DateTime date) {
+  void incomeCategoryChartCalc(DateTime date, List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
 
     setInitialize();
 
     // 当月の収入（カテゴリー）の合計金額をセット
-    totalPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '収入');
+    totalPrice = calcCurrentMonthLargeCategoryPrice(event, date, '収入');
 
     // 各カテゴリーの金額を算出
     for (int i = 0; i < chartSourceData.length; i++) {
       int price = 0;
-      price = calcCategoryPrice(EventNotifier().state, date, '収入', chartSourceData[i]['category']);
+      price = calcCategoryPrice(event, date, '収入', chartSourceData[i]['category']);
       chartSourceData[i]['price'] = price;
     }
 

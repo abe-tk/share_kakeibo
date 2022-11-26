@@ -31,7 +31,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     await updatePastEventUserName(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName'], userName);
     // プロフィール画像に変更があれば更新
     if (imgFile != null) {
-      imgURL = await putImgFileFire(imgFile);
+      imgURL = await putImgFileFire(imgFile!);
       await updateUserImgURLFire(imgURL, ref.watch(roomCodeProvider));
     }
   }
@@ -57,10 +57,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               try {
                 await updateProfile(userName.value, imgURL.value);
                 // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
+                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
+                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
+                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
                 // カレンダーのイベントを更新
                 ref.read(eventProvider.notifier).setEvent();
                 // user情報の再取得

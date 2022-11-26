@@ -14,7 +14,7 @@ class MemoNotifier extends StateNotifier<List<Memo>> {
 
   Future<void> setMemo() async {
     List<QueryDocumentSnapshot<Map<String, dynamic>>> memos = [];
-    roomCode = await setRoomCodeFire(uid);
+    roomCode = await getRoomCodeFire(uid);
     memos = await getMemoFire(roomCode);
     state = memos.map((doc) => Memo(
       id: doc.id,

@@ -16,7 +16,7 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(barChartStateProvider.notifier).setBarChartData(DateTime(DateTime.now().year));
+      ref.read(barChartStateProvider.notifier).setBarChartData(DateTime(DateTime.now().year), ref.read(eventProvider));
     });
   }
 
@@ -61,11 +61,11 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
               year: year.value,
               left: () {
                 year.value = DateTime(year.value.year - 1);
-                ref.read(barChartStateProvider.notifier).setBarChartData(year.value);
+                ref.read(barChartStateProvider.notifier).setBarChartData(year.value, ref.read(eventProvider));
               },
               right: () {
                 year.value = DateTime(year.value.year + 1);
-                ref.read(barChartStateProvider.notifier).setBarChartData(year.value);
+                ref.read(barChartStateProvider.notifier).setBarChartData(year.value, ref.read(eventProvider));
               },
             ),
             Expanded(

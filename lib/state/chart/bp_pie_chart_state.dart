@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -34,14 +35,14 @@ class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
     pieData = [];
   }
 
-  void calc(DateTime date) {
+  void calc(DateTime date, List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
     switch(first) {
       case true:
         bpPieChartFirstCalc(date);
         first = false;
         break;
       case false:
-        bpPieChartCalc(date);
+        bpPieChartCalc(date, event);
         break;
       default:
         print('error');
@@ -49,14 +50,14 @@ class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
     }
   }
 
-  void bpPieChartCalc(DateTime date) {
+  void bpPieChartCalc(DateTime date, List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
 
     // イニシャライズ
     setInitialize();
 
     // 当月の収入、支出、合計の金額を算出
-    incomePrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '収入');
-    spendingPrice = calcCurrentMonthLargeCategoryPrice(EventNotifier().state, date, '支出');
+    incomePrice = calcCurrentMonthLargeCategoryPrice(event, date, '収入');
+    spendingPrice = calcCurrentMonthLargeCategoryPrice(event, date, '支出');
     calcTotalPrice = incomePrice + spendingPrice;
     totalPrice = incomePrice - spendingPrice;
 
@@ -87,7 +88,7 @@ class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
   Future<void> bpPieChartFirstCalc(DateTime date) async {
 
     // roomCodeの取得
-    roomCode = await setRoomCodeFire(uid);
+    roomCode = await getRoomCodeFire(uid);
 
     // イニシャライズ
     setInitialize();

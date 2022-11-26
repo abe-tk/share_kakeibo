@@ -15,7 +15,7 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(detailEventStateProvider.notifier).fetchDetailEvent();
+      ref.read(detailEventStateProvider.notifier).fetchDetailEvent(ref.read(eventProvider));
     });
   }
 
@@ -49,7 +49,7 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
                     memo: detailEventState[index].memo,
                     date: detailEventState[index].date,
                     function: () {
-                      ref.read(paymentUserProvider.notifier).fetchPaymentUser();
+                      ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
                       Navigator.push(
                         context,
                         PageTransition(

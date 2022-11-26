@@ -12,20 +12,20 @@ class ChartPage extends StatefulHookConsumerWidget {
 
 class _ChartPageState extends ConsumerState<ChartPage> {
   void reCalc(DateTime date) {
-    ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(date);
-    ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(date);
-    ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(date);
-    ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(date);
+    ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(date, ref.read(eventProvider));
+    ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(date, ref.read(eventProvider));
+    ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(date, ref.read(eventProvider), ref.read(roomMemberProvider));
+    ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(date, ref.read(eventProvider), ref.read(roomMemberProvider));
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-      ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-      ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
-      ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
+      ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
+      ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
+      ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
     });
   }
 

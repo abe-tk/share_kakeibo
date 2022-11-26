@@ -23,7 +23,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(calendarEventStateProvider.notifier).fetchCalendarEvent();
+      ref.read(calendarEventStateProvider.notifier).fetchCalendarEvent(ref.read(eventProvider));
     });
   }
 
@@ -128,7 +128,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                             paymentUser: event.paymentUser,
                             memo: event.memo,
                             function: () {
-                              ref.read(paymentUserProvider.notifier).fetchPaymentUser();
+                              ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
                               Navigator.push(
                                 context,
                                 PageTransition(
