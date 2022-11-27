@@ -9,14 +9,7 @@ class ParticipationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'ROOMに参加',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-      ),
+      appBar: const DefaultAppBar(title: 'ROOMに参加'),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

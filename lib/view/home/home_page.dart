@@ -30,17 +30,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     final bpPieChartState = ref.watch(bpPieChartStateProvider);
     final bpPieChartNotifier = ref.watch(bpPieChartStateProvider.notifier);
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          AppIconButton(
-            icon: Icons.settings,
-            color: Colors.black,
-            function: () => Navigator.pushNamed(context, '/settingPage'),
-          ),
-        ],
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: appBarBackGroundColor,
+      appBar: ActionAppBar(
+        title: '',
+        icon: Icons.settings,
+        iconColor: Colors.black,
+        function: () => Navigator.pushNamed(context, '/settingPage'),
       ),
       drawer: const DrawerMenu(),
       body: SafeArea(

@@ -23,19 +23,7 @@ class _DetailEventPageState extends ConsumerState<DetailEventPage> {
   Widget build(BuildContext context) {
     final detailEventState = ref.watch(detailEventStateProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('過去の明細'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: appBarBackGroundColor,
-        bottom: PreferredSize(
-          child: Container(
-            height: 0.1,
-            color: appBarBottomLineColor,
-          ),
-          preferredSize: const Size.fromHeight(0.1),
-        ),
-      ),
+      appBar: const DefaultAppBar(title: '過去の明細'),
       body: SafeArea(
         child: (detailEventState.isNotEmpty)
             ? ListView.builder(

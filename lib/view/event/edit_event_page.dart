@@ -81,45 +81,34 @@ class EditEventPage extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '${event.largeCategory}の編集',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-        actions: [
-          AppIconButton(
-            icon: Icons.delete,
-            color: negativeIconColor,
-            function: () async {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text("${DateFormat.MMMEd('ja').format(event.date)}\n${event.smallCategory}：${event.price} 円\n削除しますか？"),
-                    actions: [
-                      TextButton(
-                        child: const Text("Cancel"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      TextButton(
-                        child: const Text("OK"),
-                        onPressed: () async => deleteEvent(),
-                      ),
-                    ],
-                  );
-                },
+      appBar: TwoActionAppBar(
+        title: '${event.largeCategory}の編集',
+        firstIcon: Icons.delete,
+        firstIconColor: negativeIconColor,
+        firstFunction: () async {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                title: Text("${DateFormat.MMMEd('ja').format(event.date)}\n${event.smallCategory}：${event.price} 円\n削除しますか？"),
+                actions: [
+                  TextButton(
+                    child: const Text("Cancel"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: const Text("OK"),
+                    onPressed: () async => deleteEvent(),
+                  ),
+                ],
               );
             },
-          ),
-          AppIconButton(
-            icon: Icons.check,
-            color: positiveIconColor,
-            function: () async => updateEvent(),
-          ),
-        ],
+          );
+        },
+        secondIcon: Icons.check,
+        secondIconColor: positiveIconColor,
+        secondFunction: () async => updateEvent(),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

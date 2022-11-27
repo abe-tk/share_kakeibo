@@ -107,61 +107,31 @@ class _ChartPageState extends ConsumerState<ChartPage> {
                     ],
                   ),
                 ),
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  alignment: Alignment.bottomRight,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                    child: ToggleButtons(
-                      fillColor: toggleFillColor,
-                      borderWidth: 2,
-                      borderColor: toggleBorder,
-                      selectedColor: toggleSelectedColor,
-                      selectedBorderColor: toggleSelectedBorder,
-                      borderRadius: BorderRadius.circular(10),
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                          child: Text('カテゴリ'),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                          child: Text('支払い元'),
-                        ),
-                      ],
-                      // （2） ON/OFFの指定
-                      isSelected: isSelected.value,
-                      // （3） ボタンが押されたときの処理
-                      onPressed: (index) async {
-                        setState(() {
-                          for (int buttonIndex = 0;
-                              buttonIndex < isSelected.value.length;
-                              buttonIndex++) {
-                            if (buttonIndex == index) {
-                              isSelected.value[buttonIndex] = true;
-                            } else {
-                              isSelected.value[buttonIndex] = false;
-                            }
-                          }
-                        });
-                        switch (index) {
-                          case 0:
-                            isDisplay.value = true;
-                            break;
-                          case 1:
-                            isDisplay.value = false;
-                            break;
+                AppToggleButton(
+                  isSelected: isSelected.value,
+                  isDisplay: isDisplay.value,
+                  function: (index) async {
+                    // setStatedではなくもっとシンプルに書けるのでは
+                    setState(() {
+                      for (int buttonIndex = 0;
+                      buttonIndex < isSelected.value.length;
+                      buttonIndex++) {
+                        if (buttonIndex == index) {
+                          isSelected.value[buttonIndex] = true;
+                        } else {
+                          isSelected.value[buttonIndex] = false;
                         }
-                      },
-                    ),
-                  ),
+                      }
+                    });
+                    switch (index) {
+                      case 0:
+                        isDisplay.value = true;
+                        break;
+                      case 1:
+                        isDisplay.value = false;
+                        break;
+                    }
+                  },
                 ),
               ],
             ),

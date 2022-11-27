@@ -53,20 +53,11 @@ class AddEventPage extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$largeCategoryの追加'),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-        actions: [
-          AppIconButton(
-            icon: Icons.check,
-            color: positiveIconColor,
-            function: () async {
-              await addEvent();
-            },
-          ),
-        ],
+      appBar: ActionAppBar(
+        title: '$largeCategoryの追加',
+        icon: Icons.check,
+        iconColor: positiveIconColor,
+        function: () => addEvent(),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

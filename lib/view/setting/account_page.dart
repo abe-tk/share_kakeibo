@@ -9,14 +9,7 @@ class AccountPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'アカウント',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-      ),
+      appBar: const DefaultAppBar(title: 'アカウント'),
       body: SingleChildScrollView(
         child: Column(
           children: [

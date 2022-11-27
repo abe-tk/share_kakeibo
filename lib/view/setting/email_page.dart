@@ -16,46 +16,38 @@ class EmailPage extends HookConsumerWidget {
     final email = useState(ref.watch(userProvider)['email']);
     final emailController = useState(TextEditingController(text: ref.watch(userProvider)['email']));
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'メールアドレスを変更',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              try {
-                updateEmailValidation(email.value, ref.watch(userProvider)['email']);
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return ReSingInDialog(
-                      function: () async {
-                        await updateEmail(email.value, emailController.value);
-                        await ref.read(userProvider.notifier).fetchUser();
-                      },
-                      navigator: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      },
-                      text: 'メールアドレスを変更しました',
-                    );
+      appBar: ActionAppBar(
+        title: 'メールアドレスを変更',
+        icon: Icons.check,
+        iconColor: positiveIconColor,
+        function: () async {
+          try {
+            updateEmailValidation(email.value, ref.watch(userProvider)['email']);
+            showDialog(
+              context: context,
+              builder: (context) {
+                return ReSingInDialog(
+                  function: () async {
+                    await updateEmail(email.value, emailController.value);
+                    await ref.read(userProvider.notifier).fetchUser();
                   },
+                  navigator: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  text: 'メールアドレスを変更しました',
                 );
-              } catch (e) {
-                final snackBar = SnackBar(
-                  backgroundColor: negativeSnackBarColor,
-                  behavior: SnackBarBehavior.floating,
-                  content: Text(e.toString()),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            },
-            icon: Icon(Icons.check, color: positiveIconColor,),
-          ),
-        ],
+              },
+            );
+          } catch (e) {
+            final snackBar = SnackBar(
+              backgroundColor: negativeSnackBarColor,
+              behavior: SnackBarBehavior.floating,
+              content: Text(e.toString()),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        },
       ),
       body: SafeArea(
         child: SingleChildScrollView(

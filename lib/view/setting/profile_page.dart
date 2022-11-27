@@ -42,39 +42,30 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final userNameController = useState(TextEditingController(text: ref.watch(userProvider)['userName']));
     final imgURL = useState(ref.watch(userProvider)['imgURL']);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'プロフィール',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-        actions: [
-          AppIconButton(
-            icon: Icons.check,
-            color: positiveIconColor,
-            function: () async {
-              try {
-                await updateProfile(userName.value, imgURL.value);
-                // 統計の円グラフを更新
-                ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-                ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
-                ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-                ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
-                // カレンダーのイベントを更新
-                ref.read(eventProvider.notifier).setEvent();
-                // user情報の再取得
-                ref.read(userProvider.notifier).fetchUser();
-                // roomMemberの情報を更新
-                ref.read(roomMemberProvider.notifier).fetchRoomMember();
-                Navigator.of(context).pop();
-                positiveSnackBar(context, 'プロフィールを編集しました');
-              } catch (e) {
-                negativeSnackBar(context, e.toString());
-              }
-            },
-          ),
-        ],
+      appBar: ActionAppBar(
+        title: 'プロフィール',
+        icon: Icons.check,
+        iconColor: positiveIconColor,
+        function: () async {
+          try {
+            await updateProfile(userName.value, imgURL.value);
+            // 統計の円グラフを更新
+            ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
+            ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
+            ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
+            ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
+            // カレンダーのイベントを更新
+            ref.read(eventProvider.notifier).setEvent();
+            // user情報の再取得
+            ref.read(userProvider.notifier).fetchUser();
+            // roomMemberの情報を更新
+            ref.read(roomMemberProvider.notifier).fetchRoomMember();
+            Navigator.of(context).pop();
+            positiveSnackBar(context, 'プロフィールを編集しました');
+          } catch (e) {
+            negativeSnackBar(context, e.toString());
+          }
+        },
       ),
       body: SingleChildScrollView(
         child: Column(

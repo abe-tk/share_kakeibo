@@ -16,6 +16,11 @@ class SelectMonth extends StatelessWidget {
     required this.right,
   }) : super(key: key);
 
+  DateTime oneMonthAgo (DateTime date) {
+    date = DateTime(date.year, date.month - 1);
+    return date;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(

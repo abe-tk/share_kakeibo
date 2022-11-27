@@ -12,108 +12,100 @@ class RoomInfoPage extends HookConsumerWidget {
     final roomMemberState = ref.watch(roomMemberProvider);
     final userState = ref.watch(userProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'ROOM情報',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text('【$roomNameState】\nから退出しますか？'),
-                    actions: [
-                      TextButton(
-                        child: const Text("Cancel"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      TextButton(
-                        child: const Text("OK"),
-                        onPressed: () async {
-                          try {
-                            Navigator.of(context).pop();
-                            if (uid == ref.watch(roomCodeProvider)) {
-                              throw 'RoomOwnerは退出できません';
-                            }
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) {
-                                return AlertDialog(
-                                  title: Text(
-                                      '【${userState['userName']}】が登録した収支データは削除されますが、よろしいですか？'),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text("Cancel"),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    TextButton(
-                                      child: const Text("OK"),
-                                      onPressed: () async {
-                                        try {
-                                          await exitRoomFire(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName']);
-                                          // 各Stateを更新
-                                          ref.read(roomCodeProvider.notifier).fetchRoomCode();
-                                          ref.read(roomNameProvider.notifier).fetchRoomName();
-                                          ref.read(roomMemberProvider.notifier).fetchRoomMember();
-                                          ref.read(eventProvider.notifier).setEvent();
-                                          ref.read(memoProvider.notifier).setMemo();
-                                          // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
-                                          ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                                          ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
-                                          Navigator.popUntil(
-                                              context,
+      appBar: ActionAppBar(
+        title: 'ROOM情報',
+        icon: Icons.logout,
+        iconColor: Colors.black,
+        function: () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return AlertDialog(
+                title: Text('【$roomNameState】\nから退出しますか？'),
+                actions: [
+                  TextButton(
+                    child: const Text("Cancel"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: const Text("OK"),
+                    onPressed: () async {
+                      try {
+                        Navigator.of(context).pop();
+                        if (uid == ref.watch(roomCodeProvider)) {
+                          throw 'RoomOwnerは退出できません';
+                        }
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text(
+                                  '【${userState['userName']}】が登録した収支データは削除されますが、よろしいですか？'),
+                              actions: [
+                                TextButton(
+                                  child: const Text("Cancel"),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                TextButton(
+                                  child: const Text("OK"),
+                                  onPressed: () async {
+                                    try {
+                                      await exitRoomFire(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName']);
+                                      // 各Stateを更新
+                                      ref.read(roomCodeProvider.notifier).fetchRoomCode();
+                                      ref.read(roomNameProvider.notifier).fetchRoomName();
+                                      ref.read(roomMemberProvider.notifier).fetchRoomMember();
+                                      ref.read(eventProvider.notifier).setEvent();
+                                      ref.read(memoProvider.notifier).setMemo();
+                                      // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
+                                      ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
+                                      ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
+                                      Navigator.popUntil(
+                                          context,
                                               (Route<dynamic> route) =>
-                                                  route.isFirst);
+                                          route.isFirst);
 
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: negativeSnackBarColor,
-                                              behavior: SnackBarBehavior.floating,
-                                              content: const Text('Roomから退出しました'),
-                                            ),
-                                          );
-                                        } catch (e) {
-                                          final snackBar = SnackBar(
-                                            backgroundColor: negativeSnackBarColor,
-                                            behavior: SnackBarBehavior.floating,
-                                            content: Text(e.toString()),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: negativeSnackBarColor,
+                                          behavior: SnackBarBehavior.floating,
+                                          content: const Text('Roomから退出しました'),
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      final snackBar = SnackBar(
+                                        backgroundColor: negativeSnackBarColor,
+                                        behavior: SnackBarBehavior.floating,
+                                        content: Text(e.toString()),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
+                                  },
+                                ),
+                              ],
                             );
-                          } catch (e) {
-                            final snackBar = SnackBar(
-                              backgroundColor: negativeSnackBarColor,
-                              behavior: SnackBarBehavior.floating,
-                              content: Text(e.toString()),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
+                          },
+                        );
+                      } catch (e) {
+                        final snackBar = SnackBar(
+                          backgroundColor: negativeSnackBarColor,
+                          behavior: SnackBarBehavior.floating,
+                          content: Text(e.toString()),
+                        );
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(snackBar);
+                      }
+                    },
+                  ),
+                ],
               );
             },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+          );
+        },
       ),
       body: SingleChildScrollView(
         child: Center(

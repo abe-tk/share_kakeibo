@@ -86,6 +86,13 @@ void invitationRoomValidation(roomCode) {
   }
 }
 
+// メモの追加
+void memoValidation(String memo) {
+  if (memo == "") {
+    throw 'メモが入力されていません';
+  }
+}
+
 // FirebaseAuthException
 String authValidation(FirebaseAuthException e) {
   switch(e.code) {
@@ -101,12 +108,5 @@ String authValidation(FirebaseAuthException e) {
       return 'すでに使用されているメールアドレスです';
     default:
       return 'エラー';
-  }
-}
-
-// メモの追加
-void validationMemo(String memo) {
-  if (memo == "") {
-    throw 'メモが入力されていません';
   }
 }

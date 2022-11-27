@@ -8,14 +8,7 @@ class SettingPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '設定',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-      ),
+      appBar: const DefaultAppBar(title: '設定'),
       body: SingleChildScrollView(
         child: Column(
           children: [

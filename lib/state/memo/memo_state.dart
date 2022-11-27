@@ -37,7 +37,7 @@ class MemoNotifier extends StateNotifier<List<Memo>> {
   }
 
   Future<void> addMemo(String memo) async {
-    validationMemo(memo);
+    memoValidation(memo);
     addMemoFire(roomCode, memo);
     await setMemo();
   }

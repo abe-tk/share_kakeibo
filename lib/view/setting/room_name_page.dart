@@ -12,41 +12,30 @@ class RoomNamePage extends HookConsumerWidget {
     final roomName = useState(ref.watch(roomNameProvider));
     final roomNameController = useState(TextEditingController(text: ref.watch(roomNameProvider)));
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Roomの名前を編集',
-        ),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 1,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              try {
-                await roomNameNotifier.changeRoomName(roomName.value);
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: positiveSnackBarColor,
-                    behavior: SnackBarBehavior.floating,
-                    content: const Text('Room名を変更しました'),
-                  ),
-                );
-              } catch (e) {
-                final snackBar = SnackBar(
-                  backgroundColor: negativeSnackBarColor,
-                  behavior: SnackBarBehavior.floating,
-                  content: Text(e.toString()),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            },
-            icon: Icon(
-              Icons.check,
-              color: positiveIconColor,
-            ),
-          ),
-        ],
+      appBar: ActionAppBar(
+        title: 'Roomの名前を編集',
+        icon: Icons.check,
+        iconColor: positiveIconColor,
+        function: () async {
+          try {
+            await roomNameNotifier.changeRoomName(roomName.value);
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: positiveSnackBarColor,
+                behavior: SnackBarBehavior.floating,
+                content: const Text('Room名を変更しました'),
+              ),
+            );
+          } catch (e) {
+            final snackBar = SnackBar(
+              backgroundColor: negativeSnackBarColor,
+              behavior: SnackBarBehavior.floating,
+              content: Text(e.toString()),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        },
       ),
       body: SingleChildScrollView(
         child: Column(

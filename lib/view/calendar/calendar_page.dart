@@ -54,25 +54,11 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('カレンダー'),
-        actions: [
-          AppIconButton(
-            icon: Icons.receipt_long,
-            color: Colors.black,
-            function: () => Navigator.pushNamed(context, '/detailEventPage'),
-          ),
-        ],
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: appBarBackGroundColor,
-        bottom: PreferredSize(
-          child: Container(
-            height: 0.1,
-            color: appBarBottomLineColor,
-          ),
-          preferredSize: const Size.fromHeight(0.1),
-        ),
+      appBar: ActionAppBar(
+        title: 'カレンダー',
+        icon: Icons.receipt_long,
+        iconColor: Colors.black,
+        function: () => Navigator.pushNamed(context, '/detailEventPage'),
       ),
       drawer: const DrawerMenu(),
       body: SafeArea(
@@ -117,34 +103,30 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
             ),
             Expanded(
               child: ListView(
-                children: _getEventForDay(_selectedDay.value)
-                    .map(
-                      (event) => Column(
-                        children: [
-                          AppCalendarList(
-                            price: event.price,
-                            largeCategory: event.largeCategory,
-                            smallCategory: event.smallCategory,
-                            paymentUser: event.paymentUser,
-                            memo: event.memo,
-                            function: () {
-                              ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                  child: EditEventPage(event: event),
-                                  type: PageTransitionType.rightToLeft,
-                                  duration: const Duration(milliseconds: 150),
-                                  reverseDuration:
-                                      const Duration(milliseconds: 150),
-                                ),
-                              );
-                            },
+                children: _getEventForDay(_selectedDay.value).map((event) => Column(
+                  children: [
+                    AppCalendarList(
+                      price: event.price,
+                      largeCategory: event.largeCategory,
+                      smallCategory: event.smallCategory,
+                      paymentUser: event.paymentUser,
+                      memo: event.memo,
+                      function: () {
+                        ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            child: EditEventPage(event: event),
+                            type: PageTransitionType.rightToLeft,
+                            duration: const Duration(milliseconds: 150),
+                            reverseDuration:
+                            const Duration(milliseconds: 150),
                           ),
-                        ],
-                      ),
-                    )
-                    .toList(),
+                        );
+                        },
+                    ),
+                  ],
+                )).toList(),
               ),
             ),
           ],

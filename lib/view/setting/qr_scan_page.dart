@@ -46,10 +46,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('QR読み取り'),
-        centerTitle: true,
-      ),
+      appBar: const DefaultAppBar(title: 'QR読み取り'),
       body: _buildQrView(context),
     );
   }
@@ -150,7 +147,10 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('no Permission')),
+        const SnackBar(
+          content: Text('no Permission'),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     }
   }

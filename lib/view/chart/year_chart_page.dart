@@ -20,38 +20,34 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
     });
   }
 
+  void showSupportMessage() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('支出額の単位について'),
+          content: const Text('1K = 1,000 円\n1M = 1,000,000 円'),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final year = useState(DateTime(DateTime.now().year));
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('支出の推移'),
-        centerTitle: true,
-        backgroundColor: appBarBackGroundColor,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return AlertDialog(
-                    title: const Text('支出額の単位について'),
-                    content: const Text('1K = 1,000 円\n1M = 1,000,000 円'),
-                    actions: [
-                      TextButton(
-                        child: const Text("OK"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            icon: const Icon(Icons.contact_support_outlined),
-          ),
-        ],
+      appBar: ActionAppBar(
+        title: '支出の推移',
+        icon: Icons.contact_support_outlined,
+        iconColor: Colors.black,
+        function: () => showSupportMessage(),
       ),
       body: SafeArea(
         child: Column(
