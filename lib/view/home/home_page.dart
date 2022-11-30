@@ -72,55 +72,59 @@ class _HomePageState extends ConsumerState<HomePage> {
                     // 当月の収支表
                     Padding(
                       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 50), //bottom：50 FABに被らないようにしている
-                      child: Container(
-                        height: 430,
-                        decoration: BoxDecoration(
-                          color: boxColor,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: boxShadowColor,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            // 対象月の選択
-                            SelectMonth(
-                              month: month.value,
-                              left: () {
-                                month.value = DateTime(month.value.year, month.value.month - 1);
-                                bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
-                              },
-                              center: () async {
-                                month.value = await selectMonth(context, month.value);
-                                bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
-                              },
-                              right: () {
-                                month.value = DateTime(month.value.year, month.value.month + 1);
-                                bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
-                              },
-                            ),
-                            // 円グラフ
-                            Container(
-                              margin: const EdgeInsets.only(top: 24, bottom: 24),
-                              height: 160,
-                              width: 160,
-                              child: AppPieChart(
-                                pieChartSectionData: bpPieChartState,
-                                price: bpPieChartNotifier.totalPrice,
+                      child: Material(
+                        elevation: 6,
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          height: 430,
+                          decoration: BoxDecoration(
+                            color: boxColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: boxShadowColor,
+                                spreadRadius: 1.0,
                               ),
-                            ),
-                            // 支出・収入・合計の金額
-                            HomeBpPrice(
-                              spendingPercent: bpPieChartNotifier.spendingPercent,
-                              spendingPrice: bpPieChartNotifier.spendingPrice,
-                              incomePercent: bpPieChartNotifier.incomePercent,
-                              incomePrice: bpPieChartNotifier.incomePrice,
-                              totalPrice: bpPieChartNotifier.totalPrice,
-                            ),
-                          ],
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              // 対象月の選択
+                              SelectMonth(
+                                month: month.value,
+                                left: () {
+                                  month.value = DateTime(month.value.year, month.value.month - 1);
+                                  bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
+                                },
+                                center: () async {
+                                  month.value = await selectMonth(context, month.value);
+                                  bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
+                                },
+                                right: () {
+                                  month.value = DateTime(month.value.year, month.value.month + 1);
+                                  bpPieChartNotifier.bpPieChartCalc(month.value, ref.read(eventProvider));
+                                },
+                              ),
+                              // 円グラフ
+                              Container(
+                                margin: const EdgeInsets.only(top: 24, bottom: 24),
+                                height: 160,
+                                width: 160,
+                                child: AppPieChart(
+                                  pieChartSectionData: bpPieChartState,
+                                  price: bpPieChartNotifier.totalPrice,
+                                ),
+                              ),
+                              // 支出・収入・合計の金額
+                              HomeBpPrice(
+                                spendingPercent: bpPieChartNotifier.spendingPercent,
+                                spendingPrice: bpPieChartNotifier.spendingPrice,
+                                incomePercent: bpPieChartNotifier.incomePercent,
+                                incomePrice: bpPieChartNotifier.incomePrice,
+                                totalPrice: bpPieChartNotifier.totalPrice,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

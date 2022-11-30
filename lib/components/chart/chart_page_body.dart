@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class ChartPagePie extends StatelessWidget {
+class ChartPageBody extends StatelessWidget {
   final String largeCategory;
   final bool category;
   final List<PieChartSectionData> pieChartSectionData;
@@ -10,7 +10,7 @@ class ChartPagePie extends StatelessWidget {
   final int length;
   final List<Map<String, dynamic>> chartSourceData;
 
-  const ChartPagePie({
+  const ChartPageBody({
     Key? key,
     required this.largeCategory,
     required this.category,
@@ -24,31 +24,26 @@ class ChartPagePie extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          height: 240,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.grey.withOpacity(0.5),
-                width: 1,
-              ),
-              bottom: BorderSide(
-                color: Colors.grey.withOpacity(0.5),
-                width: 1,
-              ),
+        // 円グラフの表示
+        Material(
+          elevation: 3,
+          child: SizedBox(
+            height: 240,
+            width: MediaQuery.of(context).size.width,
+            child: AppPieChart(
+              pieChartSectionData: pieChartSectionData,
+              price: totalPrice,
             ),
           ),
-          child: AppPieChart(
-            pieChartSectionData: pieChartSectionData,
-            price: totalPrice,
-          ),
         ),
+        // 円グラフ内の各値をリスト表示
+        const SizedBox(height: 6),
         Expanded(
           child: ListView.builder(
             itemCount: length + 1,
             itemBuilder: (context, index) {
               if (index == length) {
+                // リストの最後に合計値を表示
                 return Container(
                   alignment: Alignment.centerRight,
                   width: MediaQuery.of(context).size.width,
@@ -58,10 +53,12 @@ class ChartPagePie extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: detailTextColor),
+                        color: detailTextColor,
+                    ),
                   ),
                 );
               }
+              // 各値
               return Visibility(
                 visible: chartSourceData[index]['price'] != 0 ? true : false,
                 child: Column(
@@ -73,10 +70,12 @@ class ChartPagePie extends StatelessWidget {
                           Row(
                             children: [
                               category == true
+                              // カテゴリのアイコン
                               ? Icon(
                                 chartSourceData[index]['icon'],
                                 color: chartSourceData[index]['color'],
                               )
+                              // ユーザのプロフィール画像
                               : CircleAvatar(
                                 radius: 12,
                                 backgroundImage: NetworkImage(
@@ -84,10 +83,13 @@ class ChartPagePie extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 10),
+                              // カテゴリ名
                               Text(chartSourceData[index]['category']),
+                              // パーセント
                               Text(' / ${double.parse((chartSourceData[index]['percent']).toString()).toStringAsFixed(1)}%'),
                             ],
                           ),
+                          // 金額
                           Container(
                             alignment: Alignment.centerRight,
                             width: MediaQuery.of(context).size.width,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class AppTextField extends StatelessWidget {
+class LoginTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool suffix;
   final bool obscure;
@@ -9,7 +9,7 @@ class AppTextField extends StatelessWidget {
   final Function obscureChange;
   final Function textChange;
 
-  const AppTextField({
+  const LoginTextField({
     Key? key,
     required this.controller,
     required this.suffix,

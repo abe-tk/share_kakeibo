@@ -38,12 +38,7 @@ class PasswordPage extends HookConsumerWidget {
               },
             );
           } catch (e) {
-            final snackBar = SnackBar(
-              backgroundColor: negativeSnackBarColor,
-              behavior: SnackBarBehavior.floating,
-              content: Text(e.toString()),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            negativeSnackBar(context, e.toString());
           }
         },
       ),
@@ -52,76 +47,24 @@ class PasswordPage extends HookConsumerWidget {
           child: Center(
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.centerLeft,
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    '変更後のパスワード',
-                    style: TextStyle(color: detailTextColor),
-                  ),
+                const SettingTitle(title: '変更後のパスワード'),
+                SettingTextField(
+                  controller: passwordController.value,
+                  suffix: true,
+                  obscure: _isObscurePassword.value,
+                  text: 'パスワード（6〜20文字）',
+                  obscureChange: () => _isObscurePassword.value = !_isObscurePassword.value,
+                  textChange: (text) => password.value = text,
                 ),
                 const Divider(),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: ListTile(
-                    title: TextFormField(
-                      controller: passwordController.value,
-                      obscureText: _isObscurePassword.value,
-                      decoration: InputDecoration(
-                        hintText: 'パスワード（6〜20文字）',
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: Icon(_isObscurePassword.value
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () {
-                            _isObscurePassword.value = !_isObscurePassword.value;
-                          },
-                        ),
-                      ),
-                      onChanged: (text) {
-                        password.value = text;
-                      },
-                      // maxLength: 20,
-                    ),
-                  ),
-                ),
-                const Divider(),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.centerLeft,
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    '変更後のパスワード（確認用）',
-                    style: TextStyle(color: detailTextColor),
-                  ),
-                ),
-                const Divider(),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: ListTile(
-                    title: TextFormField(
-                      controller: checkPasswordController.value,
-                      obscureText: _isObscureCheckPassword.value,
-                      decoration: InputDecoration(
-                        hintText: 'パスワード（6〜20文字）',
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: Icon(_isObscureCheckPassword.value
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () {
-                            _isObscureCheckPassword.value = !_isObscureCheckPassword.value;
-                          },
-                        ),
-                      ),
-                      onChanged: (text) {
-                        checkPassword.value = text;
-                      },
-                      // maxLength: 20,
-                    ),
-                  ),
+                const SettingTitle(title: '変更後のパスワード（確認用）'),
+                SettingTextField(
+                  controller: checkPasswordController.value,
+                  suffix: true,
+                  obscure: _isObscureCheckPassword.value,
+                  text: 'パスワード（6〜20文字）',
+                  obscureChange: () => _isObscureCheckPassword.value = !_isObscureCheckPassword.value,
+                  textChange: (text) => checkPassword.value = text,
                 ),
                 const Divider(),
               ],

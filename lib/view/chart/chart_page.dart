@@ -11,6 +11,7 @@ class ChartPage extends StatefulHookConsumerWidget {
 }
 
 class _ChartPageState extends ConsumerState<ChartPage> {
+
   void reCalc(DateTime date) {
     ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(date, ref.read(eventProvider));
     ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(date, ref.read(eventProvider));
@@ -22,10 +23,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-      ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-      ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
-      ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
+      reCalc(DateTime(DateTime.now().year, DateTime.now().month));
     });
   }
 
@@ -48,7 +46,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: appBarBackGroundColor,
-          elevation: 0,
+          elevation: 1,
           title: SelectMonth(
             month: month.value,
             left: () {
@@ -78,57 +76,22 @@ class _ChartPageState extends ConsumerState<ChartPage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  alignment: Alignment.bottomLeft,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: TabBar(
-                            indicatorColor: tabBarIndicatorColor,
-                            tabs: const [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  '収入',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  '支出',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ]),
-                      ),
-                    ],
-                  ),
+                const AppTabBar(
+                  firstTab: '収入',
+                  secondTab: '支出',
                 ),
                 AppToggleButton(
                   isSelected: isSelected.value,
                   isDisplay: isDisplay.value,
                   function: (index) async {
-                    // setStatedではなくもっとシンプルに書けるのでは
-                    setState(() {
-                      for (int buttonIndex = 0;
-                      buttonIndex < isSelected.value.length;
-                      buttonIndex++) {
-                        if (buttonIndex == index) {
-                          isSelected.value[buttonIndex] = true;
-                        } else {
-                          isSelected.value[buttonIndex] = false;
-                        }
-                      }
-                    });
                     switch (index) {
                       case 0:
                         isDisplay.value = true;
+                        isSelected.value = [true, false];
                         break;
                       case 1:
                         isDisplay.value = false;
+                        isSelected.value = [false, true];
                         break;
                     }
                   },
@@ -142,7 +105,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
           child: TabBarView(
             children: [
               isDisplay.value == true
-                  ? ChartPagePie(
+                  ? ChartPageBody(
                       largeCategory: '収入',
                       category: true,
                       pieChartSectionData: incomeCategoryPieChartState,
@@ -150,7 +113,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
                       length: incomeCategoryPieChartNotifier.chartSourceData.length,
                       chartSourceData: incomeCategoryPieChartNotifier.chartSourceData,
                     )
-                  : ChartPagePie(
+                  : ChartPageBody(
                       largeCategory: '収入',
                       category: false,
                       pieChartSectionData: incomeUserPieChartState,
@@ -159,7 +122,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
                       chartSourceData: incomeUserPieChartNotifier.chartSourceData,
                     ),
               isDisplay.value == true
-                  ? ChartPagePie(
+                  ? ChartPageBody(
                       largeCategory: '支出',
                       category: true,
                       pieChartSectionData: spendingCategoryPieChartState,
@@ -167,7 +130,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
                       length: spendingCategoryPieChartNotifier.chartSourceData.length,
                       chartSourceData: spendingCategoryPieChartNotifier.chartSourceData,
                     )
-                  : ChartPagePie(
+                  : ChartPageBody(
                       largeCategory: '支出',
                       category: false,
                       pieChartSectionData: spendingUserPieChartState,

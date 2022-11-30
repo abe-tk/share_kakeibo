@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AppPriceTextField extends StatelessWidget {
+class PriceTextField extends StatelessWidget {
   final TextEditingController controller;
   final Function textChange;
 
-  const AppPriceTextField({
+  const PriceTextField({
     Key? key,
     required this.controller,
     required this.textChange,

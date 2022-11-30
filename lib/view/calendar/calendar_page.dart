@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'dart:collection';
 import 'package:share_kakeibo/impoter.dart';
 
@@ -15,6 +14,7 @@ class CalendarPage extends StatefulHookConsumerWidget {
 }
 
 class _CalendarPageState extends ConsumerState<CalendarPage> {
+
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
@@ -64,69 +64,73 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.width * 0.7,
-              width: MediaQuery.of(context).size.width,
-              child: AppTableCalendar(
-                focused: _focusedDay.value,
-                selected: _selectedDay.value,
-                eventLoader: _getEventForDay,
-                getEventForDay: _getEventForDay,
-                onDaySelected: (selectedDay, focusedDay) {
-                  _selectedDay.value = selectedDay;
-                  _focusedDay.value = focusedDay;
-                },
-              ),
+            // カレンダーの表示
+            AppTableCalendar(
+              focused: _focusedDay.value,
+              selected: _selectedDay.value,
+              eventLoader: _getEventForDay,
+              getEventForDay: _getEventForDay,
+              onDaySelected: (selectedDay, focusedDay) {
+                _selectedDay.value = selectedDay;
+                _focusedDay.value = focusedDay;
+              },
             ),
-            Container(
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey.withOpacity(0.5),
-                    width: 1,
-                  ),
-                  bottom: BorderSide(
-                    color: Colors.grey.withOpacity(0.5),
-                    width: 1,
+            // 選択している日付
+            Material(
+              elevation: 3,
+              child: Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 1,
+                    ),
+                    bottom: BorderSide(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 1,
+                    ),
                   ),
                 ),
-              ),
-              child: Text(
-                DateFormat.MMMEd('ja').format(_selectedDay.value),
+                child: Text(
+                  DateFormat.MMMEd('ja').format(_selectedDay.value),
+                ),
               ),
             ),
+            // 選択した日付のイベントがなければ表示
             Visibility(
               visible: checkExistenceEvent(_selectedDay.value),
-              child: const NoDataCase(text: '取引', height: 16),
+              child: const NoDataCaseImg(text: '取引', height: 36),
             ),
+            // 選択した日付のイベントを表示
             Expanded(
-              child: ListView(
-                children: _getEventForDay(_selectedDay.value).map((event) => Column(
-                  children: [
-                    AppCalendarList(
-                      price: event.price,
-                      largeCategory: event.largeCategory,
-                      smallCategory: event.smallCategory,
-                      paymentUser: event.paymentUser,
-                      memo: event.memo,
-                      function: () {
-                        ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            child: EditEventPage(event: event),
-                            type: PageTransitionType.rightToLeft,
-                            duration: const Duration(milliseconds: 150),
-                            reverseDuration:
-                            const Duration(milliseconds: 150),
-                          ),
-                        );
+              child: Padding(
+                padding: const EdgeInsets.only(top: 1.0),
+                child: ListView(
+                  children: _getEventForDay(_selectedDay.value).map((event) => Column(
+                    children: [
+                      CalendarEventList(
+                        price: event.price,
+                        largeCategory: event.largeCategory,
+                        smallCategory: event.smallCategory,
+                        paymentUser: event.paymentUser,
+                        memo: event.memo,
+                        function: () {
+                          ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return EditEventPage(event: event);
+                              },
+                            ),
+                          );
                         },
-                    ),
-                  ],
-                )).toList(),
+                      ),
+                    ],
+                  )).toList(),
+                ),
               ),
             ),
           ],

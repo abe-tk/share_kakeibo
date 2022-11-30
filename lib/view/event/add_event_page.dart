@@ -66,7 +66,7 @@ class AddEventPage extends HookConsumerWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  AppPriceTextField(
+                  PriceTextField(
                     controller: priceController.value,
                     textChange: (text) => price.value = text,
                   ),
@@ -91,7 +91,7 @@ class AddEventPage extends HookConsumerWidget {
                     icon: const Icon(Icons.person),
                   ),
                   const Divider(),
-                  AppMemoTextField(
+                  MemoTextField(
                     controller: memoController.value,
                     textChange: (text) => memo.value = text,
                   ),

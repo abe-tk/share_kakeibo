@@ -28,27 +28,23 @@ class MemoPage extends HookConsumerWidget {
       drawer: const DrawerMenu(),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: memos.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == memos.length) {
-                    return (memos.isEmpty)
-                        ? const NoDataCase(text: 'メモ', height: 60)
-                        : const SizedBox(height: 50);
-                  }
-                  return AppMemoList(
-                    completed: memos[index].completed,
-                    memo: memos[index].memo,
-                    date: memos[index].date,
-                    function: (value) => memoNotifier.toggle(memos[index].id),
-                  );
-                },
-              ),
-            ],
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: memos.length + 1,
+            itemBuilder: (context, index) {
+              if (index == memos.length) {
+                return (memos.isEmpty)
+                    ? const NoDataCaseImg(text: 'メモ', height: 60)
+                    : const SizedBox(height: 50);
+              }
+              return MemoList(
+                completed: memos[index].completed,
+                memo: memos[index].memo,
+                date: memos[index].date,
+                function: (value) => memoNotifier.toggle(memos[index].id),
+              );
+            },
           ),
         ),
       ),

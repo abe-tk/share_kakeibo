@@ -21,7 +21,7 @@ class ResetPasswordPage extends HookConsumerWidget {
                 const SizedBox(height: 16),
                 const Text('パスワード再設定メールを送信',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
                 const SizedBox(height: 36),
-                AppTextField(
+                LoginTextField(
                   controller: emailController.value,
                   suffix: false,
                   obscure: false,
@@ -30,7 +30,7 @@ class ResetPasswordPage extends HookConsumerWidget {
                   textChange: (text) => email.value = text,
                 ),
                 const SizedBox(height: 36),
-                AppElevatedButton(
+                LoginElevatedButton(
                   text: '送信',
                   function: () async {
                     ref.watch(indicatorProvider).showProgressDialog(context);

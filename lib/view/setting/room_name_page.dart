@@ -6,9 +6,18 @@ import 'package:share_kakeibo/impoter.dart';
 class RoomNamePage extends HookConsumerWidget {
   const RoomNamePage({Key? key}) : super(key: key);
 
+  Future<void> changeRooName(BuildContext context, WidgetRef ref, String roomName) async {
+    try {
+      await ref.watch(roomNameProvider.notifier).changeRoomName(roomName);
+      Navigator.of(context).pop();
+      positiveSnackBar(context, 'Room名を変更しました');
+    } catch (e) {
+      negativeSnackBar(context, e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roomNameNotifier = ref.watch(roomNameProvider.notifier);
     final roomName = useState(ref.watch(roomNameProvider));
     final roomNameController = useState(TextEditingController(text: ref.watch(roomNameProvider)));
     return Scaffold(
@@ -16,53 +25,19 @@ class RoomNamePage extends HookConsumerWidget {
         title: 'Roomの名前を編集',
         icon: Icons.check,
         iconColor: positiveIconColor,
-        function: () async {
-          try {
-            await roomNameNotifier.changeRoomName(roomName.value);
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: positiveSnackBarColor,
-                behavior: SnackBarBehavior.floating,
-                content: const Text('Room名を変更しました'),
-              ),
-            );
-          } catch (e) {
-            final snackBar = SnackBar(
-              backgroundColor: negativeSnackBarColor,
-              behavior: SnackBarBehavior.floating,
-              content: Text(e.toString()),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-        },
+        function: () async => changeRooName(context, ref, roomName.value),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              alignment: Alignment.centerLeft,
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                'Room名',
-                style: TextStyle(color: detailTextColor),
-              ),
-            ),
-            const Divider(),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: ListTile(
-                title:TextField(
-                  textAlign: TextAlign.left,
-                  controller: roomNameController.value,
-                  decoration: const InputDecoration(
-                    hintText: 'Room名を入力してください',
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (text) => roomName.value = text,
-                ),
-              ),
+            const SettingTitle(title: 'Room名'),
+            SettingTextField(
+              controller: roomNameController.value,
+              suffix: false,
+              obscure: false,
+              text: 'Room名を入力してください',
+              obscureChange: () {},
+              textChange: (text) => roomName.value = text,
             ),
             const Divider(),
           ],

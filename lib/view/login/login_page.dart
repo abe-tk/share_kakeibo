@@ -27,7 +27,7 @@ class LoginPage extends HookConsumerWidget {
               children: [
                 const AppThemeImage(),
                 const SizedBox(height: 36),
-                AppTextField(
+                LoginTextField(
                   controller: emailController.value,
                   suffix: false,
                   obscure: false,
@@ -36,7 +36,7 @@ class LoginPage extends HookConsumerWidget {
                   textChange: (text) => email.value = text,
                 ),
                 const SizedBox(height: 10),
-                AppTextField(
+                LoginTextField(
                   controller: passwordController.value,
                   suffix: true,
                   obscure: _isObscure.value,
@@ -45,7 +45,7 @@ class LoginPage extends HookConsumerWidget {
                   textChange: (text) => password.value = text,
                 ),
                 const SizedBox(height: 16),
-                AppElevatedButton(
+                LoginElevatedButton(
                   text: 'ログイン',
                   function: () async {
                     ref.watch(indicatorProvider).showProgressDialog(context);

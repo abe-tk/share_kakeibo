@@ -13,8 +13,8 @@ class EmailPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final email = useState(ref.watch(userProvider)['email']);
-    final emailController = useState(TextEditingController(text: ref.watch(userProvider)['email']));
+    final email = useState('');
+    final emailController = useState(TextEditingController(text: ''));
     return Scaffold(
       appBar: ActionAppBar(
         title: 'メールアドレスを変更',
@@ -40,12 +40,7 @@ class EmailPage extends HookConsumerWidget {
               },
             );
           } catch (e) {
-            final snackBar = SnackBar(
-              backgroundColor: negativeSnackBarColor,
-              behavior: SnackBarBehavior.floating,
-              content: Text(e.toString()),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            negativeSnackBar(context, e.toString());
           }
         },
       ),
@@ -54,16 +49,7 @@ class EmailPage extends HookConsumerWidget {
           child: Center(
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.centerLeft,
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    '現在のメールアドレス',
-                    style: TextStyle(color: detailTextColor),
-                  ),
-                ),
-                const Divider(),
+                const SettingTitle(title: '現在のメールアドレス'),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ListTile(
@@ -71,29 +57,14 @@ class EmailPage extends HookConsumerWidget {
                   ),
                 ),
                 const Divider(),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.centerLeft,
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    '変更後のメールアドレス',
-                    style: TextStyle(color: detailTextColor),
-                  ),
-                ),
-                const Divider(),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: ListTile(
-                    title: TextField(
-                      textAlign: TextAlign.left,
-                      controller: emailController.value,
-                      decoration: const InputDecoration(
-                        hintText: 'メールアドレス',
-                        border: InputBorder.none,
-                      ),
-                      onChanged: (text) => email.value = text,
-                    ),
-                  ),
+                const SettingTitle(title: '変更後のメールアドレス'),
+                SettingTextField(
+                  controller: emailController.value,
+                  suffix: false,
+                  obscure: false,
+                  text: 'メールアドレスを入力',
+                  obscureChange: () {},
+                  textChange: (text) => email.value = text,
                 ),
                 const Divider(),
               ],

@@ -13,7 +13,7 @@ class EditEventPage extends HookConsumerWidget {
     final price = useState(event.price);
     final priceController = useState(TextEditingController(text: event.price));
     final date = useState(event.date);
-    final smallCategory = useState('未分類');
+    final smallCategory = useState(event.smallCategory);
     final paymentUser = useState(event.paymentUser);
     final memo = useState(event.memo);
     final memoController = useState(TextEditingController(text: event.memo));
@@ -56,28 +56,36 @@ class EditEventPage extends HookConsumerWidget {
     }
 
     Future<void> deleteEvent() async {
-      try {
-        await deleteEventFire(ref.watch(roomCodeProvider), event.id);
-        await ref.read(eventProvider.notifier).setEvent();
-        updateState();
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: negativeSnackBarColor,
-            behavior: SnackBarBehavior.floating,
-            content: Text('${event.largeCategory}を削除しました'),
-          ),
-        );
-      } catch (e) {
-        final snackBar = SnackBar(
-          backgroundColor: negativeSnackBarColor,
-          behavior: SnackBarBehavior.floating,
-          content: Text(e.toString()),
-        );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar);
-      }
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("${DateFormat.MMMEd('ja').format(event.date)}\n${event.smallCategory}：${event.price} 円\n削除しますか？"),
+            actions: [
+              TextButton(
+                child: const Text("Cancel"),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () async {
+                  try {
+                    await deleteEventFire(ref.watch(roomCodeProvider), event.id);
+                    await ref.read(eventProvider.notifier).setEvent();
+                    updateState();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    negativeSnackBar(context, '${event.largeCategory}を削除しました');
+                  } catch (e) {
+                    negativeSnackBar(context, e.toString());
+                  }
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
 
     return Scaffold(
@@ -85,27 +93,7 @@ class EditEventPage extends HookConsumerWidget {
         title: '${event.largeCategory}の編集',
         firstIcon: Icons.delete,
         firstIconColor: negativeIconColor,
-        firstFunction: () async {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return AlertDialog(
-                title: Text("${DateFormat.MMMEd('ja').format(event.date)}\n${event.smallCategory}：${event.price} 円\n削除しますか？"),
-                actions: [
-                  TextButton(
-                    child: const Text("Cancel"),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  TextButton(
-                    child: const Text("OK"),
-                    onPressed: () async => deleteEvent(),
-                  ),
-                ],
-              );
-            },
-          );
-        },
+        firstFunction: () async => deleteEvent(),
         secondIcon: Icons.check,
         secondIconColor: positiveIconColor,
         secondFunction: () async => updateEvent(),
@@ -117,7 +105,7 @@ class EditEventPage extends HookConsumerWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  AppPriceTextField(
+                  PriceTextField(
                     controller: priceController.value,
                     textChange: (text) => price.value = text,
                   ),
@@ -142,7 +130,7 @@ class EditEventPage extends HookConsumerWidget {
                     icon: const Icon(Icons.person),
                   ),
                   const Divider(),
-                  AppMemoTextField(
+                  MemoTextField(
                     controller: memoController.value,
                     textChange: (text) => memo.value = text,
                   ),

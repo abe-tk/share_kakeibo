@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:share_kakeibo/impoter.dart';
 
 // イベント追加、編集時
 void addEventValidation(price) {
@@ -83,6 +84,12 @@ void changeRoomNameValidation(newRoomName) {
 void invitationRoomValidation(roomCode) {
   if (roomCode == null || roomCode == "") {
     throw '招待コードが入力されていません';
+  }
+}
+
+void exitRoomValidation(String roomCode) {
+  if (uid == roomCode) {
+    throw 'RoomOwnerは退出できません';
   }
 }
 

@@ -24,7 +24,7 @@ class RegisterPage extends HookConsumerWidget {
               children: [
                 const AppThemeImage(),
                 const SizedBox(height: 36),
-                AppTextField(
+                LoginTextField(
                   controller: userNameController.value,
                   suffix: false,
                   obscure: false,
@@ -33,7 +33,7 @@ class RegisterPage extends HookConsumerWidget {
                   textChange: (text) => userName.value = text,
                 ),
                 const SizedBox(height: 10),
-                AppTextField(
+                LoginTextField(
                   controller: emailController.value,
                   suffix: false,
                   obscure: false,
@@ -42,7 +42,7 @@ class RegisterPage extends HookConsumerWidget {
                   textChange: (text) => email.value = text,
                 ),
                 const SizedBox(height: 10),
-                AppTextField(
+                LoginTextField(
                   controller: passwordController.value,
                   suffix: true,
                   obscure: _isObscure.value,
@@ -51,7 +51,7 @@ class RegisterPage extends HookConsumerWidget {
                   textChange: (text) => password.value = text,
                 ),
                 const SizedBox(height: 16),
-                AppElevatedButton(
+                LoginElevatedButton(
                   text: '新規登録',
                   function: () async {
                     ref.watch(indicatorProvider).showProgressDialog(context);

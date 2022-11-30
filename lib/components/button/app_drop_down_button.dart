@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/constant/colors.dart';
 
 class AppDropDownButton extends StatelessWidget {
   final String value;

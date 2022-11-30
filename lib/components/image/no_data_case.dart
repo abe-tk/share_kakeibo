@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class NoDataCase extends StatelessWidget {
+class NoDataCaseImg extends StatelessWidget {
   final String text;
   final double height;
 
-  const NoDataCase({
+  const NoDataCaseImg({
     required this.text,
     required this.height,
     Key? key,

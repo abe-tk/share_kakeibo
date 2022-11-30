@@ -17,7 +17,6 @@ class QrScanPage extends StatefulHookConsumerWidget {
 class _QrScanPageState extends ConsumerState<QrScanPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
-
   late String roomName;
 
   Future<String> setRoomName(String code) async {
@@ -26,8 +25,18 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
     return data?['roomName'];
   }
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
+  void updateState() {
+    // 各Stateを更新
+    ref.read(roomCodeProvider.notifier).fetchRoomCode();
+    ref.read(roomNameProvider.notifier).fetchRoomName();
+    ref.read(roomMemberProvider.notifier).fetchRoomMember();
+    ref.read(eventProvider.notifier).setEvent();
+    ref.read(memoProvider.notifier).setMemo();
+    // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
+    ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
+    ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
+  }
+
   @override
   void reassemble() {
     super.reassemble();
@@ -52,13 +61,10 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
         MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
@@ -67,19 +73,18 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
-          cutOutSize: scanArea),
+          cutOutSize: scanArea,
+      ),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    // final ownerRoomName = useState('');
     setState(() {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) async {
       controller.pauseCamera();
-      // print(scanData.code);
       roomName = await setRoomName((scanData.code).toString());
       showDialog(
         context: context,
@@ -108,31 +113,11 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                   try {
                     updateUserRoomCodeFire((scanData.code).toString());
                     joinRoomFire((scanData.code).toString(), ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
-                    // 各Stateを更新
-                    ref.read(roomCodeProvider.notifier).fetchRoomCode();
-                    ref.read(roomNameProvider.notifier).fetchRoomName();
-                    ref.read(roomMemberProvider.notifier).fetchRoomMember();
-                    ref.read(eventProvider.notifier).setEvent();
-                    ref.read(memoProvider.notifier).setMemo();
-                    // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
-                    ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
-                    ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
+                    updateState();
                     Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: positiveSnackBarColor,
-                        behavior: SnackBarBehavior.floating,
-                        content: Text('【$roomName】に参加しました！'),
-                      ),
-                    );
+                    positiveSnackBar(context, '【$roomName】に参加しました！');
                   } catch (e) {
-                    final snackBar = SnackBar(
-                      backgroundColor: negativeSnackBarColor,
-                      behavior: SnackBarBehavior.floating,
-                      content: Text(e.toString()),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    negativeSnackBar(context, e.toString());
                   }
                 },
               ),
@@ -154,4 +139,5 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
       );
     }
   }
+
 }

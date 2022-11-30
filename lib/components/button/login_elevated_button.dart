@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:share_kakeibo/constant/colors.dart';
 
-class AppElevatedButton extends StatelessWidget {
+class LoginElevatedButton extends StatelessWidget {
   final String text;
   final Function function;
 
-  const AppElevatedButton({
+  const LoginElevatedButton({
     Key? key,
     required this.text,
     required this.function,

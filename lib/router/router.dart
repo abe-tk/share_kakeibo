@@ -12,7 +12,12 @@ class RouteGenerator {
   static const String emailPage = '/emailPage';
   static const String passwordPage = '/passwordPage';
   static const String roomInfoPage = '/roomInfoPage';
-  static const String invitationRoomPage = '/invitationRoomPage';
+  static const String invitationPage = '/invitationPage';
+  static const String participationPage = '/participationPage';
+  static const String roomNamePage = '/roomNamePage';
+  static const String qrScanPage = '/qrScanPage';
+  static const String inputCodePage = '/inputCodePage';
+
   static const String detailEventPage = '/detailEventPage';
   static const String yearChartPage = '/yearChartPage';
   static const String registerPage = '/registerPage';
@@ -22,7 +27,7 @@ class RouteGenerator {
     switch (settings.name) {
       case homeScreen:
         return MaterialPageRoute(
-          builder: (_) => const BottomNavi(),
+          builder: (_) => BottomNavi(),
         );
       case addIncomeEventPage:
         return MaterialPageRoute(
@@ -82,6 +87,31 @@ class RouteGenerator {
       case resetPasswordPage:
         return MaterialPageRoute(
           builder: (_) => const ResetPasswordPage(),
+          fullscreenDialog: true,
+        );
+      case invitationPage:
+        return MaterialPageRoute(
+          builder: (_) => const InvitationPage(),
+          fullscreenDialog: true,
+        );
+      case participationPage:
+        return MaterialPageRoute(
+          builder: (_) => const ParticipationPage(),
+          fullscreenDialog: true,
+        );
+      case roomNamePage:
+        return MaterialPageRoute(
+          builder: (_) => const RoomNamePage(),
+          fullscreenDialog: true,
+        );
+      case qrScanPage:
+        return MaterialPageRoute(
+          builder: (_) => const QrScanPage(),
+          fullscreenDialog: true,
+        );
+      case inputCodePage:
+        return MaterialPageRoute(
+          builder: (_) => const InputCodePage(),
           fullscreenDialog: true,
         );
       default:

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AppMemoTextField extends StatelessWidget {
+class MemoTextField extends StatelessWidget {
   final TextEditingController controller;
   final Function textChange;
 
-  const AppMemoTextField({
+  const MemoTextField({
     Key? key,
     required this.controller,
     required this.textChange,
