@@ -22,7 +22,7 @@ class MemoPage extends HookConsumerWidget {
       appBar: ActionAppBar(
         title: 'メモ',
         icon: Icons.delete,
-        iconColor: Colors.red,
+        iconColor: CustomColor.negativeIconColor,
         function: () => removeMemo(context, ref),
       ),
       drawer: const DrawerMenu(),

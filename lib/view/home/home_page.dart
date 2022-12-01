@@ -33,7 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: ActionAppBar(
         title: '',
         icon: Icons.settings,
-        iconColor: Colors.black,
+        iconColor: CustomColor.defaultIconColor,
         function: () => Navigator.pushNamed(context, '/settingPage'),
       ),
       drawer: const DrawerMenu(),
@@ -46,11 +46,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Container(
                   height: 100,
                   width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: homeBoxColor,
+                  decoration: const BoxDecoration(
+                    color: CustomColor.appBarBackgroundColor,
                     border: Border(
                       bottom: BorderSide(
-                        color: boxBorderSideColor,
+                        color: CustomColor.bdBorderSideColor,
                         width: 0.1,
                       ),
                     ),
@@ -60,7 +60,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   children: [
                     // ルーム名
                     ListTile(
-                      leading: Icon(Icons.meeting_room_rounded, color: roomNameIconColor,),
+                      leading: const Icon(Icons.meeting_room_rounded, color: CustomColor.defaultIconColor,),
                       title: Text(roomNameState, style: const TextStyle(fontWeight: FontWeight.bold),),
                     ),
                     // 総資産額
@@ -78,11 +78,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                         child: Container(
                           height: 430,
                           decoration: BoxDecoration(
-                            color: boxColor,
+                            color: CustomColor.bdColor,
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
-                                color: boxShadowColor,
+                                color: CustomColor.bdShadowColor,
                                 spreadRadius: 1.0,
                               ),
                             ],

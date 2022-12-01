@@ -18,7 +18,7 @@ class PasswordPage extends HookConsumerWidget {
       appBar: ActionAppBar(
         title: 'パスワードを変更',
         icon: Icons.check,
-        iconColor: positiveIconColor,
+        iconColor: CustomColor.positiveIconColor,
         function: () async {
           try {
             updatePasswordValidation(password.value, checkPassword.value);
@@ -66,7 +66,6 @@ class PasswordPage extends HookConsumerWidget {
                   obscureChange: () => _isObscureCheckPassword.value = !_isObscureCheckPassword.value,
                   textChange: (text) => checkPassword.value = text,
                 ),
-                const Divider(),
               ],
             ),
           ),

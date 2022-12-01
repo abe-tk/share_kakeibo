@@ -26,7 +26,7 @@ class InvitationPage extends ConsumerWidget {
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
+                  border: Border.all(color: CustomColor.bdBorderSideColor),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: QrImage(
@@ -67,7 +67,6 @@ class InvitationPage extends ConsumerWidget {
                   appSnackBar(context, '招待コードをコピーしました！');
                 },
               ),
-              const Divider(),
             ],
           ),
         ),

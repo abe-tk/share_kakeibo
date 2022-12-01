@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/impoter.dart';
 
@@ -27,13 +26,7 @@ class MyApp extends HookConsumerWidget {
           Locale("en"),
           Locale("ja"),
         ],
-        theme: ThemeData(
-          primarySwatch: customPrimarySwatch,
-          scaffoldBackgroundColor: customScaffoldBackgroundColor,
-          textTheme: GoogleFonts.notoSansTextTheme(
-            Theme.of(context).textTheme,
-          ),
-        ),
+        theme: CustomTheme.themeData(context),
         onGenerateRoute: RouteGenerator.generateRoute,
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),

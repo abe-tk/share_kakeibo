@@ -68,7 +68,7 @@ class LoginPage extends HookConsumerWidget {
                 AppTextButton(
                   text: 'パスワードをお忘れ場合はこちら',
                   size: 14,
-                  color: Colors.grey,
+                  color: CustomColor.detailTextColor,
                   function: () {
                     Navigator.pushNamed(context, '/resetPasswordPage');
                     clearController(emailController.value, passwordController.value);
@@ -81,7 +81,7 @@ class LoginPage extends HookConsumerWidget {
                 AppTextButton(
                   text: 'アカウントの新規登録はこちら',
                   size: 14,
-                  color: Colors.grey,
+                  color: CustomColor.detailTextColor,
                   function: () {
                     Navigator.pushNamed(context, '/registerPage');
                     clearController(emailController.value, passwordController.value);

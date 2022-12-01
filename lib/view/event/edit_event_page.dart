@@ -92,10 +92,10 @@ class EditEventPage extends HookConsumerWidget {
       appBar: TwoActionAppBar(
         title: '${event.largeCategory}の編集',
         firstIcon: Icons.delete,
-        firstIconColor: negativeIconColor,
+        firstIconColor: CustomColor.negativeIconColor,
         firstFunction: () async => deleteEvent(),
         secondIcon: Icons.check,
-        secondIconColor: positiveIconColor,
+        secondIconColor: CustomColor.positiveIconColor,
         secondFunction: () async => updateEvent(),
       ),
       body: SafeArea(

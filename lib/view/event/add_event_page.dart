@@ -56,7 +56,7 @@ class AddEventPage extends HookConsumerWidget {
       appBar: ActionAppBar(
         title: '$largeCategoryの追加',
         icon: Icons.check,
-        iconColor: positiveIconColor,
+        iconColor: CustomColor.positiveIconColor,
         function: () => addEvent(),
       ),
       body: SafeArea(

@@ -57,7 +57,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
       appBar: ActionAppBar(
         title: 'カレンダー',
         icon: Icons.receipt_long,
-        iconColor: Colors.black,
+        iconColor: CustomColor.defaultIconColor,
         function: () => Navigator.pushNamed(context, '/detailEventPage'),
       ),
       drawer: const DrawerMenu(),
@@ -82,7 +82,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: CustomColor.whiteContainerColor,
                   border: Border(
                     top: BorderSide(
                       color: Colors.grey.withOpacity(0.5),

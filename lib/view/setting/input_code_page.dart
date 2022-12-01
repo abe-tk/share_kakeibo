@@ -27,7 +27,7 @@ class InputCodePage extends HookConsumerWidget {
       appBar: ActionAppBar(
         title: 'ROOMに参加する',
         icon: Icons.check,
-        iconColor: positiveIconColor,
+        iconColor: CustomColor.positiveIconColor,
         function: () async {
           try {
             invitationRoomValidation(roomCode.value);
@@ -55,7 +55,6 @@ class InputCodePage extends HookConsumerWidget {
                 obscureChange: () {},
                 textChange: (text) =>  roomCode.value = text,
               ),
-              const Divider(),
             ],
           ),
         ),

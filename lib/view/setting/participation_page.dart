@@ -26,7 +26,6 @@ class ParticipationPage extends ConsumerWidget {
                 title: '招待コードを入力する',
                 function: () => Navigator.pushNamed(context, '/inputCodePage'),
               ),
-              const Divider(),
             ],
           ),
         ),

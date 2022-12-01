@@ -81,6 +81,7 @@ class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
           percent: nonDataCase,
           color: const Color.fromRGBO(130, 132, 130, 1.0)),
     ];
+
     state = getCategory(pieData);
   }
 

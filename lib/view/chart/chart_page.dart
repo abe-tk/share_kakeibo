@@ -44,8 +44,6 @@ class _ChartPageState extends ConsumerState<ChartPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: appBarBackGroundColor,
           elevation: 1,
           title: SelectMonth(
             month: month.value,
@@ -65,7 +63,7 @@ class _ChartPageState extends ConsumerState<ChartPage> {
           actions: [
             AppIconButton(
               icon: Icons.analytics_outlined,
-              color: normalTextColor,
+              color: CustomColor.defaultIconColor,
               function: () {
                 Navigator.pushNamed(context, '/yearChartPage');
               },

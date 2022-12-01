@@ -76,7 +76,7 @@ class RegisterPage extends HookConsumerWidget {
                 AppTextButton(
                   text: '既にアカウントをお持ちの方はこちら',
                   size: 14,
-                  color: Colors.grey,
+                  color: CustomColor.detailTextColor,
                   function: () => Navigator.of(context).pop(),
                 ),
               ],

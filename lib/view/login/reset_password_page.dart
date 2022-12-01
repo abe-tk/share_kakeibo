@@ -54,7 +54,7 @@ class ResetPasswordPage extends HookConsumerWidget {
                 AppTextButton(
                   text: 'ログイン画面へ戻る',
                   size: 14,
-                  color: Colors.grey,
+                  color: CustomColor.detailTextColor,
                   function: () => Navigator.of(context).pop(),
                 ),
               ],

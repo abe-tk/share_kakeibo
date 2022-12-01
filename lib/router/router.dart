@@ -27,7 +27,7 @@ class RouteGenerator {
     switch (settings.name) {
       case homeScreen:
         return MaterialPageRoute(
-          builder: (_) => BottomNavi(),
+          builder: (_) => const BottomNavi(),
         );
       case addIncomeEventPage:
         return MaterialPageRoute(

@@ -71,7 +71,7 @@ class RoomInfoPage extends HookConsumerWidget {
       appBar: ActionAppBar(
         title: 'ROOM情報',
         icon: Icons.logout,
-        iconColor: Colors.black,
+        iconColor: CustomColor.defaultIconColor,
         function: () {
           checkExitRoom(context, ref, () => checkAgainExitRoom(context, ref));
         },
@@ -99,7 +99,6 @@ class RoomInfoPage extends HookConsumerWidget {
                   );
                 },
               ),
-              const Divider(),
             ],
           ),
         ),

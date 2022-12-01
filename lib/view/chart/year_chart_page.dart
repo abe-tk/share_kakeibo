@@ -46,7 +46,7 @@ class _YearChartPageState extends ConsumerState<YearChartPage> {
       appBar: ActionAppBar(
         title: '支出の推移',
         icon: Icons.contact_support_outlined,
-        iconColor: Colors.black,
+        iconColor: CustomColor.defaultIconColor,
         function: () => showSupportMessage(),
       ),
       body: SafeArea(

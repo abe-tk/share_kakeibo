@@ -24,7 +24,7 @@ class RoomNamePage extends HookConsumerWidget {
       appBar: ActionAppBar(
         title: 'Roomの名前を編集',
         icon: Icons.check,
-        iconColor: positiveIconColor,
+        iconColor: CustomColor.positiveIconColor,
         function: () async => changeRooName(context, ref, roomName.value),
       ),
       body: SingleChildScrollView(
@@ -39,7 +39,6 @@ class RoomNamePage extends HookConsumerWidget {
               obscureChange: () {},
               textChange: (text) => roomName.value = text,
             ),
-            const Divider(),
           ],
         ),
       ),

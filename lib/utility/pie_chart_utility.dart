@@ -40,7 +40,7 @@ List<PieChartSectionData> getCategory(List<PieData> pieData) => pieData
     titleStyle: const TextStyle(
       // fontSize: fontSize,
       fontWeight: FontWeight.bold,
-      color: Colors.black54,
+      color: CustomColor.pieChartCategoryTextColor,
     ),
   );
   return MapEntry(index, value);

@@ -35,7 +35,6 @@ class SettingPage extends HookConsumerWidget {
               title: 'ROOMに参加する',
               function: () => Navigator.pushNamed(context, '/participationPage'),
             ),
-            const Divider(),
           ],
         ),
       ),

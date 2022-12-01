@@ -59,7 +59,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       appBar: ActionAppBar(
         title: 'プロフィール',
         icon: Icons.check,
-        iconColor: positiveIconColor,
+        iconColor: CustomColor.positiveIconColor,
         function: () async {
           try {
             await updateProfile(userName.value, imgURL.value);
@@ -90,7 +90,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               obscureChange: () {},
               textChange: (text) => userName.value = text,
             ),
-            const Divider(),
           ],
         ),
       ),

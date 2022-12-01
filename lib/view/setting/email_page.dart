@@ -19,7 +19,7 @@ class EmailPage extends HookConsumerWidget {
       appBar: ActionAppBar(
         title: 'メールアドレスを変更',
         icon: Icons.check,
-        iconColor: positiveIconColor,
+        iconColor: CustomColor.positiveIconColor,
         function: () async {
           try {
             updateEmailValidation(email.value, ref.watch(userProvider)['email']);
@@ -66,7 +66,6 @@ class EmailPage extends HookConsumerWidget {
                   obscureChange: () {},
                   textChange: (text) => email.value = text,
                 ),
-                const Divider(),
               ],
             ),
           ),
