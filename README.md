@@ -4,7 +4,9 @@
 
 # DEMO
 
-"hoge"の魅力が直感的に伝えわるデモ動画や図解を載せる
+ユーザが追加した収支金額が、円グラフでひと目でわかります。
+
+<img width="367" alt="CHART" src="https://user-images.githubusercontent.com/96103285/205615480-607db3aa-c88a-4f40-9eb0-556c3218afc7.png">
 
 # Features
 
