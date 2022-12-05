@@ -10,7 +10,12 @@
 
 # Features
 
-"hoge"のセールスポイントや差別化などを説明する
+ShareKakeibo/共有家計簿のセールスポイント
+
+・グループ機能
+・カレンダー表示機能
+・グラフ表示機能
+・メモ機能
 
 # Requirement
 
@@ -58,37 +63,9 @@ $ flutter pub add qr_code_scanner
 $ flutter pub add flutter_screenutil
 ```
 
-[comment]: <> (# Usage)
-
-[comment]: <> (DEMOの実行方法など、"hoge"の基本的な使い方を説明する)
-
-[comment]: <> (```bash)
-
-[comment]: <> (git clone https://github.com/hoge/~)
-
-[comment]: <> (cd examples)
-
-[comment]: <> (python demo.py)
-
-[comment]: <> (```)
-
-[comment]: <> (# Note)
-
-[comment]: <> (注意点などがあれば書く)
-
 # Author
 
 作成情報を列挙する
 
 * Takuro, Abe
 * takuro.abe0220@gmail.com
-
-[comment]: <> (# License)
-
-[comment]: <> (ライセンスを明示する)
-
-[comment]: <> ("hoge" is under [MIT license]&#40;https://en.wikipedia.org/wiki/MIT_License&#41;.)
-
-[comment]: <> (社内向けなら社外秘であることを明示してる)
-
-[comment]: <> ("hoge" is Confidential.)
