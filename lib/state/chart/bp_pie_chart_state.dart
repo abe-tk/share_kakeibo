@@ -11,8 +11,6 @@ final bpPieChartStateProvider = StateNotifierProvider<BpPieChartStateNotifier, L
 class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
   BpPieChartStateNotifier() : super([]);
 
-  var first = true;
-
   late String roomCode;
 
   int incomePrice = 0;
@@ -33,21 +31,6 @@ class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
     spendingPercent = 0.0;
     nonDataCase = 0.0;
     pieData = [];
-  }
-
-  void calc(DateTime date, List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
-    switch(first) {
-      case true:
-        bpPieChartFirstCalc(date);
-        first = false;
-        break;
-      case false:
-        bpPieChartCalc(date, event);
-        break;
-      default:
-        print('error');
-        break;
-    }
   }
 
   void bpPieChartCalc(DateTime date, List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
@@ -122,10 +105,6 @@ class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
           color: const Color.fromRGBO(130, 132, 130, 1.0)),
     ];
     state = getCategory(pieData);
-  }
-
-  void boolChange() {
-    first = true;
   }
 
 }

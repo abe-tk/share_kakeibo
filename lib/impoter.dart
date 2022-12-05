@@ -90,6 +90,7 @@ export 'utility/pie_chart_utility.dart';
 export 'utility/price_utility.dart';
 export 'utility/percent_utility.dart';
 export 'utility/select_date_utility.dart';
+export 'utility/update_state_utility.dart';
 
 // validator
 export 'validator/validator.dart';

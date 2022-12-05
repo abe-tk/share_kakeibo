@@ -25,18 +25,6 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
     return data?['roomName'];
   }
 
-  void updateState() {
-    // 各Stateを更新
-    ref.read(roomCodeProvider.notifier).fetchRoomCode();
-    ref.read(roomNameProvider.notifier).fetchRoomName();
-    ref.read(roomMemberProvider.notifier).fetchRoomMember();
-    ref.read(eventProvider.notifier).setEvent();
-    ref.read(memoProvider.notifier).setMemo();
-    // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
-    ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
-    ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
-  }
-
   @override
   void reassemble() {
     super.reassemble();
@@ -113,7 +101,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                   try {
                     updateUserRoomCodeFire((scanData.code).toString());
                     joinRoomFire((scanData.code).toString(), ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
-                    updateState();
+                    updateState(ref);
                     Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
                     positiveSnackBar(context, '【$roomName】に参加しました！');
                   } catch (e) {

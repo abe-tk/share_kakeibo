@@ -13,7 +13,11 @@ Future<Map<String, dynamic>> getUserProfileFire() async {
 
 // Userの名前を更新
 Future<void> updateUserNameFire(String name, String roomCode) async {
+  updateUserNameValidation(name);
   await FirebaseFirestore.instance.collection('users').doc(uid).update({
+    'userName': name,
+  });
+  await FirebaseFirestore.instance.collection('users').doc(uid).collection('room').doc(uid).update({
     'userName': name,
   });
   await FirebaseFirestore.instance.collection('users').doc(roomCode).collection('room').doc(uid).update({

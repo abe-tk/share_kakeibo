@@ -5,25 +5,26 @@ import 'package:share_kakeibo/impoter.dart';
 class MemoPage extends HookConsumerWidget {
   const MemoPage({Key? key}) : super(key: key);
 
-  Future<void> removeMemo(BuildContext context, WidgetRef ref) async {
-    try {
-      await ref.watch(memoProvider.notifier).removeMemo();
-      negativeSnackBar(context, 'メモを削除しました');
-    } catch (e) {
-      negativeSnackBar(context, e.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Memo> memos = ref.watch(memoProvider);
     final memoNotifier = ref.watch(memoProvider.notifier);
+
+    Future<void> removeMemo() async {
+      try {
+        await ref.watch(memoProvider.notifier).removeMemo();
+        negativeSnackBar(context, 'メモを削除しました');
+      } catch (e) {
+        negativeSnackBar(context, e.toString());
+      }
+    }
+
     return Scaffold(
       appBar: ActionAppBar(
         title: 'メモ',
         icon: Icons.delete,
         iconColor: CustomColor.negativeIconColor,
-        function: () => removeMemo(context, ref),
+        function: () => removeMemo(),
       ),
       drawer: const DrawerMenu(),
       body: SafeArea(

@@ -23,53 +23,41 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     }
   }
 
-  Future<void> updateProfile(String userName, String imgURL) async {
-    // ユーザ名が空でなければ更新
-    updateUserNameValidation(userName);
-    await updateUserNameFire(userName, ref.watch(roomCodeProvider));
-    // 過去の収支イベントの支払い元の名前を変更
-    await updatePastEventUserName(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName'], userName);
-    // プロフィール画像に変更があれば更新
-    if (imgFile != null) {
-      imgURL = await putImgFileFire(imgFile!);
-      await updateUserImgURLFire(imgURL, ref.watch(roomCodeProvider));
-    }
-  }
-
-  void updateState() {
-    // 統計の円グラフを更新
-    ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-    ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
-    ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-    ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
-    // カレンダーのイベントを更新
-    ref.read(eventProvider.notifier).setEvent();
-    // user情報の再取得
-    ref.read(userProvider.notifier).fetchUser();
-    // roomMemberの情報を更新
-    ref.read(roomMemberProvider.notifier).fetchRoomMember();
-  }
-
   @override
   Widget build(BuildContext context) {
     final userName = useState(ref.watch(userProvider)['userName']);
     final userNameController = useState(TextEditingController(text: ref.watch(userProvider)['userName']));
     final imgURL = useState(ref.watch(userProvider)['imgURL']);
+
+    Future<void> updateProfile() async {
+      try {
+        // ユーザ名に変更があれば更新
+        if (userName.value != ref.watch(userProvider)['userName']) {
+          await updateUserNameFire(userName.value, ref.watch(roomCodeProvider));
+          // 過去の収支イベントの支払い元の名前を変更
+          await updatePastEventUserName(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName'], userName.value);
+          // イベントのユーザ名に変更があるため、stateを更新
+          await updateUserNameState(ref, DateTime(DateTime.now().year, DateTime.now().month));
+        }
+        // プロフィール画像に変更があれば更新
+        if (imgFile != null) {
+          imgURL.value = await putImgFileFire(imgFile!);
+          await updateUserImgURLFire(imgURL.value, ref.watch(roomCodeProvider));
+          updateUserImgURLState(ref);
+        }
+        Navigator.of(context).pop();
+        positiveSnackBar(context, 'プロフィールを編集しました');
+      } catch (e) {
+        negativeSnackBar(context, e.toString());
+      }
+    }
+
     return Scaffold(
       appBar: ActionAppBar(
         title: 'プロフィール',
         icon: Icons.check,
         iconColor: CustomColor.positiveIconColor,
-        function: () async {
-          try {
-            await updateProfile(userName.value, imgURL.value);
-            updateState();
-            Navigator.of(context).pop();
-            positiveSnackBar(context, 'プロフィールを編集しました');
-          } catch (e) {
-            negativeSnackBar(context, e.toString());
-          }
-        },
+        function: () async => await updateProfile(),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -90,6 +78,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               obscureChange: () {},
               textChange: (text) => userName.value = text,
             ),
+            const Divider(),
           ],
         ),
       ),

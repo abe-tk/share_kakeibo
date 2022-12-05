@@ -16,8 +16,6 @@ class AccountPage extends HookConsumerWidget {
           subTitle: '',
           function: () async {
             await FirebaseAuth.instance.signOut();
-            ref.read(bpPieChartStateProvider.notifier).boolChange();
-            ref.read(totalAssetsStateProvider.notifier).boolChange();
             Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
           },
         );
@@ -39,14 +37,8 @@ class AccountPage extends HookConsumerWidget {
                 context: context,
                 builder: (context) {
                   return ReSingInDialog(
-                    function: () async {
-                      await FirebaseAuth.instance.currentUser!.delete();
-                      ref.read(bpPieChartStateProvider.notifier).boolChange();
-                      ref.read(totalAssetsStateProvider.notifier).boolChange();
-                    },
-                    navigator: () {
-                      Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-                    },
+                    function: () async => await FirebaseAuth.instance.currentUser!.delete(),
+                    navigator: () => Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst),
                     text: 'アカウントを削除しました',
                   );
                 },

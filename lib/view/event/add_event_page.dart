@@ -20,7 +20,6 @@ class AddEventPage extends HookConsumerWidget {
 
     Future<void> addEvent() async {
       try {
-        addEventValidation(price.value);
         await addEventFire(
           ref.watch(roomCodeProvider),
           date.value,
@@ -31,19 +30,7 @@ class AddEventPage extends HookConsumerWidget {
           DateTime(date.value.year, date.value.month),
           paymentUser.value,
         );
-        await ref.read(eventProvider.notifier).setEvent();
-        // ホーム画面の収支円グラフを再計算
-        ref.read(bpPieChartStateProvider.notifier).bpPieChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-        // updateState();
-        // 総資産額の再計算
-        ref.read(totalAssetsStateProvider.notifier).calcTotalAssets(ref.read(eventProvider));
-        // カレンダーのイベントを更新
-        ref.read(calendarEventStateProvider.notifier).fetchCalendarEvent(ref.read(eventProvider));
-        // 統計の円グラフを更新
-        ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-        ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
-        ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider));
-        ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(DateTime(DateTime.now().year, DateTime.now().month), ref.read(eventProvider), ref.read(roomMemberProvider));
+        await updateEventState(ref, DateTime(DateTime.now().year, DateTime.now().month));
         Navigator.of(context).pop();
         Navigator.of(context).pop();
         positiveSnackBar(context, '$largeCategoryを追加しました！');

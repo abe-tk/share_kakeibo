@@ -6,26 +6,27 @@ import 'package:share_kakeibo/impoter.dart';
 class RoomNamePage extends HookConsumerWidget {
   const RoomNamePage({Key? key}) : super(key: key);
 
-  Future<void> changeRooName(BuildContext context, WidgetRef ref, String roomName) async {
-    try {
-      await ref.watch(roomNameProvider.notifier).changeRoomName(roomName);
-      Navigator.of(context).pop();
-      positiveSnackBar(context, 'Room名を変更しました');
-    } catch (e) {
-      negativeSnackBar(context, e.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final roomName = useState(ref.watch(roomNameProvider));
     final roomNameController = useState(TextEditingController(text: ref.watch(roomNameProvider)));
+
+    Future<void> changeRooName() async {
+      try {
+        await ref.watch(roomNameProvider.notifier).changeRoomName(roomName.value);
+        Navigator.of(context).pop();
+        positiveSnackBar(context, 'Room名を変更しました');
+      } catch (e) {
+        negativeSnackBar(context, e.toString());
+      }
+    }
+
     return Scaffold(
       appBar: ActionAppBar(
         title: 'Roomの名前を編集',
         icon: Icons.check,
         iconColor: CustomColor.positiveIconColor,
-        function: () async => changeRooName(context, ref, roomName.value),
+        function: () async => changeRooName(),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -39,6 +40,7 @@ class RoomNamePage extends HookConsumerWidget {
               obscureChange: () {},
               textChange: (text) => roomName.value = text,
             ),
+            const Divider(),
           ],
         ),
       ),

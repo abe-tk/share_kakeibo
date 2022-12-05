@@ -5,18 +5,6 @@ import 'package:share_kakeibo/impoter.dart';
 class RoomInfoPage extends HookConsumerWidget {
   const RoomInfoPage({Key? key}) : super(key: key);
 
-  void updateState(WidgetRef ref) {
-    // 各Stateを更新
-    ref.read(roomCodeProvider.notifier).fetchRoomCode();
-    ref.read(roomNameProvider.notifier).fetchRoomName();
-    ref.read(roomMemberProvider.notifier).fetchRoomMember();
-    ref.read(eventProvider.notifier).setEvent();
-    ref.read(memoProvider.notifier).setMemo();
-    // Home画面で使用するWidgetの値は、Stateが未取得の状態で計算されてしまうため直接firebaseからデータを読み込む（app起動時のみ）
-    ref.read(bpPieChartStateProvider.notifier).bpPieChartFirstCalc(DateTime(DateTime.now().year, DateTime.now().month));
-    ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets();
-  }
-
   void checkExitRoom(BuildContext context, WidgetRef ref, Function function) {
     showDialog(
       context: context,

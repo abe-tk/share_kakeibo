@@ -12,18 +12,11 @@ class ChartPage extends StatefulHookConsumerWidget {
 
 class _ChartPageState extends ConsumerState<ChartPage> {
 
-  void reCalc(DateTime date) {
-    ref.read(incomeCategoryPieChartStateProvider.notifier).incomeCategoryChartCalc(date, ref.read(eventProvider));
-    ref.read(spendingCategoryPieChartStateProvider.notifier).spendingCategoryChartCalc(date, ref.read(eventProvider));
-    ref.read(incomeUserPieChartStateProvider.notifier).incomeUserChartCalc(date, ref.read(eventProvider), ref.read(roomMemberProvider));
-    ref.read(spendingUserPieChartStateProvider.notifier).spendingUserChartCalc(date, ref.read(eventProvider), ref.read(roomMemberProvider));
-  }
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      reCalc(DateTime(DateTime.now().year, DateTime.now().month));
+      updatePieChartState(ref, DateTime(DateTime.now().year, DateTime.now().month));
     });
   }
 
@@ -49,15 +42,15 @@ class _ChartPageState extends ConsumerState<ChartPage> {
             month: month.value,
             left: () {
               month.value = DateTime(month.value.year, month.value.month - 1);
-              reCalc(month.value);
+              updatePieChartState(ref, month.value);
             },
             center: () async {
               month.value = await selectMonth(context, month.value);
-              reCalc(month.value);
+              updatePieChartState(ref, month.value);
             },
             right: () {
               month.value = DateTime(month.value.year, month.value.month + 1);
-              reCalc(month.value);
+              updatePieChartState(ref, month.value);
             },
           ),
           actions: [

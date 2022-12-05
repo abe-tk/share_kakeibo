@@ -6,43 +6,42 @@ import 'package:share_kakeibo/impoter.dart';
 class EmailPage extends HookConsumerWidget {
   const EmailPage({Key? key}) : super(key: key);
 
-  Future <void> updateEmail(String email, TextEditingController emailController) async {
-    email = emailController.text;
-    await updateUserEmailFire(email);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final email = useState('');
     final emailController = useState(TextEditingController(text: ''));
+
+    Future <void> updateEmail() async {
+      try {
+        updateEmailValidation(email.value, ref.watch(userProvider)['email']);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ReSingInDialog(
+              function: () async {
+                email.value = emailController.value.text;
+                await updateUserEmailFire(email.value);
+                await ref.read(userProvider.notifier).fetchUser();
+              },
+              navigator: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              text: 'メールアドレスを変更しました',
+            );
+          },
+        );
+      } catch (e) {
+        negativeSnackBar(context, e.toString());
+      }
+    }
+
     return Scaffold(
       appBar: ActionAppBar(
         title: 'メールアドレスを変更',
         icon: Icons.check,
         iconColor: CustomColor.positiveIconColor,
-        function: () async {
-          try {
-            updateEmailValidation(email.value, ref.watch(userProvider)['email']);
-            showDialog(
-              context: context,
-              builder: (context) {
-                return ReSingInDialog(
-                  function: () async {
-                    await updateEmail(email.value, emailController.value);
-                    await ref.read(userProvider.notifier).fetchUser();
-                  },
-                  navigator: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  text: 'メールアドレスを変更しました',
-                );
-              },
-            );
-          } catch (e) {
-            negativeSnackBar(context, e.toString());
-          }
-        },
+        function: () async => updateEmail(),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -66,6 +65,7 @@ class EmailPage extends HookConsumerWidget {
                   obscureChange: () {},
                   textChange: (text) => email.value = text,
                 ),
+                const Divider(),
               ],
             ),
           ),

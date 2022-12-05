@@ -37,13 +37,7 @@ class MyApp extends HookConsumerWidget {
             }
             if (snapshot.hasData && loginState == true) {
               // User が null ではない、つまりサインイン済みのホーム画面へ
-              // 各Stateを更新
-              ref.read(roomNameProvider.notifier).fetchRoomName();
-              ref.read(roomMemberProvider.notifier).fetchRoomMember();
-              ref.read(userProvider.notifier).fetchUser();
-              ref.read(eventProvider.notifier).setEvent();
-              ref.read(memoProvider.notifier).setMemo();
-              ref.read(roomCodeProvider.notifier).fetchRoomCode();
+              updateState(ref); // 各Stateを更新
               return const BottomNavi();
             }
             // User が null である、つまり未サインインのサインイン画面へ

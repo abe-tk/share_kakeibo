@@ -83,6 +83,7 @@ class Fab extends HookConsumerWidget {
                         ListTile(
                           leading: const Icon(Icons.add),
                           title: const Text('収入の追加'),
+                          trailing: const Icon(Icons.chevron_right),
                           onTap: () async {
                             await ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
                             Navigator.pushNamed(context, '/addIncomeEventPage');
@@ -92,6 +93,7 @@ class Fab extends HookConsumerWidget {
                         ListTile(
                           leading: const Icon(Icons.remove),
                           title: const Text('支出の追加'),
+                          trailing: const Icon(Icons.chevron_right),
                           onTap: () async {
                             await ref.read(paymentUserProvider.notifier).fetchPaymentUser(ref.read(roomMemberProvider));
                             Navigator.pushNamed(context, '/addSpendingEventPage');
@@ -101,6 +103,7 @@ class Fab extends HookConsumerWidget {
                         ListTile(
                           leading: const Icon(Icons.edit),
                           title: const Text('メモの追加'),
+                          trailing: const Icon(Icons.chevron_right),
                           onTap: () {
                             selectIndex();
                             Navigator.of(context).pop();

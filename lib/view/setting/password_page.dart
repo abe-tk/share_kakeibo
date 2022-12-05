@@ -14,33 +14,36 @@ class PasswordPage extends HookConsumerWidget {
     final checkPasswordController = useState(TextEditingController(text: ''));
     final _isObscurePassword = useState(true);
     final _isObscureCheckPassword = useState(true);
+
+    Future<void> updatePassword() async {
+      try {
+        updatePasswordValidation(password.value, checkPassword.value);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ReSingInDialog(
+              function: () async {
+                await updateUserPasswordFire(password.value);
+              },
+              navigator: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              text: 'パスワードを変更しました',
+            );
+          },
+        );
+      } catch (e) {
+        negativeSnackBar(context, e.toString());
+      }
+    }
+
     return Scaffold(
       appBar: ActionAppBar(
         title: 'パスワードを変更',
         icon: Icons.check,
         iconColor: CustomColor.positiveIconColor,
-        function: () async {
-          try {
-            updatePasswordValidation(password.value, checkPassword.value);
-            showDialog(
-              context: context,
-              builder: (context) {
-                return ReSingInDialog(
-                  function: () async {
-                    await updateUserPasswordFire(password.value);
-                  },
-                  navigator: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  text: 'パスワードを変更しました',
-                );
-              },
-            );
-          } catch (e) {
-            negativeSnackBar(context, e.toString());
-          }
-        },
+        function: () async => updatePassword(),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -66,6 +69,7 @@ class PasswordPage extends HookConsumerWidget {
                   obscureChange: () => _isObscureCheckPassword.value = !_isObscureCheckPassword.value,
                   textChange: (text) => checkPassword.value = text,
                 ),
+                const Divider(),
               ],
             ),
           ),
