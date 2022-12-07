@@ -13,8 +13,8 @@ class EventNotifier extends StateNotifier<List<QueryDocumentSnapshot<Map<String,
   late String roomCode;
 
   Future<void> setEvent() async {
-    roomCode = await getRoomCodeFire(uid);
-    state = await getEventFire(roomCode);
+    roomCode = await RoomFire().getRoomCodeFire(uid);
+    state = await EventFire().getEventFire(roomCode);
     // state = events;
   }
 

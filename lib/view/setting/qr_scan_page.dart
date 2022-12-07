@@ -99,8 +99,8 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                 onPressed: () async {
                   // ここでjoinRoomの処理
                   try {
-                    updateUserRoomCodeFire((scanData.code).toString());
-                    joinRoomFire((scanData.code).toString(), ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
+                    UserFire().updateUserRoomCodeFire((scanData.code).toString());
+                    RoomFire().joinRoomFire((scanData.code).toString(), ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
                     updateState(ref);
                     Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
                     positiveSnackBar(context, '【$roomName】に参加しました！');

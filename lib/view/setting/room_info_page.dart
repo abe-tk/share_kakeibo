@@ -38,7 +38,7 @@ class RoomInfoPage extends HookConsumerWidget {
           subTitle: '',
           function: () async {
             try {
-              await exitRoomFire(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName']);
+              await RoomFire().exitRoomFire(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName']);
               updateState(ref);
               Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
               negativeSnackBar(context, 'Roomから退出しました');

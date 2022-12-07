@@ -49,13 +49,10 @@ class LoginPage extends HookConsumerWidget {
                   text: 'ログイン',
                   function: () async {
                     ref.watch(indicatorProvider).showProgressDialog(context);
-                    changeLoginState(true); // app.dartでサインインの状態で判定されるようにする
                     try {
-                      await loginFire(email.value, password.value);
+                      await AuthFire().loginFire(email.value, password.value);
                       Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
                       clearController(emailController.value, passwordController.value);
-                      // uidをログインユーザのものに変更
-                      changeUid();
                     } on FirebaseAuthException catch (e) {
                       Navigator.of(context).pop();
                       negativeSnackBar(context, authValidation(e));

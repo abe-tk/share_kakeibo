@@ -20,7 +20,7 @@ class EditEventPage extends HookConsumerWidget {
 
     Future<void> updateEvent() async {
       try {
-        await updateEventFire(
+        await EventFire().updateEventFire(
           ref.watch(roomCodeProvider),
           event,
           date.value,
@@ -54,7 +54,7 @@ class EditEventPage extends HookConsumerWidget {
                 child: const Text("OK"),
                 onPressed: () async {
                   try {
-                    await deleteEventFire(ref.watch(roomCodeProvider), event.id);
+                    await EventFire().deleteEventFire(ref.watch(roomCodeProvider), event.id);
                     await updateEventState(ref, DateTime(DateTime.now().year, DateTime.now().month));
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();

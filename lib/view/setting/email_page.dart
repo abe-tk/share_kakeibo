@@ -20,7 +20,7 @@ class EmailPage extends HookConsumerWidget {
             return ReSingInDialog(
               function: () async {
                 email.value = emailController.value.text;
-                await updateUserEmailFire(email.value);
+                await UserFire().updateUserEmailFire(email.value);
                 await ref.read(userProvider.notifier).fetchUser();
               },
               navigator: () {

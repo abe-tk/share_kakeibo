@@ -20,7 +20,7 @@ class AddEventPage extends HookConsumerWidget {
 
     Future<void> addEvent() async {
       try {
-        await addEventFire(
+        await EventFire().addEventFire(
           ref.watch(roomCodeProvider),
           date.value,
           price.value,

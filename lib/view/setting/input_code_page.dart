@@ -19,9 +19,9 @@ class InputCodePage extends HookConsumerWidget {
         function: () async {
           try {
             invitationRoomValidation(roomCode.value);
-            ownerRoomName.value = await getRoomNameFire(roomCode.value);
-            updateUserRoomCodeFire(roomCode.value);
-            joinRoomFire(roomCode.value, ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
+            ownerRoomName.value = await RoomFire().getOwnerRoomNameFire(roomCode.value);
+            UserFire().updateUserRoomCodeFire(roomCode.value);
+            RoomFire().joinRoomFire(roomCode.value, ref.watch(userProvider)['userName'], ref.watch(userProvider)['imgURL']);
             updateState(ref);
             Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
             positiveSnackBar(context, '【${ownerRoomName.value}】に参加しました！');

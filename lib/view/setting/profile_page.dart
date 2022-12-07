@@ -33,16 +33,16 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       try {
         // ユーザ名に変更があれば更新
         if (userName.value != ref.watch(userProvider)['userName']) {
-          await updateUserNameFire(userName.value, ref.watch(roomCodeProvider));
+          await UserFire().updateUserNameFire(userName.value, ref.watch(roomCodeProvider));
           // 過去の収支イベントの支払い元の名前を変更
-          await updatePastEventUserName(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName'], userName.value);
+          await UserFire().updatePastEventUserName(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName'], userName.value);
           // イベントのユーザ名に変更があるため、stateを更新
           await updateUserNameState(ref, DateTime(DateTime.now().year, DateTime.now().month));
         }
         // プロフィール画像に変更があれば更新
         if (imgFile != null) {
-          imgURL.value = await putImgFileFire(imgFile!);
-          await updateUserImgURLFire(imgURL.value, ref.watch(roomCodeProvider));
+          imgURL.value = await StorageFire().putImgFileFire(imgFile!);
+          await UserFire().updateUserImgURLFire(imgURL.value, ref.watch(roomCodeProvider));
           updateUserImgURLState(ref);
         }
         Navigator.of(context).pop();

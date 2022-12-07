@@ -11,13 +11,13 @@ class RoomNameNotifier extends StateNotifier<String> {
   late String roomCode;
 
   Future<void> fetchRoomName() async {
-    roomCode = await getRoomCodeFire(uid);
-    state = await getRoomNameFire(roomCode);
+    roomCode = await RoomFire().getRoomCodeFire(uid);
+    state = await RoomFire().getRoomNameFire(roomCode);
   }
 
   Future<void> changeRoomName(String newRoomName) async {
     changeRoomNameValidation(newRoomName);
-    await updateRoomNameFire(roomCode, newRoomName);
+    await RoomFire().updateRoomNameFire(roomCode, newRoomName);
     state = newRoomName;
   }
 

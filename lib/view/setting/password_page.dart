@@ -23,7 +23,7 @@ class PasswordPage extends HookConsumerWidget {
           builder: (context) {
             return ReSingInDialog(
               function: () async {
-                await updateUserPasswordFire(password.value);
+                await AuthFire().updateUserPasswordFire(password.value);
               },
               navigator: () {
                 Navigator.of(context).pop();

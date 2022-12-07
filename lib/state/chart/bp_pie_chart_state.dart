@@ -72,14 +72,14 @@ class BpPieChartStateNotifier extends StateNotifier<List<PieChartSectionData>> {
   Future<void> bpPieChartFirstCalc(DateTime date) async {
 
     // roomCodeの取得
-    roomCode = await getRoomCodeFire(uid);
+    roomCode = await RoomFire().getRoomCodeFire(uid);
 
     // イニシャライズ
     setInitialize();
 
     // 当月の収入、支出、合計の金額を算出
-    incomePrice = await firstCalcLargeCategoryPrice(roomCode, date, '収入');
-    spendingPrice = await firstCalcLargeCategoryPrice(roomCode, date, '支出');
+    incomePrice = await EventFire().firstCalcLargeCategoryPrice(roomCode, date, '収入');
+    spendingPrice = await EventFire().firstCalcLargeCategoryPrice(roomCode, date, '支出');
 
     calcTotalPrice = incomePrice + spendingPrice;
     totalPrice = incomePrice - spendingPrice;

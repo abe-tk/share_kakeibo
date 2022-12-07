@@ -64,7 +64,7 @@ class ReSingInDialog extends HookConsumerWidget {
               onPressed: () async {
                 try {
                   passwordValidation(password.value);
-                  await reSingInFire(ref.watch(userProvider)['email'], password.value);
+                  await AuthFire().reSingInFire(ref.watch(userProvider)['email'], password.value);
                   await function();
                   navigator();
                   positiveSnackBar(context, text);

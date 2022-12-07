@@ -53,6 +53,7 @@ export 'firebase/auth_fire.dart';
 export 'firebase/event_fire.dart';
 export 'firebase/memo_fire.dart';
 export 'firebase/room_fire.dart';
+export 'firebase/storage_fire.dart';
 export 'firebase/user_fire.dart';
 
 // model

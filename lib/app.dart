@@ -35,7 +35,7 @@ class MyApp extends HookConsumerWidget {
               // スプラッシュ画面などに書き換えても良い
               return const SizedBox();
             }
-            if (snapshot.hasData && loginState == true) {
+            if (snapshot.hasData) {
               // User が null ではない、つまりサインイン済みのホーム画面へ
               updateState(ref); // 各Stateを更新
               return const BottomNavi();

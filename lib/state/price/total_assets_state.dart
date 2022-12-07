@@ -20,9 +20,9 @@ class TotalAssetsStateNotifier extends StateNotifier<int> {
 
   // アプリ起動直後のみ使用
   Future<void> firstCalcTotalAssets() async {
-    roomCode = await getRoomCodeFire(uid);
-    int income = await firstCalcTotalPrice(roomCode, '収入');
-    int spending = await firstCalcTotalPrice(roomCode, '支出');
+    roomCode = await RoomFire().getRoomCodeFire(uid);
+    int income = await EventFire().firstCalcTotalPrice(roomCode, '収入');
+    int spending = await EventFire().firstCalcTotalPrice(roomCode, '支出');
     state = income - spending;
   }
 

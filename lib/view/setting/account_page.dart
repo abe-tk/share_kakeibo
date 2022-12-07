@@ -37,7 +37,7 @@ class AccountPage extends HookConsumerWidget {
                 context: context,
                 builder: (context) {
                   return ReSingInDialog(
-                    function: () async => await FirebaseAuth.instance.currentUser!.delete(),
+                    function: () async => await AuthFire().deleteAccountFire(),
                     navigator: () => Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst),
                     text: 'アカウントを削除しました',
                   );

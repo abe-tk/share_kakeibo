@@ -12,8 +12,8 @@ class RoomMemberNotifier extends StateNotifier<List<RoomMember>> {
   late String roomCode;
 
   Future<void> fetchRoomMember() async {
-    roomCode = await getRoomCodeFire(uid);
-    state = await getRoomMemberFire(roomCode);
+    roomCode = await RoomFire().getRoomCodeFire(uid);
+    state = await RoomFire().getRoomMemberFire(roomCode);
   }
 
 }

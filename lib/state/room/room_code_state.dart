@@ -10,7 +10,7 @@ class RoomCodeNotifier extends StateNotifier<String> {
   RoomCodeNotifier() : super('');
 
   Future<void> fetchRoomCode() async {
-    state = await getRoomCodeFire(uid);
+    state = await RoomFire().getRoomCodeFire(uid);
   }
 
 }

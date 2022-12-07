@@ -14,8 +14,8 @@ class MemoNotifier extends StateNotifier<List<Memo>> {
 
   Future<void> setMemo() async {
     List<QueryDocumentSnapshot<Map<String, dynamic>>> memos = [];
-    roomCode = await getRoomCodeFire(uid);
-    memos = await getMemoFire(roomCode);
+    roomCode = await RoomFire().getRoomCodeFire(uid);
+    memos = await MemoFire().getMemoFire(roomCode);
     state = memos.map((doc) => Memo(
       id: doc.id,
       memo: doc['memo'],
@@ -38,7 +38,7 @@ class MemoNotifier extends StateNotifier<List<Memo>> {
 
   Future<void> addMemo(String memo) async {
     memoValidation(memo);
-    addMemoFire(roomCode, memo);
+    MemoFire().addMemoFire(roomCode, memo);
     await setMemo();
   }
 
@@ -54,7 +54,7 @@ class MemoNotifier extends StateNotifier<List<Memo>> {
       case true:
         for (final memo in state) {
           if (memo.completed == true) {
-            deleteMemoFire(roomCode, memo.id);
+            MemoFire().deleteMemoFire(roomCode, memo.id);
           }
         }
         break;

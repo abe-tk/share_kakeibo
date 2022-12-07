@@ -10,7 +10,7 @@ class UserNotifier extends StateNotifier<Map<String, dynamic>> {
   UserNotifier() : super({});
 
   Future<void> fetchUser() async {
-    state = await getUserProfileFire();
+    state = await UserFire().getUserProfileFire();
   }
 
 }
