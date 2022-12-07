@@ -11,6 +11,8 @@ class AuthFire {
   Future<void> loginFire(String email, String password) async {
     loginValidation(email, password);
     await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+    // uidをログインしたユーザのIDに変更
+    uid = FirebaseAuth.instance.currentUser!.uid;
   }
 
   // アカウントの新規登録
@@ -19,7 +21,7 @@ class AuthFire {
     final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
     final user = userCredential.user;
     final userID = user?.uid;
-    // uidを登録したユーザのIDに変更
+    // uidを新規登録したユーザのIDに変更
     uid = userID!;
     // user情報の登録
     UserFire().addUserFire(userName, email, uid);
