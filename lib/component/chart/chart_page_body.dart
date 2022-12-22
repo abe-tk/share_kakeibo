@@ -31,6 +31,7 @@ class ChartPageBody extends StatelessWidget {
             height: 240,
             width: MediaQuery.of(context).size.width,
             child: AppPieChart(
+              category: largeCategory,
               pieChartSectionData: pieChartSectionData,
               price: totalPrice,
             ),

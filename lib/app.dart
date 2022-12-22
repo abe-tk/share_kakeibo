@@ -32,15 +32,14 @@ class MyApp extends HookConsumerWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // スプラッシュ画面などに書き換えても良い
               return const SizedBox();
             }
+            // Userがnullでなければ（サインイン済み）ホーム画面へ遷移
             if (snapshot.hasData) {
-              // User が null ではない、つまりサインイン済みのホーム画面へ
               updateState(ref); // 各Stateを更新
               return const BottomNavi();
             }
-            // User が null である、つまり未サインインのサインイン画面へ
+            // Userがnullであれば（未サインイン）サインイン画面へ遷移
             return const LoginPage();
           },
         ),

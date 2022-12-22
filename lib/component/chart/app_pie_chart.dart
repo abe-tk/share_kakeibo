@@ -3,11 +3,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:share_kakeibo/impoter.dart';
 
 class AppPieChart extends StatelessWidget {
+  final String category;
   final List<PieChartSectionData> pieChartSectionData;
   final int price;
 
   const AppPieChart({
     Key? key,
+    required this.category,
     required this.pieChartSectionData,
     required this.price,
   }) : super(key: key);
@@ -20,9 +22,9 @@ class AppPieChart extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              '収支',
-              style: TextStyle(
+            Text(
+              category,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: CustomColor.pieChartCenterTextColor,

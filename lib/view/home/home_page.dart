@@ -96,6 +96,7 @@ class HomePage extends HookConsumerWidget {
                                 height: 160,
                                 width: 160,
                                 child: AppPieChart(
+                                  category: '収支',
                                   pieChartSectionData: bpPieChartState,
                                   price: bpPieChartNotifier.totalPrice,
                                 ),
