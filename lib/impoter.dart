@@ -48,6 +48,9 @@ export 'constant/colors.dart';
 export 'constant/number_format.dart';
 export 'constant/theme.dart';
 
+// enum
+export 'enum/flavor.dart';
+
 // firebase
 export 'firebase/auth_fire.dart';
 export 'firebase/event_fire.dart';
