@@ -1,5 +1,5 @@
 ---
-name: issue template
+name: template
 about: 課題名（#share_kakeibo-xxx）
 title: ''
 labels: ''
