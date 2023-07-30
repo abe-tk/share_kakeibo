@@ -5,7 +5,7 @@ enum Flavor {
   prod;
 
   static Flavor get fromEnvironment {
-    const flavor = String.fromEnvironment('FLAVOR');
+    const flavor = String.fromEnvironment('flavor');
     return Flavor.values.byName(flavor);
   }
 
