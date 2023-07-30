@@ -3,11 +3,25 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/impoter.dart';
 
-class HomePage extends HookConsumerWidget {
+class HomePage extends StatefulHookConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      updateHomeState(ref);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final roomNameState = ref.watch(roomNameProvider);
     final total = ref.watch(totalAssetsStateProvider);
     final _isObscure = useState(true);
