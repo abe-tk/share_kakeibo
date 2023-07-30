@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "871010839502",
+    "project_id": "sharekakeibo-dev-2372c",
+    "storage_bucket": "sharekakeibo-dev-2372c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871010839502:android:e90b20986e9583209ed99f",
+        "android_client_info": {
+          "package_name": "com.myApp.shareKakeibo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871010839502-ojnemqc9bgn62pgkf582p03npobpk1dn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHk5teZvhr5rOdoYQ-hrcdQisH7YUp7SM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871010839502-ojnemqc9bgn62pgkf582p03npobpk1dn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "871010839502-kijnbknpl489lmedpjnhqr16qg372tqn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shareKakeibo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871010839502:android:d649512cc6945def9ed99f",
+        "android_client_info": {
+          "package_name": "com.myApp.shareKakeibo.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871010839502-ojnemqc9bgn62pgkf582p03npobpk1dn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHk5teZvhr5rOdoYQ-hrcdQisH7YUp7SM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871010839502-ojnemqc9bgn62pgkf582p03npobpk1dn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "871010839502-kijnbknpl489lmedpjnhqr16qg372tqn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shareKakeibo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

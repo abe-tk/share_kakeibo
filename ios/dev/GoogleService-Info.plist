@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>502008914076-lqhtu4fhoekqhvc939n02ucbukrp8kg4.apps.googleusercontent.com</string>
+	<string>871010839502-tttcsn602iaa869s0tc2v9hatj7eoivq.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.502008914076-lqhtu4fhoekqhvc939n02ucbukrp8kg4</string>
+	<string>com.googleusercontent.apps.871010839502-tttcsn602iaa869s0tc2v9hatj7eoivq</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCV-2vQ9DTf2feK2GJGFCFsYq3rsvObJ3w</string>
+	<string>AIzaSyBaNDrnCHve1MWRx1mUXfHsy6plx-gSrRA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>502008914076</string>
+	<string>871010839502</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.myApp.shareKakeibo</string>
+	<string>com.myApp.shareKakeibo.dev</string>
 	<key>PROJECT_ID</key>
-	<string>sharekakeibo-59b13</string>
+	<string>sharekakeibo-dev-2372c</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sharekakeibo-59b13.appspot.com</string>
+	<string>sharekakeibo-dev-2372c.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:502008914076:ios:08203ae9c6bde7efac8d59</string>
+	<string>1:871010839502:ios:cf00e86e266d9be19ed99f</string>
 </dict>
 </plist>

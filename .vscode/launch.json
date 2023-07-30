@@ -5,19 +5,18 @@
             "name": "Run dev debug",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart",
+            "flutterMode": "debug",
             "args": [
-                "--debug",
-                "--dart-define=FLAVOR=dev"
+                "--dart-define-from-file=dart_defines/dev.json"
             ]
         },
         {
             "name": "Run prod debug",
             "request": "launch",
             "type": "dart",
+            "flutterMode": "debug",
             "args": [
-                "--debug",
-                "--dart-define=FLAVOR=prod"
+                "--dart-define-from-file=dart_defines/prod.json"
             ]
         }
     ]
