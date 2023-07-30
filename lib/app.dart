@@ -40,6 +40,7 @@ class MyApp extends HookConsumerWidget {
               return const BottomNavi();
             }
             // Userがnullであれば（未サインイン）サインイン画面へ遷移
+            logger.i('message');
             return const LoginPage();
           },
         ),

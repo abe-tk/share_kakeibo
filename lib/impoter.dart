@@ -85,13 +85,14 @@ export 'state/room/room_member_state.dart';
 export 'state/user/payment_user_state.dart';
 export 'state/user/user_state.dart';
 
-// utility
-export 'utility/icon_utility.dart';
-export 'utility/pie_chart_utility.dart';
-export 'utility/price_utility.dart';
-export 'utility/percent_utility.dart';
-export 'utility/select_date_utility.dart';
-export 'utility/update_state_utility.dart';
+// util
+export 'util/icon_utility.dart';
+export 'util/pie_chart_utility.dart';
+export 'util/price_utility.dart';
+export 'util/percent_utility.dart';
+export 'util/select_date_utility.dart';
+export 'util/update_state_utility.dart';
+export 'util/logger.dart';
 
 // validator
 export 'validator/validator.dart';
