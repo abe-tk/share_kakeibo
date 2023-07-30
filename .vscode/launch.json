@@ -1,25 +1,24 @@
 {
-    // IntelliSense を使用して利用可能な属性を学べます。
-    // 既存の属性の説明をホバーして表示します。
-    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "share_kakeibo",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "share_kakeibo (profile mode)",
+            "name": "Run dev debug",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "program": "lib/main.dart",
+            "args": [
+                "--debug",
+                "--dart-define=FLAVOR=dev"
+            ]
         },
         {
-            "name": "share_kakeibo (release mode)",
+            "name": "Run prod debug",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "args": [
+                "--debug",
+                "--dart-define=FLAVOR=prod"
+            ]
         }
     ]
 }

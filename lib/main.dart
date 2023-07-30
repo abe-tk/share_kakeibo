@@ -6,6 +6,10 @@ import 'package:share_kakeibo/impoter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Flavorを取得しログ出力
+  logger.i('FLAVOR : ${flavor.name}');
+
   //画面を縦向きに固定
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
