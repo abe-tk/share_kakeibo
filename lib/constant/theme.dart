@@ -5,7 +5,8 @@ import 'package:share_kakeibo/impoter.dart';
 class CustomTheme {
 
   static AppBarTheme appBarTheme = const AppBarTheme(
-    backgroundColor: CustomColor.appBarBackgroundColor,
+    // backgroundColor: CustomColor.appBarBackgroundColor,
+    backgroundColor: Color(0xFFF9F9F9),
     centerTitle: true,
   );
 

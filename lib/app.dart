@@ -37,7 +37,7 @@ class MyApp extends HookConsumerWidget {
             // Userがnullでなければ（サインイン済み）ホーム画面へ遷移
             if (snapshot.hasData) {
               updateState(ref); // 各Stateを更新
-              return const BottomNavi();
+              return const BottomNav();
             }
             // Userがnullであれば（未サインイン）サインイン画面へ遷移
             return const LoginPage();
