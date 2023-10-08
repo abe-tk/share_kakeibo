@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class MyApp extends HookConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -36,8 +36,13 @@ class MyApp extends HookConsumerWidget {
             }
             // Userがnullでなければ（サインイン済み）ホーム画面へ遷移
             if (snapshot.hasData) {
-              updateState(ref); // 各Stateを更新
-              return const BottomNavi();
+              // 各Stateを更新
+              ref.invalidate(roomCodeProvider(ref.watch(uidProvider)));
+              ref.read(userInfoProvider.notifier).readUser();
+              ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets(
+                    ref.watch(uidProvider),
+                  );
+              return const RootPage();
             }
             // Userがnullであれば（未サインイン）サインイン画面へ遷移
             return const LoginPage();

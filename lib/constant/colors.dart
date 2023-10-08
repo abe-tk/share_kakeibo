@@ -69,8 +69,8 @@ class CustomColor {
 
   // text
   static const defaultTextColor = Colors.black;
-  static const incomeTextColor = Colors.green;
-  static const spendingTextColor = Colors.red;
+  static const incomeTextColor = Color(0xFF00800D);
+  static const spendingTextColor = Color(0xFFFF0000);
   static const detailTextColor = Colors.grey;
   static const pieChartCenterTextColor = Color.fromRGBO(65, 65, 65, 0.8);
   static const pieChartCategoryTextColor = Colors.black54;

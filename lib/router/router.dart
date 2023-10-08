@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/feature/event/presentation/page/upsert_event_page.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class RouteGenerator {
   // EditEventPageへはCalendarPageから[event]を受け取る必要があるため、CalendarPageからNavigator.pushしている。
@@ -17,9 +18,6 @@ class RouteGenerator {
   static const String roomNamePage = '/roomNamePage';
   static const String qrScanPage = '/qrScanPage';
   static const String inputCodePage = '/inputCodePage';
-
-  static const String detailEventPage = '/detailEventPage';
-  static const String yearChartPage = '/yearChartPage';
   static const String registerPage = '/registerPage';
   static const String resetPasswordPage = '/resetPasswordPage';
 
@@ -27,16 +25,16 @@ class RouteGenerator {
     switch (settings.name) {
       case homeScreen:
         return MaterialPageRoute(
-          builder: (_) => const BottomNavi(),
+          builder: (_) => const RootPage(),
         );
       case addIncomeEventPage:
         return MaterialPageRoute(
-          builder: (_) => const AddEventPage(largeCategory: '収入'),
+          builder: (_) => const UpsertEventPage(largeCategory: '収入'),
           fullscreenDialog: true,
         );
       case addSpendingEventPage:
         return MaterialPageRoute(
-          builder: (_) => const AddEventPage(largeCategory: '支出'),
+          builder: (_) => const UpsertEventPage(largeCategory: '支出'),
           fullscreenDialog: true,
         );
       case settingPage:
@@ -44,11 +42,11 @@ class RouteGenerator {
           builder: (_) => const SettingPage(),
           fullscreenDialog: true,
         );
-      case profilePage:
-        return MaterialPageRoute(
-          builder: (_) => const ProfilePage(),
-          fullscreenDialog: true,
-        );
+      // case profilePage:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const ProfilePage(),
+      //     fullscreenDialog: true,
+      //   );
       case accountPage:
         return MaterialPageRoute(
           builder: (_) => const AccountPage(),
@@ -67,16 +65,6 @@ class RouteGenerator {
       case roomInfoPage:
         return MaterialPageRoute(
           builder: (_) => const RoomInfoPage(),
-          fullscreenDialog: true,
-        );
-      case detailEventPage:
-        return MaterialPageRoute(
-          builder: (_) => const DetailEventPage(),
-          fullscreenDialog: true,
-        );
-      case yearChartPage:
-        return MaterialPageRoute(
-          builder: (_) => const YearChartPage(),
           fullscreenDialog: true,
         );
       case registerPage:
