@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:share_kakeibo/util/converter/timestamp_converter.dart';
+
 part 'memo.freezed.dart';
+part 'memo.g.dart';
 
 @freezed
 class Memo with _$Memo {
   const factory Memo({
     required String id,
     required String memo,
-    required DateTime date,
-    required bool completed,
+    @TimestampConverter() required DateTime registerDate,
   }) = _Memo;
+
+    factory Memo.fromJson(Map<String, dynamic> json) =>
+      _$MemoFromJson(json);
 }

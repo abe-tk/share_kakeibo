@@ -1,31 +1,31 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
-final calendarEventStateProvider =
-StateNotifierProvider<CalendarEventStateNotifier, Map<DateTime, List<Event>>>((ref) {
-  return CalendarEventStateNotifier();
-});
-
-class CalendarEventStateNotifier extends StateNotifier<Map<DateTime, List<Event>>> {
-  CalendarEventStateNotifier() : super({});
-
-  void fetchCalendarEvent(List<QueryDocumentSnapshot<Map<String, dynamic>>> event) {
+class CalendarEventNotifier extends Notifier<Map<DateTime, List<Event>>> {
+  @override
+  Map<DateTime, List<Event>> build() {
     Map<DateTime, List<Event>> eventMap = {};
+    final event =
+        ref.watch(eventProvider).whenOrNull(data: (data) => data) ?? [];
     for (final doc in event) {
       final event = Event(
         id: doc.id,
-        date: (doc['date'] as Timestamp).toDate(),
-        price: doc['price'],
-        largeCategory: doc['largeCategory'],
-        smallCategory: doc['smallCategory'],
-        memo: doc['memo'],
-        paymentUser: doc['paymentUser'],
+        date: doc.date,
+        registerDate: doc.registerDate,
+        price: doc.price,
+        largeCategory: doc.largeCategory,
+        smallCategory: doc.smallCategory,
+        memo: doc.memo,
+        paymentUser: doc.paymentUser,
       );
       final value = eventMap[event.date] ?? [];
       eventMap[event.date] = [event, ...value];
     }
-    state = eventMap;
+    return eventMap;
   }
-
 }
+
+final calendarEventProvider =
+    NotifierProvider<CalendarEventNotifier, Map<DateTime, List<Event>>>(
+  () => CalendarEventNotifier(),
+);

@@ -1,27 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/common_widget/custom_text_field.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class EmailPage extends HookConsumerWidget {
   const EmailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final email = useState('');
-    final emailController = useState(TextEditingController(text: ''));
+    final beforeUserData = ref.watch(userInfoProvider).whenOrNull(
+          data: (data) => data,
+        );
 
-    Future <void> updateEmail() async {
+    final email = useState('');
+    final emailController =
+        useTextEditingController(text: beforeUserData!.email);
+
+    final roomCode = ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+          data: (data) => data,
+        );
+
+    Future<void> updateEmail() async {
       try {
-        updateEmailValidation(email.value, ref.watch(userProvider)['email']);
+        updateEmailValidation(email.value, beforeUserData.email);
         showDialog(
           context: context,
           builder: (context) {
             return ReSingInDialog(
               function: () async {
                 email.value = emailController.value.text;
-                await UserFire().updateUserEmailFire(email.value);
-                await ref.read(userProvider.notifier).fetchUser();
+                ref.read(userInfoProvider.notifier).updateUser(
+                      uid: ref.watch(uidProvider),
+                      roomCode: roomCode!,
+                      userData: beforeUserData,
+                      email: email.value,
+                    );
               },
               navigator: () {
                 Navigator.of(context).pop();
@@ -37,35 +51,24 @@ class EmailPage extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'メールアドレスを変更',
-        icon: Icons.check,
-        iconColor: CustomColor.positiveIconColor,
-        onTaped: () async => updateEmail(),
-      ),
+      appBar: const CustomAppBar(title: 'メールアドレスを変更'),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Center(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               children: [
-                const SettingTitle(title: '現在のメールアドレス'),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: ListTile(
-                    title: Text(ref.watch(userProvider)['email']),
-                  ),
-                ),
-                const Divider(),
-                const SettingTitle(title: '変更後のメールアドレス'),
-                SettingTextField(
-                  controller: emailController.value,
-                  suffix: false,
-                  obscure: false,
-                  text: 'メールアドレスを入力',
-                  obscureChange: () {},
+                const SubTitle(title: 'メールアドレス'),
+                CustomTextField(
+                  hintText: 'メールアドレスを入力',
+                  controller: emailController,
                   textChange: (text) => email.value = text,
                 ),
-                const Divider(),
+                const SizedBox(height: 16),
+                CustomElevatedButton(
+                  text: '保存',
+                  onTaped: () async => updateEmail(),
+                ),
               ],
             ),
           ),

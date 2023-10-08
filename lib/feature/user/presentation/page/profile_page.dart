@@ -2,48 +2,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/common_widget/custom_text_field.dart';
+import 'package:share_kakeibo/importer.dart';
 import 'dart:io';
 
-class ProfilePage extends StatefulHookConsumerWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+import 'package:share_kakeibo/util/storage/storage.dart';
+
+class ProfilePage extends HookConsumerWidget {
+  const ProfilePage({
+    Key? key,
+    this.userData,
+  }) : super(key: key);
+
+  final UserData? userData;
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // プロフィール画像
+    final imgURL = useState(userData!.imgURL);
 
-class _ProfilePageState extends ConsumerState<ProfilePage> {
-  File? imgFile;
+    // プロフィール画像のファイルパス
+    final imgFilePath = useState('');
 
-  Future<void> pickImg() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final fileTemp = File(pickedFile.path);
-      setState(() => imgFile = fileTemp);
+    // ユーザー名
+    final userName = useState(userData!.userName);
+    final userNameController =
+        useTextEditingController(text: userData!.userName);
+
+    final beforeUserData = ref.watch(userInfoProvider).whenOrNull(
+          data: (data) => data,
+        );
+
+    final roomCode = ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+          data: (data) => data,
+        );
+
+    Future<void> pickImg() async {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        imgFilePath.value = pickedFile.path;
+      }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final userName = useState(ref.watch(userProvider)['userName']);
-    final userNameController = useState(TextEditingController(text: ref.watch(userProvider)['userName']));
-    final imgURL = useState(ref.watch(userProvider)['imgURL']);
 
     Future<void> updateProfile() async {
       try {
-        // ユーザ名に変更があれば更新
-        if (userName.value != ref.watch(userProvider)['userName']) {
-          await UserFire().updateUserNameFire(userName.value, ref.watch(roomCodeProvider));
-          // 過去の収支イベントの支払い元の名前を変更
-          await UserFire().updatePastEventUserName(ref.watch(roomCodeProvider), ref.watch(userProvider)['userName'], userName.value);
-          // イベントのユーザ名に変更があるため、stateを更新
-          await updateUserNameState(ref, DateTime(DateTime.now().year, DateTime.now().month));
-        }
         // プロフィール画像に変更があれば更新
-        if (imgFile != null) {
-          imgURL.value = await StorageFire().putImgFileFire(imgFile!);
-          await UserFire().updateUserImgURLFire(imgURL.value, ref.watch(roomCodeProvider));
-          updateUserImgURLState(ref);
+        if (imgFilePath.value != '') {
+          imgURL.value = await Storage().createImgFile(File(imgFilePath.value));
+        }
+        // ユーザー情報の更新
+        await ref.read(userInfoProvider.notifier).updateUser(
+              uid: ref.watch(uidProvider),
+              roomCode: roomCode!,
+              userData: userData!,
+              userName: userName.value,
+              imgURL: imgURL.value,
+              imgFilePath: imgFilePath.value,
+            );
+        // ユーザ名に変更があれば更新、イベント関連のstateを更新
+        if (userName.value != beforeUserData!.userName) {
+          // ref.read(eventProvider.notifier).setEvent();
+          ref
+              .read(roomMemberProvider.notifier)
+              .readRoomMember(roomCode: roomCode);
         }
         Navigator.of(context).pop();
         positiveSnackBar(context, 'プロフィールを編集しました');
@@ -53,33 +75,33 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     }
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'プロフィール',
-        icon: Icons.check,
-        iconColor: CustomColor.positiveIconColor,
-        onTaped: () async => await updateProfile(),
-      ),
+      appBar: const CustomAppBar(title: 'プロフィール'),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SettingTitle(title: 'プロフィール画像'),
-            SetProfileImage(
-              function: () async => pickImg(),
-              imgFile: imgFile,
-              imgURL: imgURL.value,
-            ),
-            const Divider(),
-            const SettingTitle(title: 'ユーザ名'),
-            SettingTextField(
-              controller: userNameController.value,
-              suffix: false,
-              obscure: false,
-              text: 'ユーザ名を入力してください',
-              obscureChange: () {},
-              textChange: (text) => userName.value = text,
-            ),
-            const Divider(),
-          ],
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 18),
+          child: Column(
+            children: [
+              const SubTitle(title: 'プロフィール画像'),
+              SetProfileImage(
+                function: () async => pickImg(),
+                imgFilePath: imgFilePath.value,
+                imgURL: imgURL.value,
+              ),
+              const SubTitle(title: 'ユーザ名'),
+              CustomTextField(
+                hintText: 'ユーザ名を入力してください',
+                controller: userNameController,
+                textChange: (text) => userName.value = text,
+              ),
+              const SizedBox(height: 16),
+              CustomElevatedButton(
+                text: '保存',
+                onTaped: () async {
+                  await updateProfile();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

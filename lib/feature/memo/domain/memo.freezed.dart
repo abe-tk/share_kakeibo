@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'memo.dart';
 
@@ -14,13 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Memo _$MemoFromJson(Map<String, dynamic> json) {
+  return _Memo.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Memo {
   String get id => throw _privateConstructorUsedError;
   String get memo => throw _privateConstructorUsedError;
-  DateTime get date => throw _privateConstructorUsedError;
-  bool get completed => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get registerDate => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $MemoCopyWith<Memo> get copyWith => throw _privateConstructorUsedError;
 }
@@ -28,43 +33,43 @@ mixin _$Memo {
 /// @nodoc
 abstract class $MemoCopyWith<$Res> {
   factory $MemoCopyWith(Memo value, $Res Function(Memo) then) =
-      _$MemoCopyWithImpl<$Res>;
-  $Res call({String id, String memo, DateTime date, bool completed});
+      _$MemoCopyWithImpl<$Res, Memo>;
+  @useResult
+  $Res call(
+      {String id, String memo, @TimestampConverter() DateTime registerDate});
 }
 
 /// @nodoc
-class _$MemoCopyWithImpl<$Res> implements $MemoCopyWith<$Res> {
+class _$MemoCopyWithImpl<$Res, $Val extends Memo>
+    implements $MemoCopyWith<$Res> {
   _$MemoCopyWithImpl(this._value, this._then);
 
-  final Memo _value;
   // ignore: unused_field
-  final $Res Function(Memo) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? memo = freezed,
-    Object? date = freezed,
-    Object? completed = freezed,
+    Object? id = null,
+    Object? memo = null,
+    Object? registerDate = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      memo: memo == freezed
+      memo: null == memo
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String,
-      date: date == freezed
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
+      registerDate: null == registerDate
+          ? _value.registerDate
+          : registerDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      completed: completed == freezed
-          ? _value.completed
-          : completed // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    ) as $Val);
   }
 }
 
@@ -73,67 +78,62 @@ abstract class _$$_MemoCopyWith<$Res> implements $MemoCopyWith<$Res> {
   factory _$$_MemoCopyWith(_$_Memo value, $Res Function(_$_Memo) then) =
       __$$_MemoCopyWithImpl<$Res>;
   @override
-  $Res call({String id, String memo, DateTime date, bool completed});
+  @useResult
+  $Res call(
+      {String id, String memo, @TimestampConverter() DateTime registerDate});
 }
 
 /// @nodoc
-class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res>
+class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
     implements _$$_MemoCopyWith<$Res> {
   __$$_MemoCopyWithImpl(_$_Memo _value, $Res Function(_$_Memo) _then)
-      : super(_value, (v) => _then(v as _$_Memo));
+      : super(_value, _then);
 
-  @override
-  _$_Memo get _value => super._value as _$_Memo;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? memo = freezed,
-    Object? date = freezed,
-    Object? completed = freezed,
+    Object? id = null,
+    Object? memo = null,
+    Object? registerDate = null,
   }) {
     return _then(_$_Memo(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      memo: memo == freezed
+      memo: null == memo
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String,
-      date: date == freezed
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
+      registerDate: null == registerDate
+          ? _value.registerDate
+          : registerDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      completed: completed == freezed
-          ? _value.completed
-          : completed // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Memo implements _Memo {
   const _$_Memo(
       {required this.id,
       required this.memo,
-      required this.date,
-      required this.completed});
+      @TimestampConverter() required this.registerDate});
+
+  factory _$_Memo.fromJson(Map<String, dynamic> json) => _$$_MemoFromJson(json);
 
   @override
   final String id;
   @override
   final String memo;
   @override
-  final DateTime date;
-  @override
-  final bool completed;
+  @TimestampConverter()
+  final DateTime registerDate;
 
   @override
   String toString() {
-    return 'Memo(id: $id, memo: $memo, date: $date, completed: $completed)';
+    return 'Memo(id: $id, memo: $memo, registerDate: $registerDate)';
   }
 
   @override
@@ -141,41 +141,45 @@ class _$_Memo implements _Memo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Memo &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.memo, memo) &&
-            const DeepCollectionEquality().equals(other.date, date) &&
-            const DeepCollectionEquality().equals(other.completed, completed));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.memo, memo) || other.memo == memo) &&
+            (identical(other.registerDate, registerDate) ||
+                other.registerDate == registerDate));
   }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(memo),
-      const DeepCollectionEquality().hash(date),
-      const DeepCollectionEquality().hash(completed));
 
   @JsonKey(ignore: true)
   @override
+  int get hashCode => Object.hash(runtimeType, id, memo, registerDate);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
   _$$_MemoCopyWith<_$_Memo> get copyWith =>
       __$$_MemoCopyWithImpl<_$_Memo>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_MemoToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Memo implements Memo {
   const factory _Memo(
       {required final String id,
       required final String memo,
-      required final DateTime date,
-      required final bool completed}) = _$_Memo;
+      @TimestampConverter() required final DateTime registerDate}) = _$_Memo;
+
+  factory _Memo.fromJson(Map<String, dynamic> json) = _$_Memo.fromJson;
 
   @override
   String get id;
   @override
   String get memo;
   @override
-  DateTime get date;
-  @override
-  bool get completed;
+  @TimestampConverter()
+  DateTime get registerDate;
   @override
   @JsonKey(ignore: true)
   _$$_MemoCopyWith<_$_Memo> get copyWith => throw _privateConstructorUsedError;

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'room_member.dart';
 
@@ -29,38 +29,42 @@ mixin _$RoomMember {
 abstract class $RoomMemberCopyWith<$Res> {
   factory $RoomMemberCopyWith(
           RoomMember value, $Res Function(RoomMember) then) =
-      _$RoomMemberCopyWithImpl<$Res>;
+      _$RoomMemberCopyWithImpl<$Res, RoomMember>;
+  @useResult
   $Res call({String userName, String imgURL, bool owner});
 }
 
 /// @nodoc
-class _$RoomMemberCopyWithImpl<$Res> implements $RoomMemberCopyWith<$Res> {
+class _$RoomMemberCopyWithImpl<$Res, $Val extends RoomMember>
+    implements $RoomMemberCopyWith<$Res> {
   _$RoomMemberCopyWithImpl(this._value, this._then);
 
-  final RoomMember _value;
   // ignore: unused_field
-  final $Res Function(RoomMember) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userName = freezed,
-    Object? imgURL = freezed,
-    Object? owner = freezed,
+    Object? userName = null,
+    Object? imgURL = null,
+    Object? owner = null,
   }) {
     return _then(_value.copyWith(
-      userName: userName == freezed
+      userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      imgURL: imgURL == freezed
+      imgURL: null == imgURL
           ? _value.imgURL
           : imgURL // ignore: cast_nullable_to_non_nullable
               as String,
-      owner: owner == freezed
+      owner: null == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as bool,
-    ));
+    ) as $Val);
   }
 }
 
@@ -71,35 +75,35 @@ abstract class _$$_RoomMemberCopyWith<$Res>
           _$_RoomMember value, $Res Function(_$_RoomMember) then) =
       __$$_RoomMemberCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String userName, String imgURL, bool owner});
 }
 
 /// @nodoc
-class __$$_RoomMemberCopyWithImpl<$Res> extends _$RoomMemberCopyWithImpl<$Res>
+class __$$_RoomMemberCopyWithImpl<$Res>
+    extends _$RoomMemberCopyWithImpl<$Res, _$_RoomMember>
     implements _$$_RoomMemberCopyWith<$Res> {
   __$$_RoomMemberCopyWithImpl(
       _$_RoomMember _value, $Res Function(_$_RoomMember) _then)
-      : super(_value, (v) => _then(v as _$_RoomMember));
+      : super(_value, _then);
 
-  @override
-  _$_RoomMember get _value => super._value as _$_RoomMember;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userName = freezed,
-    Object? imgURL = freezed,
-    Object? owner = freezed,
+    Object? userName = null,
+    Object? imgURL = null,
+    Object? owner = null,
   }) {
     return _then(_$_RoomMember(
-      userName: userName == freezed
+      userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      imgURL: imgURL == freezed
+      imgURL: null == imgURL
           ? _value.imgURL
           : imgURL // ignore: cast_nullable_to_non_nullable
               as String,
-      owner: owner == freezed
+      owner: null == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -130,20 +134,18 @@ class _$_RoomMember implements _RoomMember {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RoomMember &&
-            const DeepCollectionEquality().equals(other.userName, userName) &&
-            const DeepCollectionEquality().equals(other.imgURL, imgURL) &&
-            const DeepCollectionEquality().equals(other.owner, owner));
+            (identical(other.userName, userName) ||
+                other.userName == userName) &&
+            (identical(other.imgURL, imgURL) || other.imgURL == imgURL) &&
+            (identical(other.owner, owner) || other.owner == owner));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(userName),
-      const DeepCollectionEquality().hash(imgURL),
-      const DeepCollectionEquality().hash(owner));
+  int get hashCode => Object.hash(runtimeType, userName, imgURL, owner);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_RoomMemberCopyWith<_$_RoomMember> get copyWith =>
       __$$_RoomMemberCopyWithImpl<_$_RoomMember>(this, _$identity);
 }

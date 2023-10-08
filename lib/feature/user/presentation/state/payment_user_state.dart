@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
 final paymentUserProvider =
 StateNotifierProvider<PaymentUserNotifier, List<String>>((ref) {

@@ -2,82 +2,100 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class RegisterPage extends HookConsumerWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.watch(loginRepositoryProvider);
+
+    // ユーザー名
     final userName = useState('');
-    final email = useState('');
-    final password = useState('');
     final userNameController = useState(TextEditingController());
+
+    // メールアドレス
+    final email = useState('');
     final emailController = useState(TextEditingController());
+
+    // パスワード
+    final password = useState('');
     final passwordController = useState(TextEditingController());
+
+    // パスワードの非表示
     final _isObscure = useState(true);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const AppThemeImage(),
-                const SizedBox(height: 36),
-                LoginTextField(
-                  controller: userNameController.value,
-                  suffix: false,
-                  obscure: false,
-                  text: 'ユーザー名',
-                  obscureChange: () {},
-                  textChange: (text) => userName.value = text,
-                ),
-                const SizedBox(height: 10),
-                LoginTextField(
-                  controller: emailController.value,
-                  suffix: false,
-                  obscure: false,
-                  text: 'メールアドレス',
-                  obscureChange: () {},
-                  textChange: (text) => email.value = text,
-                ),
-                const SizedBox(height: 10),
-                LoginTextField(
-                  controller: passwordController.value,
-                  suffix: true,
-                  obscure: _isObscure.value,
-                  text: 'パスワード（6桁以上）',
-                  obscureChange: () => _isObscure.value = !_isObscure.value,
-                  textChange: (text) => password.value = text,
-                ),
-                const SizedBox(height: 16),
-                CustomElevatedButton(
-                  text: '新規登録',
-                  onTaped: () async {
-                    ref.watch(indicatorProvider).showProgressDialog(context);
-                    try {
-                      await AuthFire().registerFire(userName.value, email.value, password.value);
-                      Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-                      positiveSnackBar(context, 'アカウントの新規登録が完了しました');
-                    } on FirebaseAuthException catch (e) {
-                      Navigator.of(context).pop();
-                      negativeSnackBar(context, authValidation(e));
-                    } catch (e) {
-                      Navigator.of(context).pop();
-                      negativeSnackBar(context, e.toString());
-                    }
-                  },
-                ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: const Divider(thickness: 3)),
-                AppTextButton(
-                  text: '既にアカウントをお持ちの方はこちら',
-                  size: 14,
-                  color: CustomColor.detailTextColor,
-                  function: () => Navigator.of(context).pop(),
-                ),
-              ],
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 36),
+              child: Column(
+                children: [
+                  const Logo(),
+                  const SizedBox(height: 32),
+                  LoginTextField(
+                    labelText: 'ユーザー名',
+                    controller: userNameController.value,
+                    textChange: (text) => userName.value = text,
+                  ),
+                  const SizedBox(height: 16),
+                  LoginTextField(
+                    labelText: 'メールアドレス',
+                    controller: emailController.value,
+                    textChange: (text) => email.value = text,
+                  ),
+                  const SizedBox(height: 16),
+                  LoginTextField(
+                    labelText: 'パスワード（6桁以上）',
+                    controller: passwordController.value,
+                    textChange: (text) => password.value = text,
+                    isObscure: _isObscure.value,
+                    isObscureChange: () => _isObscure.value = !_isObscure.value,
+                  ),
+                  const SizedBox(height: 16),
+                  CustomElevatedButton(
+                    text: '新規登録',
+                    onTaped: () async {
+                      showProgressDialog(context);
+                      try {
+                        registerValidation(
+                          userName.value,
+                          email.value,
+                          password.value,
+                        );
+                        await loginNotifier.register(
+                          uidProvider: ref.read(uidProvider.notifier).state,
+                          userName: userName.value,
+                          email: email.value,
+                          password: password.value,
+                        );
+                        Navigator.popUntil(
+                            context, (Route<dynamic> route) => route.isFirst);
+                        positiveSnackBar(context, 'アカウントの新規登録が完了しました');
+                      } on FirebaseAuthException catch (e) {
+                        Navigator.of(context).pop();
+                        negativeSnackBar(context, authValidation(e));
+                      } catch (e) {
+                        Navigator.of(context).pop();
+                        negativeSnackBar(context, e.toString());
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  TextButton(
+                    child: Text(
+                      '既にアカウントをお持ちの方はこちら',
+                      style: context.bodyMediumGrey,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

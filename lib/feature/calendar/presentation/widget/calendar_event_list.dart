@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class CalendarEventList extends StatelessWidget {
   final String price;
@@ -7,7 +7,7 @@ class CalendarEventList extends StatelessWidget {
   final String smallCategory;
   final String paymentUser;
   final String memo;
-  final Function function;
+  final VoidCallback onTap;
 
   const CalendarEventList({
     required this.price,
@@ -15,118 +15,97 @@ class CalendarEventList extends StatelessWidget {
     required this.smallCategory,
     required this.paymentUser,
     required this.memo,
-    required this.function,
+    required this.onTap,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
-        child: Container(
-          decoration: BoxDecoration(
-            color: CustomColor.bdColor,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black38,
-                offset: Offset(0.0, 3.0),
-                blurRadius: 3.0,
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: CustomColor.bdColor,
-                  borderRadius: BorderRadius.circular(16),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: CustomShadowContainer(
+        height: 80,
+        onTap: onTap,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                // カテゴリのアイコン
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: viewIcon(smallCategory),
                 ),
-                child: Row(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 16),
-                    // カテゴリのアイコン
-                    viewIcon(smallCategory),
-                    const SizedBox(width: 16),
-                    SizedBox(
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // カテゴリ名
-                          Text(
-                            smallCategory,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          // 支払い元名
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.person,
-                                size: 16,
-                                color: CustomColor.detailIconColor,
-                              ),
-                              Text(
-                                '：$paymentUser',
-                                style: const TextStyle(
-                                    color: CustomColor.detailTextColor),
-                              ),
-                            ],
-                          ),
-                          // イベントのメモ
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.edit,
-                                size: 16,
-                                color: CustomColor.detailIconColor,
-                              ),
-                              Text(
-                                '：$memo',
-                                style: const TextStyle(
-                                    color: CustomColor.detailTextColor),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    // カテゴリ名
+                    Text(
+                      smallCategory,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    // 支払い元名
+                    _DetailItem(
+                      icon: Icons.person,
+                      text: paymentUser,
+                    ),
+                    // イベントのメモ
+                    _DetailItem(
+                      icon: Icons.edit,
+                      text: memo,
                     ),
                   ],
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                height: 80,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  // イベントの金額
-                  child: Text(
-                    (largeCategory == '収入')
-                        ? '${formatter.format(int.parse(price))} 円'
-                        : '- ${formatter.format(int.parse(price))} 円',
-                    style: TextStyle(
-                      color: (largeCategory == '収入')
-                          ? CustomColor.incomeTextColor
-                          : CustomColor.spendingTextColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              ],
+            ),
+            // 金額
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Text(
+                (largeCategory == '収入')
+                    ? '${numberFormatter.format(int.parse(price))} 円'
+                    : '- ${numberFormatter.format(int.parse(price))} 円',
+                style: TextStyle(
+                  color: (largeCategory == '収入')
+                      ? CustomColor.incomeTextColor
+                      : CustomColor.spendingTextColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      onTap: () {
-        function();
-      },
+    );
+  }
+}
+
+class _DetailItem extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const _DetailItem({
+    required this.icon,
+    required this.text,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 16,
+          color: const Color(0xFF4B4B4B),
+        ),
+        Text(
+          ' : $text',
+          style: const TextStyle(color: Color(0xFF4B4B4B)),
+        ),
+      ],
     );
   }
 }

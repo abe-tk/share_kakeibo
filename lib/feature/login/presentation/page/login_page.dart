@@ -2,89 +2,107 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class LoginPage extends HookConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
 
-  void clearController(TextEditingController email, TextEditingController password) {
-    email.clear();
-    password.clear();
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.watch(loginRepositoryProvider);
+
+    // メールアドレス
     final email = useState('');
-    final password = useState('');
     final emailController = useState(TextEditingController());
+
+    // パスワード
+    final password = useState('');
     final passwordController = useState(TextEditingController());
+
+    // パスワードの非表示
     final _isObscure = useState(true);
+
+    // テキストの初期化
+    void clearText() {
+      emailController.value.clear();
+      passwordController.value.clear();
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const AppThemeImage(),
-                const SizedBox(height: 36),
-                LoginTextField(
-                  controller: emailController.value,
-                  suffix: false,
-                  obscure: false,
-                  text: 'メールアドレス',
-                  obscureChange: () {},
-                  textChange: (text) => email.value = text,
-                ),
-                const SizedBox(height: 10),
-                LoginTextField(
-                  controller: passwordController.value,
-                  suffix: true,
-                  obscure: _isObscure.value,
-                  text: 'パスワード（6桁以上）',
-                  obscureChange: () => _isObscure.value = !_isObscure.value,
-                  textChange: (text) => password.value = text,
-                ),
-                const SizedBox(height: 16),
-                CustomElevatedButton(
-                  text: 'ログイン',
-                  onTaped: () async {
-                    ref.watch(indicatorProvider).showProgressDialog(context);
-                    try {
-                      await AuthFire().loginFire(email.value, password.value);
-                      Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-                      clearController(emailController.value, passwordController.value);
-                    } on FirebaseAuthException catch (e) {
-                      Navigator.of(context).pop();
-                      negativeSnackBar(context, authValidation(e));
-                    } catch (e) {
-                      Navigator.of(context).pop();
-                      negativeSnackBar(context, e.toString());
-                    }
-                  },
-                ),
-                AppTextButton(
-                  text: 'パスワードをお忘れ場合はこちら',
-                  size: 14,
-                  color: CustomColor.detailTextColor,
-                  function: () {
-                    Navigator.pushNamed(context, '/resetPasswordPage');
-                    clearController(emailController.value, passwordController.value);
-                  },
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: const Divider(thickness: 3),
-                ),
-                AppTextButton(
-                  text: 'アカウントの新規登録はこちら',
-                  size: 14,
-                  color: CustomColor.detailTextColor,
-                  function: () {
-                    Navigator.pushNamed(context, '/registerPage');
-                    clearController(emailController.value, passwordController.value);
-                  },
-                ),
-              ],
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 36),
+              child: Column(
+                children: [
+                  const Logo(),
+                  const SizedBox(height: 32),
+                  LoginTextField(
+                    labelText: 'メールアドレス',
+                    controller: emailController.value,
+                    textChange: (text) => email.value = text,
+                  ),
+                  const SizedBox(height: 16),
+                  LoginTextField(
+                    labelText: 'パスワード（6桁以上）',
+                    controller: passwordController.value,
+                    textChange: (text) => password.value = text,
+                    isObscure: _isObscure.value,
+                    isObscureChange: () => _isObscure.value = !_isObscure.value,
+                  ),
+                  const SizedBox(height: 16),
+                  CustomElevatedButton(
+                    text: 'ログイン',
+                    onTaped: () async {
+                      showProgressDialog(context);
+                      try {
+                        loginValidation(
+                          email.value,
+                          password.value,
+                        );
+                        await loginNotifier.login(
+                          uidProvider: ref.read(uidProvider.notifier).state,
+                          email: email.value,
+                          password: password.value,
+                        );
+                        Navigator.popUntil(
+                            context, (Route<dynamic> route) => route.isFirst);
+                        clearText();
+                      } on FirebaseAuthException catch (e) {
+                        Navigator.of(context).pop();
+                        negativeSnackBar(context, authValidation(e));
+                      } catch (e) {
+                        Navigator.of(context).pop();
+                        negativeSnackBar(context, e.toString());
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    child: Text(
+                      'パスワードをお忘れ場合はこちら',
+                      style: context.bodyMediumGrey,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/resetPasswordPage');
+                      clearText();
+                    },
+                  ),
+                  const Divider(),
+                  TextButton(
+                    child: Text(
+                      'アカウントの新規登録はこちら',
+                      style: context.bodyMediumGrey,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/registerPage');
+                      clearText();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

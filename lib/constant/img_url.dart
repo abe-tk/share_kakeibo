@@ -1,0 +1,1 @@
+const imgURL = 'https://firebasestorage.googleapis.com/v0/b/sharekakeibo-59b13.appspot.com/o/users%2Fuser_icon.png?alt=media&token=a3bd368c-58d4-4945-bf38-f8bc57fc4144';

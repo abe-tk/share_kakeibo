@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/services.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
 import 'config/firebase/dev/firebase_options.dart' as dev;
 import 'config/firebase/prod/firebase_options.dart' as prod;

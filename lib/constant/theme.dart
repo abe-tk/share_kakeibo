@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class CustomTheme {
 
@@ -21,16 +21,6 @@ class CustomTheme {
     backgroundColor: CustomColor.fabBackGroundColor,
   );
 
-  static ElevatedButtonThemeData elevatedButtonThemeData = ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      primary: CustomColor.ebPrimaryColor,
-      side: const BorderSide(
-        color: CustomColor.ebBorderSideColor,
-        width: 1,
-      ),
-    ),
-  );
-
   static ToggleButtonsThemeData toggleButtonsThemeData = ToggleButtonsThemeData(
     fillColor: CustomColor.tbFillColor,
     borderWidth: 2,
@@ -46,7 +36,6 @@ class CustomTheme {
       appBarTheme: appBarTheme,
       bottomNavigationBarTheme: bottomNavigationBarThemeData,
       floatingActionButtonTheme: floatingActionButtonThemeData,
-      elevatedButtonTheme: elevatedButtonThemeData,
       toggleButtonsTheme: toggleButtonsThemeData,
       indicatorColor: CustomColor.indicatorColor,
       dividerColor: CustomColor.dividerColor,
@@ -58,4 +47,3 @@ class CustomTheme {
   }
 
 }
-

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'pie_data.dart';
 
@@ -27,38 +27,42 @@ mixin _$PieData {
 /// @nodoc
 abstract class $PieDataCopyWith<$Res> {
   factory $PieDataCopyWith(PieData value, $Res Function(PieData) then) =
-      _$PieDataCopyWithImpl<$Res>;
+      _$PieDataCopyWithImpl<$Res, PieData>;
+  @useResult
   $Res call({String title, double percent, Color color});
 }
 
 /// @nodoc
-class _$PieDataCopyWithImpl<$Res> implements $PieDataCopyWith<$Res> {
+class _$PieDataCopyWithImpl<$Res, $Val extends PieData>
+    implements $PieDataCopyWith<$Res> {
   _$PieDataCopyWithImpl(this._value, this._then);
 
-  final PieData _value;
   // ignore: unused_field
-  final $Res Function(PieData) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = freezed,
-    Object? percent = freezed,
-    Object? color = freezed,
+    Object? title = null,
+    Object? percent = null,
+    Object? color = null,
   }) {
     return _then(_value.copyWith(
-      title: title == freezed
+      title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      percent: percent == freezed
+      percent: null == percent
           ? _value.percent
           : percent // ignore: cast_nullable_to_non_nullable
               as double,
-      color: color == freezed
+      color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as Color,
-    ));
+    ) as $Val);
   }
 }
 
@@ -68,34 +72,34 @@ abstract class _$$_PieDataCopyWith<$Res> implements $PieDataCopyWith<$Res> {
           _$_PieData value, $Res Function(_$_PieData) then) =
       __$$_PieDataCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String title, double percent, Color color});
 }
 
 /// @nodoc
-class __$$_PieDataCopyWithImpl<$Res> extends _$PieDataCopyWithImpl<$Res>
+class __$$_PieDataCopyWithImpl<$Res>
+    extends _$PieDataCopyWithImpl<$Res, _$_PieData>
     implements _$$_PieDataCopyWith<$Res> {
   __$$_PieDataCopyWithImpl(_$_PieData _value, $Res Function(_$_PieData) _then)
-      : super(_value, (v) => _then(v as _$_PieData));
+      : super(_value, _then);
 
-  @override
-  _$_PieData get _value => super._value as _$_PieData;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = freezed,
-    Object? percent = freezed,
-    Object? color = freezed,
+    Object? title = null,
+    Object? percent = null,
+    Object? color = null,
   }) {
     return _then(_$_PieData(
-      title: title == freezed
+      title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      percent: percent == freezed
+      percent: null == percent
           ? _value.percent
           : percent // ignore: cast_nullable_to_non_nullable
               as double,
-      color: color == freezed
+      color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as Color,
@@ -126,20 +130,17 @@ class _$_PieData implements _PieData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PieData &&
-            const DeepCollectionEquality().equals(other.title, title) &&
-            const DeepCollectionEquality().equals(other.percent, percent) &&
-            const DeepCollectionEquality().equals(other.color, color));
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.percent, percent) || other.percent == percent) &&
+            (identical(other.color, color) || other.color == color));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(title),
-      const DeepCollectionEquality().hash(percent),
-      const DeepCollectionEquality().hash(color));
+  int get hashCode => Object.hash(runtimeType, title, percent, color);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_PieDataCopyWith<_$_PieData> get copyWith =>
       __$$_PieDataCopyWithImpl<_$_PieData>(this, _$identity);
 }

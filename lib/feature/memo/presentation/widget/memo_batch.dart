@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class MemoBatch extends StatelessWidget {
   final bool isNotEmpty;

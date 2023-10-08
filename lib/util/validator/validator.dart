@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/importer.dart';
 
 // イベント追加、編集時
 void addEventValidation(price) {
@@ -87,7 +87,7 @@ void invitationRoomValidation(roomCode) {
   }
 }
 
-void exitRoomValidation(String roomCode) {
+void exitRoomValidation(String uid, String roomCode) {
   if (uid == roomCode) {
     throw 'RoomOwnerは退出できません';
   }

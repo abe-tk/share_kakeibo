@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:share_kakeibo/impoter.dart';
+import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class ReSingInDialog extends HookConsumerWidget {
   final Function function;
@@ -19,7 +20,12 @@ class ReSingInDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _isObscure = useState(true);
     final password = useState('');
-    final passwordController = useState(TextEditingController());
+    final passwordController = useTextEditingController();
+
+    final userData = ref.watch(userInfoProvider).whenOrNull(
+          data: (data) => data,
+        );
+
     return SimpleDialog(
       title: const Text("パスワードを入力"),
       children: [
@@ -27,7 +33,7 @@ class ReSingInDialog extends HookConsumerWidget {
           onPressed: () => Navigator.pop(context),
           child: ListTile(
             title: TextFormField(
-              controller: passwordController.value,
+              controller: passwordController,
               obscureText: _isObscure.value,
               decoration: InputDecoration(
                 hintText: 'パスワード',
@@ -64,7 +70,10 @@ class ReSingInDialog extends HookConsumerWidget {
               onPressed: () async {
                 try {
                   passwordValidation(password.value);
-                  await AuthFire().reSingInFire(ref.watch(userProvider)['email'], password.value);
+                  await ref.read(loginRepositoryProvider).reSingIn(
+                        email: userData!.email,
+                        password: password.value,
+                      );
                   await function();
                   navigator();
                   positiveSnackBar(context, text);

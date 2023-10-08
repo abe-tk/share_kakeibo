@@ -3,12 +3,12 @@ import 'dart:io';
 
 class SetProfileImage extends StatelessWidget {
   final String imgURL;
-  final File? imgFile;
+  final String imgFilePath;
   final Function function;
   const SetProfileImage({
     Key? key,
     required this.imgURL,
-    required this.imgFile,
+    required this.imgFilePath,
     required this.function,
   }) : super(key: key);
 
@@ -20,7 +20,7 @@ class SetProfileImage extends StatelessWidget {
         child: SizedBox(
           width: 150,
           height: 150,
-          child: imgFile == null
+          child: imgFilePath == ''
               ? Container(
                   width: 150,
                   height: 150,
@@ -43,7 +43,7 @@ class SetProfileImage extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Image.file(
-                    imgFile!,
+                    File(imgFilePath),
                     fit: BoxFit.cover,
                   ),
                 ),
