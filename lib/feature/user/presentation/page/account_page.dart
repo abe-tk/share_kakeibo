@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/common_widget/custom_list_tile.dart';
+import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
 import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
 import 'package:share_kakeibo/feature/user/data/user_repository.impl.dart';
 import 'package:share_kakeibo/importer.dart';
@@ -10,55 +10,9 @@ class AccountPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void logout() {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomAlertDialog(
-            title: "ログアウトしますか？",
-            subTitle: '',
-            function: () async {
-              await ref.read(loginRepositoryProvider).signOut();
-              Navigator.popUntil(
-                  context, (Route<dynamic> route) => route.isFirst);
-            },
-          );
-        },
-      );
-    }
-
-    void deleteAccount() {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomAlertDialog(
-            title: "アカウント削除",
-            subTitle: 'アカウントを削除するとログインできなくなります。\nアカウントを削除しますか？',
-            function: () async {
-              try {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return ReSingInDialog(
-                      function: () async => await ref
-                          .read(userRepositoryProvider)
-                          .deleteAccount(),
-                      navigator: () => Navigator.popUntil(
-                          context, (Route<dynamic> route) => route.isFirst),
-                      text: 'アカウントを削除しました',
-                    );
-                  },
-                );
-              } catch (e) {
-                negativeSnackBar(context, e.toString());
-              }
-            },
-          );
-        },
-      );
-    }
+    final userData = ref.watch(userInfoProvider).whenOrNull(
+          data: (data) => data,
+        );
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'アカウント'),
@@ -83,12 +37,56 @@ class AccountPage extends HookConsumerWidget {
               CustomListTile(
                 title: 'ログアウト',
                 leading: const Icon(Icons.exit_to_app),
-                onTaped: () => logout(),
+                onTaped: () async {
+                  final isLogout = await ConfirmDialog.show(
+                    context: context,
+                    title: 'ログアウトしますか？',
+                    confirmButtonText: 'ログアウト',
+                    confirmButtonTextStyle: context.bodyMediumRed,
+                  );
+                  if (isLogout) {
+                    await ref.read(loginRepositoryProvider).signOut();
+                    Navigator.popUntil(
+                        context, (Route<dynamic> route) => route.isFirst);
+                  }
+                },
               ),
               CustomListTile(
                 title: 'アカウントを削除',
                 leading: const Icon(Icons.remove_circle_outline),
-                onTaped: () => deleteAccount(),
+                onTaped: () async {
+                  final isDeleteAccount = await ConfirmDialog.show(
+                    context: context,
+                    title: 'アカウントを削除しますか？',
+                    message: 'アカウントを削除するとログインできなくなります。',
+                    confirmButtonText: '削除',
+                    confirmButtonTextStyle: context.bodyMediumRed,
+                  );
+                  if (isDeleteAccount) {
+                    final password = await InputTextDialog.show(
+                      context: context,
+                      title: 'パスワードを入力',
+                      hintText: 'パスワード',
+                      isPassword: true,
+                      confirmButtonText: '削除',
+                    );
+                    if (password != null) {
+                      try {
+                        passwordValidation(password);
+                        await ref.read(loginRepositoryProvider).reSingIn(
+                              email: userData!.email,
+                              password: password,
+                            );
+                        await ref.read(userRepositoryProvider).deleteAccount();
+                        Navigator.popUntil(
+                            context, (Route<dynamic> route) => route.isFirst);
+                        positiveSnackBar(context, 'アカウントを削除しました');
+                      } catch (e) {
+                        negativeSnackBar(context, e.toString());
+                      }
+                    }
+                  }
+                },
               ),
             ],
           ),

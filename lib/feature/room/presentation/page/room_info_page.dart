@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/common_widget/custom_list_tile.dart';
+import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
+import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class RoomInfoPage extends HookConsumerWidget {
@@ -20,42 +21,37 @@ class RoomInfoPage extends HookConsumerWidget {
               data: (data) => data,
             );
 
-    void checkExitRoom(Function function) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomAlertDialog(
-              title: '【${ref.watch(roomNameProvider)}】\nから退出しますか？',
-              subTitle: '',
-              function: () {
-                try {
-                  exitRoomValidation(ref.watch(uidProvider), roomCode!);
-                  Navigator.of(context).pop();
-                  function();
-                } catch (e) {
-                  Navigator.of(context).pop();
-                  negativeSnackBar(context, e.toString());
-                }
-              });
-        },
-      );
-    }
-
-    void checkAgainExitRoom() {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomAlertDialog(
-            title: '【${userData!.userName}】が登録した収支データは削除されますが、よろしいですか？',
-            subTitle: '',
-            function: () async {
-              try {
-                // await RoomFire().exitRoomFire(
-                //     ref.watch(roomCodeProvider), userData.userName);
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'ROOM情報',
+        icon: Icons.logout,
+        iconColor: CustomColor.defaultIconColor,
+        onTaped: () async {
+          final isExit = await ConfirmDialog.show(
+            context: context,
+            title: 'ルームから退出しますか？',
+            message: '「${userData!.userName}」が登録した収支データは削除されます。',
+            confirmButtonText: '退出する',
+            confirmButtonTextStyle: context.bodyMediumRed,
+          );
+          if (isExit) {
+            try {
+              exitRoomValidation(ref.watch(uidProvider), roomCode!);
+              final password = await InputTextDialog.show(
+                context: context,
+                title: 'パスワードを入力',
+                hintText: 'パスワード',
+                isPassword: true,
+                confirmButtonText: '退出する',
+              );
+              if (password != null) {
+                passwordValidation(password);
+                await ref.read(loginRepositoryProvider).reSingIn(
+                      email: userData.email,
+                      password: password,
+                    );
                 await ref.read(roomMemberProvider.notifier).exitRoom(
-                      roomCode: roomCode!,
+                      roomCode: roomCode,
                       userName: userData.userName,
                     );
                 // 各Stateを更新
@@ -70,22 +66,11 @@ class RoomInfoPage extends HookConsumerWidget {
                 Navigator.popUntil(
                     context, (Route<dynamic> route) => route.isFirst);
                 negativeSnackBar(context, 'Roomから退出しました');
-              } catch (e) {
-                negativeSnackBar(context, e.toString());
               }
-            },
-          );
-        },
-      );
-    }
-
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'ROOM情報',
-        icon: Icons.logout,
-        iconColor: CustomColor.defaultIconColor,
-        onTaped: () {
-          checkExitRoom(() => checkAgainExitRoom());
+            } catch (e) {
+              negativeSnackBar(context, e.toString());
+            }
+          }
         },
       ),
       body: SingleChildScrollView(

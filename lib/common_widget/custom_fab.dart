@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
 import 'package:share_kakeibo/feature/memo/application/memo_service.dart';
 import 'package:share_kakeibo/importer.dart';
 
@@ -23,55 +24,6 @@ class CustomFab extends HookConsumerWidget {
         ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
               data: (data) => data,
             );
-
-    void showMemoDialog() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text("メモの追加"),
-            children: [
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(context),
-                child: ListTile(
-                  title: TextField(
-                    controller: memoController,
-                    decoration: const InputDecoration(
-                      hintText: 'メモ',
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (text) => memo.value = text,
-                  ),
-                  leading: const Icon(Icons.featured_play_list_rounded),
-                ),
-              ),
-              Row(
-                children: [
-                  SimpleDialogOption(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("CANCEL"),
-                  ),
-                  SimpleDialogOption(
-                    onPressed: () async {
-                      try {
-                        await ref
-                            .read(memoService)
-                            .createMemo(roomCode: roomCode!, memo: memo.value);
-                        Navigator.of(context).pop();
-                        positiveSnackBar(context, 'メモを追加しました！');
-                      } catch (e) {
-                        negativeSnackBar(context, e.toString());
-                      }
-                    },
-                    child: const Text("OK"),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      );
-    }
 
     return FloatingActionButton(
       shape: RoundedRectangleBorder(
@@ -129,12 +81,29 @@ class CustomFab extends HookConsumerWidget {
                           leading: const Icon(Icons.edit),
                           title: const Text('メモの追加'),
                           trailing: const Icon(Icons.chevron_right),
-                          onTap: () {
-                            selectIndex();
-                            Navigator.of(context).pop();
-                            showMemoDialog();
-                            memoController.clear();
-                            memo.value = '';
+                          onTap: () async {
+                            try {
+                              selectIndex();
+                              Navigator.of(context).pop();
+                              memo.value = await InputTextDialog.show(
+                                    context: context,
+                                    title: 'メモを追加',
+                                    hintText: 'メモ',
+                                    confirmButtonText: '追加',
+                                  ) ??
+                                  '';
+                              if (memo.value.isNotEmpty) {
+                                await ref.read(memoService).createMemo(
+                                      roomCode: roomCode!,
+                                      memo: memo.value,
+                                    );
+                                memoController.clear();
+                                memo.value = '';
+                              }
+                              // positiveSnackBar(context, 'メモを追加しました！');
+                            } catch (e) {
+                              negativeSnackBar(context, e.toString());
+                            }
                           },
                         ),
                       ],

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/common_widget/custom_text_field.dart';
+import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
+import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class EmailPage extends HookConsumerWidget {
@@ -13,42 +15,19 @@ class EmailPage extends HookConsumerWidget {
           data: (data) => data,
         );
 
-    final email = useState('');
-    final emailController =
-        useTextEditingController(text: beforeUserData!.email);
+    final email = useState(beforeUserData!.email);
+    final emailController = useTextEditingController(
+      text: beforeUserData.email,
+    );
 
-    final roomCode = ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+    final roomCode =
+        ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+              data: (data) => data,
+            );
+
+    final userData = ref.watch(userInfoProvider).whenOrNull(
           data: (data) => data,
         );
-
-    Future<void> updateEmail() async {
-      try {
-        updateEmailValidation(email.value, beforeUserData.email);
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ReSingInDialog(
-              function: () async {
-                email.value = emailController.value.text;
-                ref.read(userInfoProvider.notifier).updateUser(
-                      uid: ref.watch(uidProvider),
-                      roomCode: roomCode!,
-                      userData: beforeUserData,
-                      email: email.value,
-                    );
-              },
-              navigator: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              text: 'メールアドレスを変更しました',
-            );
-          },
-        );
-      } catch (e) {
-        negativeSnackBar(context, e.toString());
-      }
-    }
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'メールアドレスを変更'),
@@ -66,8 +45,38 @@ class EmailPage extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 CustomElevatedButton(
-                  text: '保存',
-                  onTaped: () async => updateEmail(),
+                  text: '変更',
+                  onTaped: () async {
+                    try {
+                      updateEmailValidation(email.value, beforeUserData.email);
+                      final password = await InputTextDialog.show(
+                        context: context,
+                        title: 'パスワードを入力',
+                        hintText: 'パスワード',
+                        isPassword: true,
+                        confirmButtonText: '変更',
+                      );
+                      if (password != null) {
+                        passwordValidation(password);
+                        await ref.read(loginRepositoryProvider).reSingIn(
+                              email: userData!.email,
+                              password: password,
+                            );
+                        email.value = emailController.value.text;
+                        ref.read(userInfoProvider.notifier).updateUser(
+                              uid: ref.watch(uidProvider),
+                              roomCode: roomCode!,
+                              userData: beforeUserData,
+                              email: email.value,
+                            );
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        positiveSnackBar(context, 'メールアドレスを変更しました');
+                      }
+                    } catch (e) {
+                      negativeSnackBar(context, e.toString());
+                    }
+                  },
                 ),
               ],
             ),

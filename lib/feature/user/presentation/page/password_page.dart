@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/common_widget/custom_text_field.dart';
+import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
+import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
 import 'package:share_kakeibo/feature/user/data/user_repository.impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
@@ -16,30 +18,9 @@ class PasswordPage extends HookConsumerWidget {
     final checkPasswordController = useTextEditingController(text: '');
     final _isObscurePassword = useState(true);
 
-    Future<void> updatePassword() async {
-      try {
-        updatePasswordValidation(password.value, checkPassword.value);
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ReSingInDialog(
-              function: () async {
-                await ref
-                    .read(userRepositoryProvider)
-                    .updatePassword(password: password.value);
-              },
-              navigator: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              text: 'パスワードを変更しました',
-            );
-          },
+    final userData = ref.watch(userInfoProvider).whenOrNull(
+          data: (data) => data,
         );
-      } catch (e) {
-        negativeSnackBar(context, e.toString());
-      }
-    }
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'パスワードを変更'),
@@ -69,8 +50,35 @@ class PasswordPage extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 CustomElevatedButton(
-                  text: '保存',
-                  onTaped: () async => updatePassword(),
+                  text: '変更',
+                  onTaped: () async {
+                    try {
+                      updatePasswordValidation(
+                          password.value, checkPassword.value);
+                      final reSignInPwd = await InputTextDialog.show(
+                        context: context,
+                        title: 'パスワードを入力',
+                        hintText: 'パスワード',
+                        isPassword: true,
+                        confirmButtonText: '変更',
+                      );
+                      if (reSignInPwd != null) {
+                        passwordValidation(password);
+                        await ref.read(loginRepositoryProvider).reSingIn(
+                              email: userData!.email,
+                              password: reSignInPwd,
+                            );
+                        await ref
+                            .read(userRepositoryProvider)
+                            .updatePassword(password: password.value);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        positiveSnackBar(context, 'パスワードを変更しました');
+                      }
+                    } catch (e) {
+                      negativeSnackBar(context, e.toString());
+                    }
+                  },
                 ),
               ],
             ),
