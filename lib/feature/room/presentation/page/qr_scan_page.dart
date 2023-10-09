@@ -114,7 +114,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                           imgURL: userData.imgURL,
                         );
                     // 各Stateを更新
-                    ref.invalidate(roomCodeProvider(ref.watch(uidProvider)));
+                    ref.invalidate(roomCodeProvider);
                     ref.read(userInfoProvider.notifier).readUser();
                     ref
                         .read(totalAssetsStateProvider.notifier)

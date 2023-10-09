@@ -16,7 +16,7 @@ class RoomNamePage extends HookConsumerWidget {
 
     final roomNameController = useTextEditingController(text: roomNameState);
 
-    final roomCode = ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+    final roomCode = ref.watch(roomCodeProvider).whenOrNull(
           data: (data) => data,
         );
 

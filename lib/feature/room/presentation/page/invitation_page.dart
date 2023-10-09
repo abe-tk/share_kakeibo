@@ -10,7 +10,7 @@ class InvitationPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roomCode = ref.watch(roomCodeProvider(ref.watch(uidProvider)));
+    final roomCode = ref.watch(roomCodeProvider);
 
     void showQrCode() {
       showModalBottomSheet(
