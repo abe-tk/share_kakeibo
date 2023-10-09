@@ -12,7 +12,7 @@ class MemoPage extends HookConsumerWidget {
     final memoList = ref.watch(memoProvider);
 
     final roomCode =
-        ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+        ref.watch(roomCodeProvider).whenOrNull(
               data: (data) => data,
             );
 

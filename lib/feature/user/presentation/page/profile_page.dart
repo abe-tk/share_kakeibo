@@ -33,7 +33,7 @@ class ProfilePage extends HookConsumerWidget {
           data: (data) => data,
         );
 
-    final roomCode = ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+    final roomCode = ref.watch(roomCodeProvider).whenOrNull(
           data: (data) => data,
         );
 

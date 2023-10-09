@@ -21,7 +21,7 @@ class EmailPage extends HookConsumerWidget {
     );
 
     final roomCode =
-        ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
+        ref.watch(roomCodeProvider).whenOrNull(
               data: (data) => data,
             );
 

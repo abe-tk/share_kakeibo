@@ -16,10 +16,9 @@ class RoomInfoPage extends HookConsumerWidget {
           data: (data) => data,
         );
 
-    final roomCode =
-        ref.watch(roomCodeProvider(ref.watch(uidProvider))).whenOrNull(
-              data: (data) => data,
-            );
+    final roomCode = ref.watch(roomCodeProvider).whenOrNull(
+          data: (data) => data,
+        );
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -55,7 +54,7 @@ class RoomInfoPage extends HookConsumerWidget {
                       userName: userData.userName,
                     );
                 // 各Stateを更新
-                ref.invalidate(roomCodeProvider(ref.watch(uidProvider)));
+                ref.invalidate(roomCodeProvider);
                 ref.read(userInfoProvider.notifier).readUser();
                 ref
                     .read(totalAssetsStateProvider.notifier)

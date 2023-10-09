@@ -4,15 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/feature/event/data/event_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
-final eventProvider = AsyncNotifierProvider<Events, List<Event>>(Events.new);
-
-class Events extends AsyncNotifier<List<Event>> {
-  // refは渡さなくていい
-
-  // ユーザー情報の取得
+class AsyncEvents extends AsyncNotifier<List<Event>> {
+  // イベント一覧の取得
   Future<List<Event>> readEvent() async {
     final repository = ref.watch(eventRepositoryProvider);
-    return repository.readEvent(roomCode: 'JXfnbvqjtURZgDCQHxcOf9OriIo1');
+    final roomCode = await ref.watch(roomCodeProvider.future);
+    return repository.readEvent(roomCode: roomCode);
   }
 
   // 初期データの読み込み
@@ -69,6 +66,7 @@ class Events extends AsyncNotifier<List<Event>> {
     });
   }
 
+  // イベントの更新
   Future<void> updateEvent({
     required String roomCode,
     required Event event,
@@ -97,5 +95,8 @@ class Events extends AsyncNotifier<List<Event>> {
       return readEvent();
     });
   }
-
 }
+
+final eventProvider = AsyncNotifierProvider<AsyncEvents, List<Event>>(
+  AsyncEvents.new,
+);
