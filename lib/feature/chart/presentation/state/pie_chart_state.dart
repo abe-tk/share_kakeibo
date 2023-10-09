@@ -1,107 +1,112 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/constant/minus_category.dart';
-import 'package:share_kakeibo/constant/plus_category.dart';
+import 'package:share_kakeibo/constant/category.dart';
 import 'package:share_kakeibo/feature/chart/application/pie_chart_service.dart';
+import 'package:share_kakeibo/feature/chart/domain/pie_chart_datatable_state.dart';
+import 'package:share_kakeibo/feature/chart/domain/pie_chart_source_data.dart';
 import 'package:share_kakeibo/feature/event/presentation/state/event_state.dart';
 import 'package:share_kakeibo/feature/room/presentation/state/room_member_state.dart';
 
 // 円グラフのプロバイダ
-class PieChartNotifier
-    extends AutoDisposeNotifier<Map<int, List<Map<String, dynamic>>>> {
+class PieChartNotifier extends AutoDisposeNotifier<PieChartDatatableState> {
   // 円グラフのデータを作成
-  Map<int, List<Map<String, dynamic>>> createPieData(
-    bool isCategory,
-    DateTime date,
-    String largeCategory,
-  ) {
+  PieChartDatatableState createPieData({
+    required bool isCategory,
+    required DateTime date,
+    required String largeCategory,
+  }) {
+    // PieChartServiceのプロバイダ
+    final pieChartService = ref.watch(pieChartServiceProvider);
+
     // イベントを取得
-    final event =
+    final events =
         ref.watch(eventProvider).whenOrNull(data: (data) => data) ?? [];
 
-    // sourceDataを作成
-    List<Map<String, dynamic>> sourceData = [];
-    if (isCategory) {
-      sourceData = PieChartService().setCategoryData(
-        largeCategory == '収入' ? plusCategory : minusCategory,
-      );
-    }
-    if (!isCategory) {
-      sourceData = PieChartService().setUserData(
-        ref.watch(roomMemberProvider).whenOrNull(data: (data) => data) ?? [],
-      );
-    }
+    // ルームメンバーを取得
+    final roomMember =
+        ref.watch(roomMemberProvider).whenOrNull(data: (data) => data) ?? [];
 
-    // カテゴリの合計金額をセット
-    int totalPrice = PieChartService().calcTotalPrice(
-      event: event,
+    // 収入 or 支出の合計金額
+    final totalPrice = pieChartService.calcTotalPrice(
+      events: events,
       date: date,
       largeCategory: largeCategory,
     );
 
-    // 各カテゴリーの金額を算出
-    for (int i = 0; i < sourceData.length; i++) {
-      var data = isCategory
-          ? event
-              .where(
-                (data) => data.registerDate == DateTime(date.year, date.month),
+    // カテゴリー、ユーザーの金額
+    final prices = isCategory
+        ? pieChartService.calcCategoryPrice(
+            events: events,
+            categories: largeCategory == '収入' ? Category.plus : Category.minus,
+            date: date,
+            largeCategory: largeCategory,
+          )
+        : pieChartService.calcUserPrice(
+            events: events,
+            roomMember: roomMember,
+            date: date,
+            largeCategory: largeCategory,
+          );
+
+    // カテゴリー、ユーザーのパーセント
+    final percents = pieChartService.calcPercent(
+      totalPrice: totalPrice,
+      prices: prices,
+    );
+
+    // pieChartSourceDataを作成
+    final pieChartSourceData = totalPrice == 0
+        ? [
+            const PieChartSourceData(
+              category: 'データなし',
+              icon: null,
+              imgURL: null,
+              color: Color.fromRGBO(130, 132, 130, 1.0),
+              price: 0,
+              percent: 100,
+            ),
+          ]
+        : isCategory
+            ? pieChartService.setCategoryData(
+                categories: largeCategory == '収入' ? Category.plus : Category.minus,
+                prices: prices,
+                percents: percents,
               )
-              .where((data) => data.largeCategory == largeCategory)
-              .where(
-                (data) => data.smallCategory == sourceData[i]['category'],
-              )
-          : event
-              .where(
-                (data) => data.registerDate == DateTime(date.year, date.month),
-              )
-              .where((data) => data.largeCategory == largeCategory)
-              .where(
-                (data) => data.paymentUser == sourceData[i]['category'],
+            : pieChartService.setUserData(
+                roomMember: roomMember,
+                prices: prices,
+                percents: percents,
               );
-      for (final document in data) {
-        final event = document;
-        final price = event.price;
-        sourceData[i]['price'] += int.parse(price);
-      }
-    }
 
-    // 各カテゴリーのパーセントを算出
-    for (int i = 0; i < sourceData.length; i++) {
-      double percent = 0;
-      percent = PieChartService().calcPercent(
-        sourceData[i]['price'],
-        totalPrice,
-      );
-      sourceData[i]['percent'] = percent;
-    }
-
-    return {totalPrice: sourceData};
+    return PieChartDatatableState(
+      totalPrice: totalPrice,
+      pieChartSourceData: pieChartSourceData,
+    );
   }
 
   @override
-  Map<int, List<Map<String, dynamic>>> build() {
-    final Map<int, List<Map<String, dynamic>>> data = createPieData(
-      true,
-      DateTime(DateTime.now().year, DateTime.now().month),
-      '収入',
+  PieChartDatatableState build() {
+    return createPieData(
+      isCategory: true,
+      date: DateTime(DateTime.now().year, DateTime.now().month),
+      largeCategory: '収入',
     );
-    return {
-      data.keys.first: data.values.first,
-    };
   }
 
-  void reCalc(bool isCategory, DateTime date, String largeCategory) {
-    final Map<int, List<Map<String, dynamic>>> data = createPieData(
-      isCategory,
-      date,
-      largeCategory,
+  void reCalc({
+    required bool isCategory,
+    required DateTime date,
+    required String largeCategory,
+  }) {
+    state = createPieData(
+      isCategory: isCategory,
+      date: date,
+      largeCategory: largeCategory,
     );
-    state = {
-      data.keys.first: data.values.first,
-    };
   }
 }
 
-final pieChartProvider = AutoDisposeNotifierProvider<PieChartNotifier,
-    Map<int, List<Map<String, dynamic>>>>(
+final pieChartProvider =
+    AutoDisposeNotifierProvider<PieChartNotifier, PieChartDatatableState>(
   () => PieChartNotifier(),
 );

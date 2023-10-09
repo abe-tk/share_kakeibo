@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:share_kakeibo/feature/chart/application/pie_chart_service.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class HomePage extends HookConsumerWidget {
@@ -8,18 +10,21 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // PieChartServiceのプロバイダ
+    final pieChartService = ref.watch(pieChartServiceProvider);
+
     // 総資産額
     final totalAssets = ref.watch(totalAssetsStateProvider);
 
     // 総資産額の表示・非表示
-    final _isObscure = useState(true);
+    final isObscure = useState(true);
 
     // 収支円グラフの対象月
     final month = useState(DateTime(DateTime.now().year, DateTime.now().month));
 
     // 収支円グラフ
     final homePieChart = ref.watch(homePieChartProvider);
-    final homePieChartNotifier = ref.read(homePieChartProvider.notifier);
+    final homePieChartNotifier = ref.watch(homePieChartProvider.notifier);
 
     // イベント
     final event = ref.watch(eventProvider).whenOrNull(
@@ -46,15 +51,15 @@ class HomePage extends HookConsumerWidget {
               Column(
                 children: [
                   // 総資産額
-                  const SizedBox(height: 16),
+                  const Gap(16),
                   _TotalAssets(
                     price: totalAssets,
-                    obscure: _isObscure.value,
-                    onTap: () => _isObscure.value = !_isObscure.value,
+                    obscure: isObscure.value,
+                    onTap: () => isObscure.value = !isObscure.value,
                   ),
 
                   // 収支円グラフの対象月
-                  const SizedBox(height: 32),
+                  const Gap(32),
                   TargetDate(
                     month: month.value,
                     onTapedDate: () async {
@@ -62,21 +67,21 @@ class HomePage extends HookConsumerWidget {
                         context,
                         month.value,
                       );
-                      homePieChartNotifier.reCalc(month.value);
+                      homePieChartNotifier.reCalc(date: month.value);
                     },
                     onTapedLeft: () {
                       month.value = DateTime(
                         month.value.year,
                         month.value.month - 1,
                       );
-                      homePieChartNotifier.reCalc(month.value);
+                      homePieChartNotifier.reCalc(date: month.value);
                     },
                     onTapedRight: () {
                       month.value = DateTime(
                         month.value.year,
                         month.value.month + 1,
                       );
-                      homePieChartNotifier.reCalc(month.value);
+                      homePieChartNotifier.reCalc(date: month.value);
                     },
                   ),
 
@@ -88,8 +93,10 @@ class HomePage extends HookConsumerWidget {
                     width: 200,
                     child: CustomPieChart(
                       category: '合計',
-                      pieChartSectionData: homePieChart.values.first,
-                      price: homePieChart.keys.first,
+                      pieChartSectionData: pieChartService.getCategory(
+                        pieChartSourceData: homePieChart.pieChartSourceData,
+                      ),
+                      price: homePieChart.totalPrice,
                     ),
                   ),
                 ],

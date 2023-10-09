@@ -1,72 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:share_kakeibo/feature/chart/application/pie_chart_service.dart';
+import 'package:share_kakeibo/feature/chart/domain/pie_chart_datatable_state.dart';
+import 'package:share_kakeibo/feature/chart/domain/pie_chart_source_data.dart';
 import 'package:share_kakeibo/importer.dart';
 
-class HomePieChartNotifier
-    extends AutoDisposeNotifier<Map<int, List<PieChartSectionData>>> {
-  Map<int, List<PieData>> calcPieData(DateTime date) {
-    // 当月の収入、支出、合計の金額を算出
-    final incomePrice = PieChartService().calcCurrentMonthLargeCategoryPrice(
-      ref.watch(eventProvider).whenOrNull(data: (data) => data) ?? [],
-      date,
-      '収入',
-    );
-    final spendingPrice = PieChartService().calcCurrentMonthLargeCategoryPrice(
-      ref.watch(eventProvider).whenOrNull(data: (data) => data) ?? [],
-      date,
-      '支出',
-    );
-    final calcTotalPrice = incomePrice + spendingPrice;
-    final totalPrice = incomePrice - spendingPrice;
+// HomePageの円グラフのプロバイダ
+class HomePieChartNotifier extends AutoDisposeNotifier<PieChartDatatableState> {
+  PieChartDatatableState calcPieData({
+    required DateTime date,
+  }) {
+    // PieChartServiceのプロバイダ
+    final pieChartService = ref.watch(pieChartServiceProvider);
 
-    // 当月の収入、支出のパーセントを算出
-    final incomePercent = PieChartService().setPercent(incomePrice, calcTotalPrice);
-    final spendingPercent = PieChartService().setPercent(spendingPrice, calcTotalPrice);
-    final double nonDataCase =
-        (incomePrice != 0 || spendingPrice != 0) ? 0 : 100;
+    // イベントを取得
+    final events =
+        ref.watch(eventProvider).whenOrNull(data: (data) => data) ?? [];
 
-    return {
-      totalPrice: [
-        PieData(
-            title:
-                '${incomePercent != 0 ? incomePercent.toStringAsFixed(1) : 0}％\n収入',
-            percent: incomePercent,
-            color: Colors.greenAccent),
-        PieData(
-            title:
-                '${spendingPercent != 0 ? spendingPercent.toStringAsFixed(1) : 0}％\n支出',
-            percent: spendingPercent,
-            color: Colors.redAccent),
-        PieData(
-          title: 'データなし',
-          percent: nonDataCase,
-          color: const Color.fromRGBO(130, 132, 130, 1.0),
-        ),
-      ],
-    };
+    // 当月の収入の金額を算出
+    final plusPrice = pieChartService.calcTotalPrice(
+      events: events,
+      date: date,
+      largeCategory: '収入',
+    );
+
+    // 当月の支出の金額を算出
+    final minusPrice = pieChartService.calcTotalPrice(
+      events: events,
+      date: date,
+      largeCategory: '支出',
+    );
+
+    // 当月の収支金額を算出
+    final totalPrice = plusPrice - minusPrice;
+
+    // 当月の収入のパーセントを算出
+    final plusPercent = pieChartService.calcBpPercent(
+      smallPrice: plusPrice,
+      largePrice: plusPrice + minusPrice,
+    );
+
+    // 当月の支出のパーセントを算出
+    final minusPercent = pieChartService.calcBpPercent(
+      smallPrice: minusPrice,
+      largePrice: plusPrice + minusPrice,
+    );
+
+    // pieChartSourceDataを作成
+    final pieChartSourceData = totalPrice == 0
+        ? [
+            const PieChartSourceData(
+              category: 'データなし',
+              icon: null,
+              imgURL: null,
+              color: Color.fromRGBO(130, 132, 130, 1.0),
+              price: 0,
+              percent: 100,
+            ),
+          ]
+        : pieChartService.setBpData(
+            categories: Category.bp,
+            prices: [plusPrice, minusPrice],
+            percents: [plusPercent, minusPercent],
+          );
+
+    return PieChartDatatableState(
+      totalPrice: totalPrice,
+      pieChartSourceData: pieChartSourceData,
+    );
   }
 
   @override
-  Map<int, List<PieChartSectionData>> build() {
-    final Map<int, List<PieData>> data = calcPieData(
-      DateTime(DateTime.now().year, DateTime.now().month),
+  PieChartDatatableState build() {
+    return calcPieData(
+      date: DateTime(DateTime.now().year, DateTime.now().month),
     );
-    return {
-      data.keys.first: PieChartService().getCategory(data.values.first),
-    };
   }
 
-  void reCalc(DateTime date) {
-    final Map<int, List<PieData>> data = calcPieData(date);
-    state = {
-      data.keys.first: PieChartService().getCategory(data.values.first),
-    };
+  void reCalc({
+    required DateTime date,
+  }) {
+    state = calcPieData(
+      date: date,
+    );
   }
 }
 
 final homePieChartProvider =
-    AutoDisposeNotifierProvider<HomePieChartNotifier, Map<int, List<PieChartSectionData>>>(
+    AutoDisposeNotifierProvider<HomePieChartNotifier, PieChartDatatableState>(
   () => HomePieChartNotifier(),
 );

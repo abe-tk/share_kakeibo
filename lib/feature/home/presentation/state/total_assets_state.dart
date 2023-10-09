@@ -14,8 +14,8 @@ class TotalAssetsStateNotifier extends StateNotifier<int> {
   late String roomCode;
 
   void calcTotalAssets(List<Event> event) {
-    int income = PieChartService().calcLageCategoryPrice(event, '収入');
-    int spending = PieChartService().calcLageCategoryPrice(event, '支出');
+    int income = PieChartService().calcLargeCategoryPrice(event, '収入');
+    int spending = PieChartService().calcLargeCategoryPrice(event, '支出');
     state = income - spending;
   }
 

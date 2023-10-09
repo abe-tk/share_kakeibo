@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/feature/chart/application/pie_chart_service.dart';
@@ -10,8 +11,12 @@ class ChartPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 円グラフのデータ
-    final pieData = ref.watch(pieChartProvider);
+    // PieChartServiceのプロバイダ
+    final pieChartService = ref.watch(pieChartServiceProvider);
+
+    // 円グラフ
+    final pieChart = ref.watch(pieChartProvider);
+    final pieChartNotifier = ref.watch(pieChartProvider.notifier);
 
     // 月の選択
     final month = useState(DateTime(DateTime.now().year, DateTime.now().month));
@@ -22,74 +27,79 @@ class ChartPage extends HookConsumerWidget {
     // 大カテゴリ
     final largeCategory = useState('収入');
 
+    void chartReCalc() {
+      pieChartNotifier.reCalc(
+        isCategory: isCategory.value,
+        date: month.value,
+        largeCategory: largeCategory.value,
+      );
+    }
+
     return Scaffold(
       appBar: const CustomAppBar(),
       drawer: const CustomDrawer(),
       body: SafeArea(
         child: Column(
           children: [
+            // 円グラフの対象月
             TargetDate(
               month: month.value,
               onTapedDate: () async {
-                month.value = await selectMonth(context, month.value);
-                ref.read(pieChartProvider.notifier).reCalc(
-                      isCategory.value,
-                      month.value,
-                      largeCategory.value,
-                    );
+                month.value = await selectMonth(
+                  context,
+                  month.value,
+                );
+                chartReCalc();
               },
               onTapedLeft: () {
-                month.value = DateTime(month.value.year, month.value.month - 1);
-                ref.read(pieChartProvider.notifier).reCalc(
-                      isCategory.value,
-                      month.value,
-                      largeCategory.value,
-                    );
+                month.value = DateTime(
+                  month.value.year,
+                  month.value.month - 1,
+                );
+                chartReCalc();
               },
               onTapedRight: () {
-                month.value = DateTime(month.value.year, month.value.month + 1);
-                ref.read(pieChartProvider.notifier).reCalc(
-                      isCategory.value,
-                      month.value,
-                      largeCategory.value,
-                    );
+                month.value = DateTime(
+                  month.value.year,
+                  month.value.month + 1,
+                );
+                chartReCalc();
               },
             ),
+
             // 円グラフの表示
             SizedBox(
               height: 200,
               width: MediaQuery.of(context).size.width,
               child: CustomPieChart(
                 category: largeCategory.value,
-                pieChartSectionData: PieChartService().getCategory(
-                  PieChartService().setPieData(
-                    pieData.values.first,
-                    pieData.keys.first,
-                  ),
+                pieChartSectionData: pieChartService.getCategory(
+                  pieChartSourceData: pieChart.pieChartSourceData,
                 ),
-                price: pieData.keys.first,
+                price: pieChart.totalPrice,
                 onTaped: () {
                   switch (largeCategory.value) {
                     case '収入':
                       largeCategory.value = '支出';
-                      ref.read(pieChartProvider.notifier).reCalc(
-                            isCategory.value,
-                            month.value,
-                            largeCategory.value,
-                          );
+                      pieChartNotifier.reCalc(
+                        isCategory: isCategory.value,
+                        date: month.value,
+                        largeCategory: largeCategory.value,
+                      );
                       break;
                     case '支出':
                       largeCategory.value = '収入';
-                      ref.read(pieChartProvider.notifier).reCalc(
-                            isCategory.value,
-                            month.value,
-                            largeCategory.value,
-                          );
+                      pieChartNotifier.reCalc(
+                        isCategory: isCategory.value,
+                        date: month.value,
+                        largeCategory: largeCategory.value,
+                      );
                       break;
                   }
                 },
               ),
             ),
+
             // 表示切り替え
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -99,11 +109,11 @@ class ChartPage extends HookConsumerWidget {
                       ? null
                       : () {
                           isCategory.value = !isCategory.value;
-                          ref.read(pieChartProvider.notifier).reCalc(
-                                isCategory.value,
-                                month.value,
-                                largeCategory.value,
-                              );
+                          pieChartNotifier.reCalc(
+                            isCategory: isCategory.value,
+                            date: month.value,
+                            largeCategory: largeCategory.value,
+                          );
                         },
                   icon: const Icon(Icons.category),
                 ),
@@ -111,31 +121,32 @@ class ChartPage extends HookConsumerWidget {
                   onPressed: isCategory.value
                       ? () {
                           isCategory.value = !isCategory.value;
-                          ref.read(pieChartProvider.notifier).reCalc(
-                                isCategory.value,
-                                month.value,
-                                largeCategory.value,
-                              );
+                          pieChartNotifier.reCalc(
+                            isCategory: isCategory.value,
+                            date: month.value,
+                            largeCategory: largeCategory.value,
+                          );
                         }
                       : null,
                   icon: const Icon(Icons.person),
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const Gap(6),
+
             // 円グラフ内の各値をリスト表示
             Expanded(
               child: ListView.builder(
-                itemCount: pieData.values.first.length + 1,
+                itemCount: pieChart.pieChartSourceData.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == pieData.values.first.length) {
+                  if (index == pieChart.pieChartSourceData.length) {
                     // リストの最後に合計値を表示
                     return Container(
                       alignment: Alignment.centerRight,
                       width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsets.only(right: 16, bottom: 30),
                       child: Text(
-                        '合計 ${numberFormatter.format(pieData.keys.first)} 円',
+                        '合計 ${numberFormatter.format(pieChart.totalPrice)} 円',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -144,58 +155,61 @@ class ChartPage extends HookConsumerWidget {
                       ),
                     );
                   }
+
                   // 各値
                   return Visibility(
-                    visible: pieData.values.first[index]['price'] != 0
+                    visible: pieChart.pieChartSourceData[index].price != 0
                         ? true
                         : false,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: CustomShadowContainer(
                         height: 48,
-                        // onTap: ,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
-                                const SizedBox(width: 16),
+                                const Gap(16),
                                 isCategory.value == true
                                     // カテゴリのアイコン
                                     ? Icon(
-                                        pieData.values.first[index]['icon'],
-                                        color: pieData.values.first[index]
-                                            ['color'],
+                                        pieChart.pieChartSourceData[index].icon,
+                                        color: pieChart
+                                            .pieChartSourceData[index].color,
                                       )
                                     // ユーザのプロフィール画像
                                     : CircleAvatar(
                                         radius: 12,
                                         backgroundImage: NetworkImage(
-                                          pieData.values.first[index]['imgURL'],
+                                          pieChart.pieChartSourceData[index]
+                                              .imgURL!,
                                         ),
                                       ),
-                                const SizedBox(width: 10),
+                                const Gap(10),
+
                                 // カテゴリ名
                                 Text(
-                                  pieData.values.first[index]['category'],
+                                  pieChart.pieChartSourceData[index].category,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 // パーセント
                                 Text(
-                                  ' ${double.parse((pieData.values.first[index]['percent']).toString()).toStringAsFixed(1)}%',
+                                  ' ${double.parse((pieChart.pieChartSourceData[index].percent).toString()).toStringAsFixed(1)}%',
                                   style: const TextStyle(
                                     color: Colors.black54,
                                   ),
                                 ),
                               ],
                             ),
+
                             // 金額
                             Padding(
                               padding: const EdgeInsets.only(right: 16.0),
                               child: Text(
-                                '${numberFormatter.format(pieData.values.first[index]['price'])} 円',
+                                '${numberFormatter.format(pieChart.pieChartSourceData[index].price)} 円',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,

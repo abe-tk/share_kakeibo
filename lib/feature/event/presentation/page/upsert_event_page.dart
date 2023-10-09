@@ -60,6 +60,14 @@ class UpsertEventPage extends HookConsumerWidget {
           data: (data) => data,
         );
 
+    List<String> _categories(List<Map<String, Object>> category) {
+      List<String> categories = [];
+      for (int i = 0; i < category.length; i++) {
+        categories.add(category[i]['category'] as String);
+      }
+      return categories;
+    }
+
     Future<void> addEvent() async {
       try {
         addEventValidation(price.value);
@@ -171,8 +179,8 @@ class UpsertEventPage extends HookConsumerWidget {
                   icon: const Icon(Icons.category),
                   initialItem: smallCategory.value,
                   items: largeCategory == '収入'
-                      ? Category.incomeCategory
-                      : Category.spendingCategory,
+                      ? _categories(Category.plus)
+                      : _categories(Category.minus),
                   selectItem: (value) => smallCategory.value = value!,
                 ),
                 UpsertEventItem(
