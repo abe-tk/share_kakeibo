@@ -12,7 +12,7 @@ export 'common_widget/non_data_case.dart';
 export 'util/snack_bar.dart';
 export 'common_widget/dialog/confirm_dialog.dart';
 export 'feature/user/presentation/widget/set_profile_image.dart';
-export 'feature/memo/presentation/widget/memo_batch.dart';
+export 'common_widget/custom_batch.dart';
 export 'common_widget/custom_fab.dart';
 export 'package:share_kakeibo/common_widget/custom_app_bar.dart';
 export 'common_widget/custom_elevated_button.dart';
