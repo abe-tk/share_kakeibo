@@ -19,6 +19,8 @@ class RootPage extends HookConsumerWidget {
     // bottomNavで選択されているページのindex
     final selectIndex = useState(0);
 
+    final memo = ref.watch(memoProvider);
+
     return Scaffold(
       body: _pages[selectIndex.value],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -50,14 +52,18 @@ class RootPage extends HookConsumerWidget {
               onTaped: () => selectIndex.value = 2,
             ),
             _BottomNavItem(
-              icon: ref.watch(memoProvider).when(
-                    loading: () => const CircularProgressIndicator(),
-                    error: (error, stack) => const Text('error'),
-                    data: (data) => MemoBatch(
-                      isNotEmpty: data.isNotEmpty,
-                      length: data.length,
+              icon: Stack(
+                children: [
+                  const Icon(Icons.featured_play_list_outlined),
+                  CustomBatch(
+                    length: memo.when(
+                      loading: () => 0,
+                      error: (error, stack) => 0,
+                      data: (data) => data.length,
                     ),
                   ),
+                ],
+              ),
               isActive: selectIndex.value == 3,
               onTaped: () => selectIndex.value = 3,
             ),

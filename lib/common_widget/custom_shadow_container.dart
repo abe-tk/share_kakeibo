@@ -5,12 +5,14 @@ class CustomShadowContainer extends StatelessWidget {
   final double? height;
   final double? width;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final Widget child;
 
   const CustomShadowContainer({
     this.height,
     this.width,
     this.onTap,
+    this.onLongPress,
     required this.child,
     Key? key,
   }) : super(key: key);
@@ -36,6 +38,7 @@ class CustomShadowContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
+          onLongPress: onLongPress,
           onTap: onTap,
           child: child,
         ),
