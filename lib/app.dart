@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/common_widget/custom_snack_bar.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class MyApp extends HookConsumerWidget {
@@ -10,12 +11,16 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // SnackBar表示のためののGlobalKey
+    final scaffoldKey = ref.watch(scaffoldKeyProvider);
+
     // レスポンシブ対応のためflutter_screenUtilを適応
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) => MaterialApp(
+        scaffoldMessengerKey: scaffoldKey,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,

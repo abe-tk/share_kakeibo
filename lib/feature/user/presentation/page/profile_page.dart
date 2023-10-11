@@ -37,6 +37,8 @@ class ProfilePage extends HookConsumerWidget {
           data: (data) => data,
         );
 
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
+
     Future<void> pickImg() async {
       final pickedFile =
           await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -68,9 +70,18 @@ class ProfilePage extends HookConsumerWidget {
               .readRoomMember(roomCode: roomCode);
         }
         Navigator.of(context).pop();
-        positiveSnackBar(context, 'プロフィールを編集しました');
+        final snackbar = CustomSnackBar(
+          context,
+          msg: 'プロフィールを編集しました',
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       } catch (e) {
-        negativeSnackBar(context, e.toString());
+        final snackbar = CustomSnackBar(
+          context,
+          msg: 'エラーが発生しました。\nもう一度お試しください。',
+          color: Colors.red,
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       }
     }
 

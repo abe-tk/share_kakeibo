@@ -69,6 +69,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
     final userData = ref.watch(userInfoProvider).whenOrNull(
           data: (data) => data,
         );
@@ -124,9 +125,18 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
 
                     Navigator.popUntil(
                         context, (Route<dynamic> route) => route.isFirst);
-                    positiveSnackBar(context, '【$roomName】に参加しました！');
+                    final snackbar = CustomSnackBar(
+                      context,
+                      msg: '【$roomName】に参加しました！',
+                    );
+                    scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
-                    negativeSnackBar(context, e.toString());
+                    final snackbar = CustomSnackBar(
+                      context,
+                      msg: 'エラーが発生しました。\nもう一度お試しください。',
+                      color: Colors.red,
+                    );
+                    scaffoldMessenger.showSnackBar(snackbar);
                   }
                 },
               ),

@@ -18,6 +18,8 @@ class InputCodePage extends HookConsumerWidget {
           data: (data) => data,
         );
 
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
+
     return Scaffold(
       appBar: const CustomAppBar(title: 'ROOMに参加する'),
       body: SingleChildScrollView(
@@ -59,10 +61,18 @@ class InputCodePage extends HookConsumerWidget {
 
                     Navigator.popUntil(
                         context, (Route<dynamic> route) => route.isFirst);
-                    positiveSnackBar(
-                        context, '【${ownerRoomName.value}】に参加しました！');
+                    final snackbar = CustomSnackBar(
+                      context,
+                      msg: '【${ownerRoomName.value}】に参加しました！',
+                    );
+                    scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
-                    negativeSnackBar(context, e.toString());
+                    final snackbar = CustomSnackBar(
+                      context,
+                      msg: 'エラーが発生しました。\nもう一度お試しください。',
+                      color: Colors.red,
+                    );
+                    scaffoldMessenger.showSnackBar(snackbar);
                   }
                 },
               ),

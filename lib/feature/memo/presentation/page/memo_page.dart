@@ -11,6 +11,7 @@ class MemoPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final memo = ref.watch(memoProvider);
     final memoNotifier = ref.watch(memoProvider.notifier);
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
     return Scaffold(
       appBar: const CustomAppBar(title: 'メモ'),
       drawer: const CustomDrawer(),
@@ -53,9 +54,18 @@ class MemoPage extends ConsumerWidget {
                           if (isDelete) {
                             try {
                               await memoNotifier.deleteMemo(id: data[index].id);
-                              // negativeSnackBar(context, 'メモを削除しました');
+                              final snackbar = CustomSnackBar(
+                                context,
+                                msg: 'メモを削除しました',
+                              );
+                              scaffoldMessenger.showSnackBar(snackbar);
                             } catch (e) {
-                              negativeSnackBar(context, e.toString());
+                              final snackbar = CustomSnackBar(
+                                context,
+                                msg: 'エラーが発生しました。\nもう一度お試しください。',
+                                color: Colors.red,
+                              );
+                              scaffoldMessenger.showSnackBar(snackbar);
                             }
                           }
                         },

@@ -20,6 +20,8 @@ class RoomNamePage extends HookConsumerWidget {
           data: (data) => data,
         );
 
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
+
     Future<void> changeRooName() async {
       try {
         changeRoomNameValidation(roomName.value);
@@ -28,9 +30,18 @@ class RoomNamePage extends HookConsumerWidget {
               newRoomName: roomName.value!,
             );
         Navigator.of(context).pop();
-        positiveSnackBar(context, 'Room名を変更しました');
+        final snackbar = CustomSnackBar(
+          context,
+          msg: 'Room名を変更しました',
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       } catch (e) {
-        negativeSnackBar(context, e.toString());
+        final snackbar = CustomSnackBar(
+          context,
+          msg: 'エラーが発生しました。\nもう一度お試しください。',
+          color: Colors.red,
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       }
     }
 

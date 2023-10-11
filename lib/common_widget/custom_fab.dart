@@ -18,12 +18,7 @@ class CustomFab extends HookConsumerWidget {
     final roomMember = ref.watch(roomMemberProvider).whenOrNull(
           data: (data) => data,
         );
-
-    final roomCode =
-        ref.watch(roomCodeProvider).whenOrNull(
-              data: (data) => data,
-            );
-
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
     return FloatingActionButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(90),
@@ -92,15 +87,26 @@ class CustomFab extends HookConsumerWidget {
                                   ) ??
                                   '';
                               if (memo.value.isNotEmpty) {
-                                await ref.watch(memoProvider.notifier).createMemo(
+                                await ref
+                                    .watch(memoProvider.notifier)
+                                    .createMemo(
                                       memo: memo.value,
                                     );
                                 memoController.clear();
                                 memo.value = '';
                               }
-                              // positiveSnackBar(context, 'メモを追加しました！');
+                              final snackbar = CustomSnackBar(
+                                context,
+                                msg: 'メモを追加しました！',
+                              );
+                              scaffoldMessenger.showSnackBar(snackbar);
                             } catch (e) {
-                              negativeSnackBar(context, e.toString());
+                              final snackbar = CustomSnackBar(
+                                context,
+                                msg: 'エラーが発生しました。\nもう一度お試しください。',
+                                color: Colors.red,
+                              );
+                              scaffoldMessenger.showSnackBar(snackbar);
                             }
                           },
                         ),

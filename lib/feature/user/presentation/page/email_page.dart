@@ -20,14 +20,15 @@ class EmailPage extends HookConsumerWidget {
       text: beforeUserData.email,
     );
 
-    final roomCode =
-        ref.watch(roomCodeProvider).whenOrNull(
-              data: (data) => data,
-            );
+    final roomCode = ref.watch(roomCodeProvider).whenOrNull(
+          data: (data) => data,
+        );
 
     final userData = ref.watch(userInfoProvider).whenOrNull(
           data: (data) => data,
         );
+
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'メールアドレスを変更'),
@@ -71,10 +72,19 @@ class EmailPage extends HookConsumerWidget {
                             );
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
-                        positiveSnackBar(context, 'メールアドレスを変更しました');
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: 'メールアドレスを変更しました',
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
                       }
                     } catch (e) {
-                      negativeSnackBar(context, e.toString());
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: 'エラーが発生しました。\nもう一度お試しください。',
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
                     }
                   },
                 ),

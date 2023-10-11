@@ -13,6 +13,7 @@ class AccountPage extends HookConsumerWidget {
     final userData = ref.watch(userInfoProvider).whenOrNull(
           data: (data) => data,
         );
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'アカウント'),
@@ -80,9 +81,18 @@ class AccountPage extends HookConsumerWidget {
                         await ref.read(userRepositoryProvider).deleteAccount();
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
-                        positiveSnackBar(context, 'アカウントを削除しました');
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: 'アカウントを削除しました',
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
-                        negativeSnackBar(context, e.toString());
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: 'エラーが発生しました。\nもう一度お試しください。',
+                          color: Colors.red,
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
                       }
                     }
                   }

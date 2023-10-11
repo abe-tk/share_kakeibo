@@ -50,15 +50,16 @@ class UpsertEventPage extends HookConsumerWidget {
       text: event?.memo ?? '',
     );
 
-    final roomCode =
-        ref.watch(roomCodeProvider).whenOrNull(
-              data: (data) => data,
-            );
+    final roomCode = ref.watch(roomCodeProvider).whenOrNull(
+          data: (data) => data,
+        );
 
     final eventData = ref.watch(eventProvider).whenOrNull(
           skipLoadingOnRefresh: false,
           data: (data) => data,
         );
+
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     List<String> _categories(List<Map<String, Object>> category) {
       List<String> categories = [];
@@ -84,9 +85,18 @@ class UpsertEventPage extends HookConsumerWidget {
         ref.read(totalAssetsStateProvider.notifier).calcTotalAssets(eventData!);
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-        positiveSnackBar(context, '$largeCategoryを追加しました！');
+        final snackbar = CustomSnackBar(
+          context,
+          msg: '$largeCategoryを追加しました！',
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       } catch (e) {
-        negativeSnackBar(context, e.toString());
+        final snackbar = CustomSnackBar(
+          context,
+          msg: 'エラーが発生しました。\nもう一度お試しください。',
+          color: Colors.red,
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       }
     }
 
@@ -105,9 +115,18 @@ class UpsertEventPage extends HookConsumerWidget {
             );
         ref.read(totalAssetsStateProvider.notifier).calcTotalAssets(eventData!);
         Navigator.of(context).pop();
-        positiveSnackBar(context, '$largeCategoryを編集しました！');
+        final snackbar = CustomSnackBar(
+          context,
+          msg: '$largeCategoryを編集しました！',
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       } catch (e) {
-        negativeSnackBar(context, e.toString());
+        final snackbar = CustomSnackBar(
+          context,
+          msg: 'エラーが発生しました。\nもう一度お試しください。',
+          color: Colors.red,
+        );
+        scaffoldMessenger.showSnackBar(snackbar);
       }
     }
 
@@ -138,9 +157,18 @@ class UpsertEventPage extends HookConsumerWidget {
 
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
-                    negativeSnackBar(context, '${event!.largeCategory}を削除しました');
+                    final snackbar = CustomSnackBar(
+                      context,
+                      msg: '${event!.largeCategory}を削除しました',
+                    );
+                    scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
-                    negativeSnackBar(context, e.toString());
+                    final snackbar = CustomSnackBar(
+                      context,
+                      msg: 'エラーが発生しました。\nもう一度お試しください。',
+                      color: Colors.red,
+                    );
+                    scaffoldMessenger.showSnackBar(snackbar);
                   }
                 },
               ),
