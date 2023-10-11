@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_kakeibo/common_widget/custom_list_tile.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class InvitationPage extends ConsumerWidget {
@@ -11,6 +10,7 @@ class InvitationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final roomCode = ref.watch(roomCodeProvider);
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     void showQrCode() {
       showModalBottomSheet(
@@ -77,7 +77,11 @@ class InvitationPage extends ConsumerWidget {
                     isTrailing: false,
                     onTaped: () {
                       Clipboard.setData(ClipboardData(text: data));
-                      appSnackBar(context, '招待コードをコピーしました！');
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: '招待コードをコピーしました！',
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
                     },
                   ),
                 ),

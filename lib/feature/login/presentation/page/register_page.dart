@@ -11,6 +11,7 @@ class RegisterPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginNotifier = ref.watch(loginRepositoryProvider);
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     // ユーザー名
     final userName = useState('');
@@ -75,13 +76,27 @@ class RegisterPage extends HookConsumerWidget {
                         );
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
-                        positiveSnackBar(context, 'アカウントの新規登録が完了しました');
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: 'アカウントの新規登録が完了しました',
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
                       } on FirebaseAuthException catch (e) {
                         Navigator.of(context).pop();
-                        negativeSnackBar(context, authValidation(e));
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: authValidation(e),
+                          color: Colors.red,
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
                         Navigator.of(context).pop();
-                        negativeSnackBar(context, e.toString());
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: 'エラーが発生しました。\nもう一度お試しください。',
+                          color: Colors.red,
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
                       }
                     },
                   ),

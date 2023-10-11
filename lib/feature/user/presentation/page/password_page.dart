@@ -22,6 +22,8 @@ class PasswordPage extends HookConsumerWidget {
           data: (data) => data,
         );
 
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
+
     return Scaffold(
       appBar: const CustomAppBar(title: 'パスワードを変更'),
       body: SafeArea(
@@ -73,10 +75,20 @@ class PasswordPage extends HookConsumerWidget {
                             .updatePassword(password: password.value);
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
-                        positiveSnackBar(context, 'パスワードを変更しました');
+
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: 'パスワードを変更しました',
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
                       }
                     } catch (e) {
-                      negativeSnackBar(context, e.toString());
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: 'エラーが発生しました。\nもう一度お試しください。',
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
                     }
                   },
                 ),

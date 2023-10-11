@@ -20,6 +20,8 @@ class RoomInfoPage extends HookConsumerWidget {
           data: (data) => data,
         );
 
+    final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
+
     return Scaffold(
       appBar: CustomAppBar(
         title: 'ROOM情報',
@@ -64,10 +66,19 @@ class RoomInfoPage extends HookConsumerWidget {
 
                 Navigator.popUntil(
                     context, (Route<dynamic> route) => route.isFirst);
-                negativeSnackBar(context, 'Roomから退出しました');
+                final snackbar = CustomSnackBar(
+                  context,
+                  msg: 'Roomから退出しました',
+                );
+                scaffoldMessenger.showSnackBar(snackbar);
               }
             } catch (e) {
-              negativeSnackBar(context, e.toString());
+              final snackbar = CustomSnackBar(
+                context,
+                msg: 'エラーが発生しました。\nもう一度お試しください。',
+                color: Colors.red,
+              );
+              scaffoldMessenger.showSnackBar(snackbar);
             }
           }
         },

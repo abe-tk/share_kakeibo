@@ -9,7 +9,7 @@ export 'feature/root_page.dart';
 export 'common_widget/custom_drawer.dart';
 export 'util/indicator.dart';
 export 'common_widget/non_data_case.dart';
-export 'util/snack_bar.dart';
+export 'common_widget/custom_snack_bar.dart';
 export 'common_widget/dialog/confirm_dialog.dart';
 export 'feature/user/presentation/widget/set_profile_image.dart';
 export 'common_widget/custom_batch.dart';
