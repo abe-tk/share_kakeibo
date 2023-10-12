@@ -94,12 +94,12 @@ class CustomFab extends HookConsumerWidget {
                                     );
                                 memoController.clear();
                                 memo.value = '';
+                                final snackbar = CustomSnackBar(
+                                  context,
+                                  msg: 'メモを追加しました！',
+                                );
+                                scaffoldMessenger.showSnackBar(snackbar);
                               }
-                              final snackbar = CustomSnackBar(
-                                context,
-                                msg: 'メモを追加しました！',
-                              );
-                              scaffoldMessenger.showSnackBar(snackbar);
                             } catch (e) {
                               final snackbar = CustomSnackBar(
                                 context,
