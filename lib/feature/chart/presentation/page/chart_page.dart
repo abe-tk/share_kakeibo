@@ -146,7 +146,7 @@ class ChartPage extends HookConsumerWidget {
                       width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsets.only(right: 16, bottom: 30),
                       child: Text(
-                        '合計 ${numberFormatter.format(pieChart.totalPrice)} 円',
+                        '合計 ${pieChart.totalPrice.separator} 円',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -209,7 +209,7 @@ class ChartPage extends HookConsumerWidget {
                             Padding(
                               padding: const EdgeInsets.only(right: 16.0),
                               child: Text(
-                                '${numberFormatter.format(pieChart.pieChartSourceData[index].price)} 円',
+                                '${pieChart.pieChartSourceData[index].price.separator} 円',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,

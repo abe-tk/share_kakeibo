@@ -64,8 +64,8 @@ class CalendarEventList extends StatelessWidget {
               padding: const EdgeInsets.only(right: 16.0),
               child: Text(
                 (largeCategory == '収入')
-                    ? '${numberFormatter.format(int.parse(price))} 円'
-                    : '- ${numberFormatter.format(int.parse(price))} 円',
+                    ? '${int.parse(price).separator} 円'
+                    : '- ${int.parse(price).separator} 円',
                 style: TextStyle(
                   color: (largeCategory == '収入')
                       ? CustomColor.incomeTextColor

@@ -140,7 +140,7 @@ class _TotalAssets extends StatelessWidget {
                 ),
               ),
               Text(
-                obscure ? '*** 円' : '${numberFormatter.format(price)} 円',
+                obscure ? '*** 円' : '${price.separator} 円',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
