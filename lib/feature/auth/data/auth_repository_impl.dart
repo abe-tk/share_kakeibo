@@ -1,22 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/constant/img_url.dart';
-import 'package:share_kakeibo/feature/login/data/login_repository.dart';
+import 'package:share_kakeibo/feature/auth/data/auth_repository.dart';
 import 'package:share_kakeibo/importer.dart';
 
-final loginRepositoryProvider = Provider(
-  (ref) => LoginRepositoryImpl(),
+final authRepositoryProvider = Provider(
+  (ref) => AuthRepositoryImpl(),
 );
 
-class LoginRepositoryImpl extends LoginRepository {
+class AuthRepositoryImpl extends AuthRepository {
   // 利用する外部サービスの指定
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<void> login({
-    // required String uidProvider,
+  Future<void> singIn({
     required String email,
     required String password,
   }) async {
@@ -25,10 +21,6 @@ class LoginRepositoryImpl extends LoginRepository {
         email: email,
         password: password,
       );
-
-      // uidをログインしたユーザのIDに変更
-      // TODO(takuro): 
-      // uidProvider = _auth.currentUser!.uid;
     } on FirebaseAuthException catch (e) {
       logger.e(e);
       rethrow;
@@ -39,9 +31,7 @@ class LoginRepositoryImpl extends LoginRepository {
   }
 
   @override
-  Future<void> register({
-    required String uidProvider,
-    required String userName,
+  Future<UserCredential> register({
     required String email,
     required String password,
   }) async {
@@ -50,31 +40,7 @@ class LoginRepositoryImpl extends LoginRepository {
         email: email,
         password: password,
       );
-      final uid = userCredential.user?.uid;
-
-      // uidをログインしたユーザのIDに変更
-      uidProvider = uid!;
-
-      // ユーザー情報の登録
-      await _firestore.collection('users').doc(uid).set({
-        'userName': userName,
-        'email': email,
-        'imgURL': imgURL,
-        'roomCode': uid,
-        'roomName': '$userNameのルーム',
-      });
-
-      // ルーム情報の登録
-      await _firestore
-          .collection('users')
-          .doc(uid)
-          .collection('room')
-          .doc(uid)
-          .set({
-        'userName': userName,
-        'imgURL': imgURL,
-        'owner': true,
-      });
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       logger.e(e);
       rethrow;
@@ -129,5 +95,10 @@ class LoginRepositoryImpl extends LoginRepository {
       logger.e(e);
       rethrow;
     }
+  }
+
+  @override
+  Stream<User?> checkSignIn() {
+    return _auth.authStateChanges();
   }
 }

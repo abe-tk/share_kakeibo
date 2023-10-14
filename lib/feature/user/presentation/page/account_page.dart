@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
-import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
+import 'package:share_kakeibo/feature/auth/data/auth_repository_impl.dart';
 import 'package:share_kakeibo/feature/user/data/user_repository.impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
@@ -46,7 +47,7 @@ class AccountPage extends HookConsumerWidget {
                     confirmButtonTextStyle: context.bodyMediumRed,
                   );
                   if (isLogout) {
-                    await ref.read(loginRepositoryProvider).signOut();
+                    await ref.read(authServiceProvider).signOut();
                     Navigator.popUntil(
                         context, (Route<dynamic> route) => route.isFirst);
                   }
@@ -86,7 +87,7 @@ class AccountPage extends HookConsumerWidget {
                           return;
                         }
 
-                        await ref.read(loginRepositoryProvider).reSingIn(
+                        await ref.read(authServiceProvider).reSingIn(
                               email: userData!.email,
                               password: password,
                             );

@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
-import 'package:share_kakeibo/feature/login/presentation/state/auth_state.dart';
+import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class LoginPage extends HookConsumerWidget {
@@ -11,7 +10,10 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginNotifier = ref.watch(loginRepositoryProvider);
+    // authのサービス
+    final authService = ref.watch(authServiceProvider);
+
+    // snackbarの設定
     final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     // メールアドレス
@@ -75,21 +77,26 @@ class LoginPage extends HookConsumerWidget {
                           return;
                         }
 
-                        await loginNotifier.login(
-                          // uidProvider: ref.read(uidProvider.notifier).state,
+                        // サインイン
+                        await authService.singIn(
                           email: email.value,
                           password: password.value,
                         );
-                        ref.read(uidProvider.notifier).update(
-                            (state) => FirebaseAuth.instance.currentUser!.uid);
+
+                        // uidの更新
+                        ref.invalidate(uidProvider);
+
+                        // ホーム画面へ遷移
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
+
+                        // テキストの初期化
                         clearText();
                       } on FirebaseAuthException catch (e) {
                         Navigator.of(context).pop();
                         final snackbar = CustomSnackBar(
                           context,
-                          msg: ref.watch(authNotifierProvider).getErrorMessage(e),
+                          msg: authService.getErrorMessage(e),
                           color: Colors.red,
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
