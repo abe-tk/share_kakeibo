@@ -69,6 +69,21 @@ class UpsertEventPage extends HookConsumerWidget {
       return categories;
     }
 
+    // 月日の選択
+    Future<DateTime> _selectDate(BuildContext context, DateTime date) async {
+      final DateTime? selected = await showDatePicker(
+        context: context,
+        initialDate: date,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2035),
+      );
+      if (selected == null) {
+        return date;
+      } else {
+        return selected;
+      }
+    }
+
     Future<void> addEvent() async {
       try {
         // 金額のバリデーション
@@ -205,7 +220,7 @@ class UpsertEventPage extends HookConsumerWidget {
                   icon: const Icon(Icons.calendar_today),
                   date: DateFormat.MMMEd('ja').format(date.value),
                   selectDate: () async =>
-                      date.value = await selectDate(context, date.value),
+                      date.value = await _selectDate(context, date.value),
                 ),
                 UpsertEventItem(
                   icon: const Icon(Icons.category),

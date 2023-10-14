@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // SnackBar表示のためののGlobalKey
-// 無理にProviderにする必要はないかも？
 final scaffoldKeyProvider = Provider(
   (ref) => GlobalKey<ScaffoldMessengerState>(),
 );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:share_kakeibo/feature/chart/application/pie_chart_service.dart';
 import 'package:share_kakeibo/feature/chart/presentation/state/pie_chart_state.dart';
 import 'package:share_kakeibo/importer.dart';
@@ -35,6 +36,21 @@ class ChartPage extends HookConsumerWidget {
       );
     }
 
+    // 月の選択
+    Future<DateTime> _selectMonth(BuildContext context, DateTime date) async {
+      var selectedMonth = await showMonthPicker(
+        context: context,
+        initialDate: date,
+        firstDate: DateTime(DateTime.now().year - 1),
+        lastDate: DateTime(DateTime.now().year + 1),
+      );
+      if (selectedMonth == null) {
+        return date;
+      } else {
+        return selectedMonth;
+      }
+    }
+
     return Scaffold(
       appBar: const CustomAppBar(),
       drawer: const CustomDrawer(),
@@ -45,7 +61,7 @@ class ChartPage extends HookConsumerWidget {
             TargetDate(
               month: month.value,
               onTapedDate: () async {
-                month.value = await selectMonth(
+                month.value = await _selectMonth(
                   context,
                   month.value,
                 );

@@ -44,7 +44,7 @@ class ResetPasswordPage extends HookConsumerWidget {
                   CustomElevatedButton(
                     text: '送信',
                     onTaped: () async {
-                      showProgressDialog(context);
+                      Indicator.show(context);
                       try {
                         // メールアドレスのバリデーション
                         final validMessage =
