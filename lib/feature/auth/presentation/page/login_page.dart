@@ -18,19 +18,19 @@ class LoginPage extends HookConsumerWidget {
 
     // メールアドレス
     final email = useState('');
-    final emailController = useState(TextEditingController());
+    final emailController = useTextEditingController();
 
     // パスワード
     final password = useState('');
-    final passwordController = useState(TextEditingController());
+    final passwordController = useTextEditingController();
 
     // パスワードの非表示
     final _isObscure = useState(true);
 
     // テキストの初期化
     void clearText() {
-      emailController.value.clear();
-      passwordController.value.clear();
+      emailController.clear();
+      passwordController.clear();
     }
 
     return Scaffold(
@@ -49,13 +49,13 @@ class LoginPage extends HookConsumerWidget {
                   const SizedBox(height: 32),
                   LoginTextField(
                     labelText: 'メールアドレス',
-                    controller: emailController.value,
+                    controller: emailController,
                     textChange: (text) => email.value = text,
                   ),
                   const SizedBox(height: 16),
                   LoginTextField(
                     labelText: 'パスワード（6桁以上）',
-                    controller: passwordController.value,
+                    controller: passwordController,
                     textChange: (text) => password.value = text,
                     isObscure: _isObscure.value,
                     isObscureChange: () => _isObscure.value = !_isObscure.value,
@@ -64,6 +64,7 @@ class LoginPage extends HookConsumerWidget {
                   CustomElevatedButton(
                     text: 'ログイン',
                     onTaped: () async {
+                      // ローディングの表示
                       Indicator.show(context);
                       try {
                         // メールアドレスとパスワードのバリデーション
@@ -94,10 +95,20 @@ class LoginPage extends HookConsumerWidget {
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
 
+                        // メッセージの表示
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: 'ログインしました',
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
+
                         // テキストの初期化
                         clearText();
                       } on FirebaseAuthException catch (e) {
+                        // ローディングの表示解除
                         Navigator.of(context).pop();
+
+                        // エラーメッセージの表示
                         final snackbar = CustomSnackBar(
                           context,
                           msg: authService.getErrorMessage(e),
@@ -105,6 +116,7 @@ class LoginPage extends HookConsumerWidget {
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
+                        // ローディングの表示解除
                         Navigator.of(context).pop();
                         logger.e(e.toString());
                       }

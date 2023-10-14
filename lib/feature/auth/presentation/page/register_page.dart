@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:share_kakeibo/constant/img_url.dart';
 import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
+import 'package:share_kakeibo/feature/room/application/room_service.dart';
+import 'package:share_kakeibo/feature/user/application/user_service.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class RegisterPage extends HookConsumerWidget {
@@ -15,20 +16,26 @@ class RegisterPage extends HookConsumerWidget {
     // authのサービス
     final authService = ref.watch(authServiceProvider);
 
+    // userのサービス
+    final userService = ref.watch(userServiceProvider);
+
+    // roomのサービス
+    final roomService = ref.watch(roomServiceProvider);
+
     // snackbarの設定
     final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     // ユーザー名
     final userName = useState('');
-    final userNameController = useState(TextEditingController());
+    final userNameController = useTextEditingController();
 
     // メールアドレス
     final email = useState('');
-    final emailController = useState(TextEditingController());
+    final emailController = useTextEditingController();
 
     // パスワード
     final password = useState('');
-    final passwordController = useState(TextEditingController());
+    final passwordController = useTextEditingController();
 
     // パスワードの非表示
     final _isObscure = useState(true);
@@ -49,19 +56,19 @@ class RegisterPage extends HookConsumerWidget {
                   const SizedBox(height: 32),
                   LoginTextField(
                     labelText: 'ユーザー名',
-                    controller: userNameController.value,
+                    controller: userNameController,
                     textChange: (text) => userName.value = text,
                   ),
                   const SizedBox(height: 16),
                   LoginTextField(
                     labelText: 'メールアドレス',
-                    controller: emailController.value,
+                    controller: emailController,
                     textChange: (text) => email.value = text,
                   ),
                   const SizedBox(height: 16),
                   LoginTextField(
                     labelText: 'パスワード（6桁以上）',
-                    controller: passwordController.value,
+                    controller: passwordController,
                     textChange: (text) => password.value = text,
                     isObscure: _isObscure.value,
                     isObscureChange: () => _isObscure.value = !_isObscure.value,
@@ -95,31 +102,21 @@ class RegisterPage extends HookConsumerWidget {
                         );
                         final uid = userCredential.user!.uid;
 
-                        /// 以下の処理はUserのProviderで行いたい
                         // ユーザー情報の登録
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(uid)
-                            .set({
-                          'userName': userName.value,
-                          'email': email.value,
-                          'imgURL': imgURL,
-                          'roomCode': uid,
-                          'roomName': '${userName.value}のルーム',
-                        });
-                        // ルーム情報の登録
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(uid)
-                            .collection('room')
-                            .doc(uid)
-                            .set({
-                          'userName': userName.value,
-                          'imgURL': imgURL,
-                          'owner': true,
-                        });
+                        userService.createUser(
+                          uid: uid,
+                          userName: userName.value,
+                          email: email.value,
+                          imgURL: imgURL,
+                        );
 
-                        /// 上記の処理はUserのProviderで行いたい
+                        // ルームの作成
+                        roomService.createRoom(
+                          uid: uid,
+                          userName: userName.value,
+                          email: email.value,
+                          imgURL: imgURL,
+                        );
 
                         // uidの更新
                         ref.invalidate(uidProvider);
@@ -127,13 +124,18 @@ class RegisterPage extends HookConsumerWidget {
                         // ホーム画面へ遷移
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
+
+                        // メッセージの表示
                         final snackbar = CustomSnackBar(
                           context,
                           msg: 'アカウントの新規登録が完了しました',
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } on FirebaseAuthException catch (e) {
+                        // ローディングの表示解除
                         Navigator.of(context).pop();
+
+                        // エラーメッセージの表示
                         final snackbar = CustomSnackBar(
                           context,
                           msg: authService.getErrorMessage(e),
@@ -141,6 +143,7 @@ class RegisterPage extends HookConsumerWidget {
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
+                        // ローディングの表示解除
                         Navigator.of(context).pop();
                         logger.e(e.toString());
                       }

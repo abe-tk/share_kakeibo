@@ -18,7 +18,7 @@ class ResetPasswordPage extends HookConsumerWidget {
 
     // メールアドレス
     final email = useState('');
-    final emailController = useState(TextEditingController());
+    final emailController = useTextEditingController();
 
     return Scaffold(
       body: SafeArea(
@@ -41,7 +41,7 @@ class ResetPasswordPage extends HookConsumerWidget {
                   const SizedBox(height: 32),
                   LoginTextField(
                     labelText: 'メールアドレス',
-                    controller: emailController.value,
+                    controller: emailController,
                     textChange: (text) => email.value = text,
                   ),
                   const SizedBox(height: 16),
@@ -69,13 +69,18 @@ class ResetPasswordPage extends HookConsumerWidget {
                         // メール送信処理後、ログイン画面へ戻る
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
+
+                        // メッセージの表示
                         final snackbar = CustomSnackBar(
                           context,
                           msg: 'パスワード再設定メールを送信しました',
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } on FirebaseAuthException catch (e) {
+                        // ローディングの表示解除
                         Navigator.of(context).pop();
+
+                        // エラーメッセージの表示
                         final snackbar = CustomSnackBar(
                           context,
                           msg: authService.getErrorMessage(e),
@@ -83,6 +88,7 @@ class ResetPasswordPage extends HookConsumerWidget {
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
+                        // ローディングの表示解除
                         Navigator.of(context).pop();
                         logger.e(e.toString());
                       }

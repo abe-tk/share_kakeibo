@@ -14,6 +14,27 @@ class UserRepositoryImpl extends UserRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
+  Future<void> createUser({
+    required String uid,
+    required String userName,
+    required String email,
+    required String imgURL,
+  }) async {
+    try {
+      await _firestore.collection('users').doc(uid).set({
+        'userName': userName,
+        'email': email,
+        'imgURL': imgURL,
+        'roomCode': uid,
+        'roomName': '$userNameのルーム',
+      });
+    } on Exception catch (e) {
+      logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
   Future<UserData?> readUser({
     required String uid,
   }) async {
