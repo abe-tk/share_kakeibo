@@ -19,6 +19,27 @@ class CalendarEventList extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  Icon _categoryIcon({
+    required List<Map<String, Object>> category,
+    required String smallCategory,
+  }) {
+    List<String> categories = [];
+    for (int i = 0; i < category.length; i++) {
+      if (smallCategory == category[i]['category']) {
+        return Icon(
+          category[i]['icon'] as IconData,
+          color: category[i]['color'] as Color,
+          size: 30,
+        );
+      }
+    }
+    return const Icon(
+      Icons.question_mark,
+      color: Colors.grey,
+      size: 30,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,7 +55,15 @@ class CalendarEventList extends StatelessWidget {
                 // カテゴリのアイコン
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: viewIcon(smallCategory),
+                  child: (largeCategory == '収入')
+                      ? _categoryIcon(
+                          category: Category.plus,
+                          smallCategory: smallCategory,
+                        )
+                      : _categoryIcon(
+                          category: Category.minus,
+                          smallCategory: smallCategory,
+                        ),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,

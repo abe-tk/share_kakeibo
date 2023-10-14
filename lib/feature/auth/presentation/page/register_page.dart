@@ -66,7 +66,7 @@ class RegisterPage extends HookConsumerWidget {
                   CustomElevatedButton(
                     text: '新規登録',
                     onTaped: () async {
-                      showProgressDialog(context);
+                      Indicator.show(context);
                       try {
                         // ユーザー名、メールアドレス、パスワードのバリデーション
                         final validMessage = Validator.validateUserName(

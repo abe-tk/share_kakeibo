@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:share_kakeibo/util/timestamp_converter.dart';
+import 'package:share_kakeibo/util/converter/timestamp_converter.dart';
 
 part 'memo.freezed.dart';
 part 'memo.g.dart';

@@ -60,7 +60,7 @@ class LoginPage extends HookConsumerWidget {
                   CustomElevatedButton(
                     text: 'ログイン',
                     onTaped: () async {
-                      showProgressDialog(context);
+                      Indicator.show(context);
                       try {
                         // メールアドレスとパスワードのバリデーション
                         final validMessage = Validator.validateEmail(

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -5,8 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:share_kakeibo/common_widget/custom_text_field.dart';
 import 'package:share_kakeibo/importer.dart';
 import 'dart:io';
-
-import 'package:share_kakeibo/util/storage.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({
@@ -47,11 +47,21 @@ class ProfilePage extends HookConsumerWidget {
       }
     }
 
+    // fireStorageにimgFileを追加（「Userのプロフィール画像を更新」のため）
+    Future<String> _createImgFile(File imgFile) async {
+      final task = await FirebaseStorage.instance
+          .ref(
+              'users/${FirebaseFirestore.instance.collection('users').doc().id}')
+          .putFile(imgFile);
+      final imgURL = await task.ref.getDownloadURL();
+      return imgURL;
+    }
+
     Future<void> updateProfile() async {
       try {
         // プロフィール画像に変更があれば更新
         if (imgFilePath.value != '') {
-          imgURL.value = await Storage().createImgFile(File(imgFilePath.value));
+          imgURL.value = await _createImgFile(File(imgFilePath.value));
         }
 
         // ユーザー名のバリデーション
