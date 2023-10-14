@@ -41,7 +41,11 @@ class RegisterPage extends HookConsumerWidget {
               margin: const EdgeInsets.symmetric(horizontal: 36),
               child: Column(
                 children: [
-                  const Logo(),
+                  const Image(
+                    image: AssetImage('assets/image/app_theme.png'),
+                    height: 160,
+                    width: 160,
+                  ),
                   const SizedBox(height: 32),
                   LoginTextField(
                     labelText: 'ユーザー名',
@@ -114,6 +118,7 @@ class RegisterPage extends HookConsumerWidget {
                           'imgURL': imgURL,
                           'owner': true,
                         });
+
                         /// 上記の処理はUserのProviderで行いたい
 
                         // uidの更新

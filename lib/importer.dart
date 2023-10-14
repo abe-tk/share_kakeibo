@@ -1,6 +1,5 @@
 export 'app.dart';
 export 'common_widget/custom_pie_chart.dart';
-export 'feature/auth/presentation/widget/logo.dart';
 export 'feature/calendar/presentation/widget/calendar_event_list.dart';
 export 'feature/event/presentation/widget/upsert_event_item.dart';
 export 'feature/auth/presentation/widget/login_text_field.dart';

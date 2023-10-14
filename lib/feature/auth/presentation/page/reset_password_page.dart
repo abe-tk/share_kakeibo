@@ -28,7 +28,11 @@ class ResetPasswordPage extends HookConsumerWidget {
               margin: const EdgeInsets.symmetric(horizontal: 36),
               child: Column(
                 children: [
-                  const Logo(),
+                  const Image(
+                    image: AssetImage('assets/image/app_theme.png'),
+                    height: 160,
+                    width: 160,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'パスワード再設定メールを送信',
