@@ -38,7 +38,7 @@ export 'feature/room/presentation/state/room_name_state.dart';
 export 'feature/room/presentation/state/room_member_state.dart';
 export 'feature/user/presentation/state/payment_user_state.dart';
 export 'feature/user/presentation/state/user_state.dart';
-export 'util/validator/validator.dart';
+export 'util/validator.dart';
 export 'util/icon_utility.dart';
 export 'util/select_date_utility.dart';
 export 'util/logger.dart';

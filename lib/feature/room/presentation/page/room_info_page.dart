@@ -37,7 +37,9 @@ class RoomInfoPage extends HookConsumerWidget {
           );
           if (isExit) {
             try {
-              exitRoomValidation(ref.watch(uidProvider), roomCode!);
+              if (ref.watch(uidProvider) == roomCode!) {
+                throw 'RoomOwnerは退出できません';
+              }
               final password = await InputTextDialog.show(
                 context: context,
                 title: 'パスワードを入力',
@@ -46,7 +48,19 @@ class RoomInfoPage extends HookConsumerWidget {
                 confirmButtonText: '退出する',
               );
               if (password != null) {
-                passwordValidation(password);
+                // パスワードのバリデーション
+                final validMessage =
+                    Validator.validatePassword(value: password);
+                if (validMessage != null) {
+                  final snackbar = CustomSnackBar(
+                    context,
+                    msg: validMessage,
+                    color: Colors.red,
+                  );
+                  scaffoldMessenger.showSnackBar(snackbar);
+                  return;
+                }
+
                 await ref.read(loginRepositoryProvider).reSingIn(
                       email: userData.email,
                       password: password,
@@ -73,12 +87,7 @@ class RoomInfoPage extends HookConsumerWidget {
                 scaffoldMessenger.showSnackBar(snackbar);
               }
             } catch (e) {
-              final snackbar = CustomSnackBar(
-                context,
-                msg: 'エラーが発生しました。\nもう一度お試しください。',
-                color: Colors.red,
-              );
-              scaffoldMessenger.showSnackBar(snackbar);
+              logger.e(e.toString());
             }
           }
         },

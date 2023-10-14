@@ -86,27 +86,32 @@ class CustomFab extends HookConsumerWidget {
                                     confirmButtonText: '追加',
                                   ) ??
                                   '';
-                              if (memo.value.isNotEmpty) {
-                                await ref
-                                    .watch(memoProvider.notifier)
-                                    .createMemo(
-                                      memo: memo.value,
-                                    );
-                                memoController.clear();
-                                memo.value = '';
+
+                              // メモのバリデーション
+                              final validMessage =
+                                  Validator.validateMemo(value: memo.value);
+                              if (validMessage != null) {
                                 final snackbar = CustomSnackBar(
                                   context,
-                                  msg: 'メモを追加しました！',
+                                  msg: validMessage,
+                                  color: Colors.red,
                                 );
                                 scaffoldMessenger.showSnackBar(snackbar);
+                                return;
                               }
-                            } catch (e) {
+                              
+                              await ref.watch(memoProvider.notifier).createMemo(
+                                    memo: memo.value,
+                                  );
+                              memoController.clear();
+                              memo.value = '';
                               final snackbar = CustomSnackBar(
                                 context,
-                                msg: 'エラーが発生しました。\nもう一度お試しください。',
-                                color: Colors.red,
+                                msg: 'メモを追加しました！',
                               );
                               scaffoldMessenger.showSnackBar(snackbar);
+                            } catch (e) {
+                              logger.e(e.toString());
                             }
                           },
                         ),

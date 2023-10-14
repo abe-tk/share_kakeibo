@@ -6,7 +6,7 @@ import 'package:share_kakeibo/common_widget/custom_text_field.dart';
 import 'package:share_kakeibo/importer.dart';
 import 'dart:io';
 
-import 'package:share_kakeibo/util/storage/storage.dart';
+import 'package:share_kakeibo/util/storage.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({
@@ -53,6 +53,19 @@ class ProfilePage extends HookConsumerWidget {
         if (imgFilePath.value != '') {
           imgURL.value = await Storage().createImgFile(File(imgFilePath.value));
         }
+
+        // ユーザー名のバリデーション
+        final validMessage = Validator.validateUserName(value: userName.value);
+        if (validMessage != null) {
+          final snackbar = CustomSnackBar(
+            context,
+            msg: validMessage,
+            color: Colors.red,
+          );
+          scaffoldMessenger.showSnackBar(snackbar);
+          return;
+        }
+
         // ユーザー情報の更新
         await ref.read(userInfoProvider.notifier).updateUser(
               uid: ref.watch(uidProvider),
@@ -76,12 +89,7 @@ class ProfilePage extends HookConsumerWidget {
         );
         scaffoldMessenger.showSnackBar(snackbar);
       } catch (e) {
-        final snackbar = CustomSnackBar(
-          context,
-          msg: 'エラーが発生しました。\nもう一度お試しください。',
-          color: Colors.red,
-        );
-        scaffoldMessenger.showSnackBar(snackbar);
+        logger.e(e.toString());
       }
     }
 

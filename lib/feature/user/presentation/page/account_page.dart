@@ -73,7 +73,19 @@ class AccountPage extends HookConsumerWidget {
                     );
                     if (password != null) {
                       try {
-                        passwordValidation(password);
+                        // パスワードのバリデーション
+                        final validMessage =
+                            Validator.validatePassword(value: password);
+                        if (validMessage != null) {
+                          final snackbar = CustomSnackBar(
+                            context,
+                            msg: validMessage,
+                            color: Colors.red,
+                          );
+                          scaffoldMessenger.showSnackBar(snackbar);
+                          return;
+                        }
+
                         await ref.read(loginRepositoryProvider).reSingIn(
                               email: userData!.email,
                               password: password,
@@ -87,12 +99,7 @@ class AccountPage extends HookConsumerWidget {
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
-                        final snackbar = CustomSnackBar(
-                          context,
-                          msg: 'エラーが発生しました。\nもう一度お試しください。',
-                          color: Colors.red,
-                        );
-                        scaffoldMessenger.showSnackBar(snackbar);
+                        logger.e(e.toString());
                       }
                     }
                   }

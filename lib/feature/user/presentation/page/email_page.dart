@@ -15,6 +15,7 @@ class EmailPage extends HookConsumerWidget {
           data: (data) => data,
         );
 
+    // TODO(takuro): ここでbeforeUserDataを参照すると更新時にエラーになるため、前画面から値を受け取るようにする
     final email = useState(beforeUserData!.email);
     final emailController = useTextEditingController(
       text: beforeUserData.email,
@@ -49,7 +50,20 @@ class EmailPage extends HookConsumerWidget {
                   text: '変更',
                   onTaped: () async {
                     try {
-                      updateEmailValidation(email.value, beforeUserData.email);
+                      // メールアドレスのバリデーション
+                      final validMessage =
+                          Validator.validateEmail(value: email.value);
+                      if (validMessage != null) {
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: validMessage,
+                          color: Colors.red,
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
+                        return;
+                      }
+
+                      // パスワードの入力
                       final password = await InputTextDialog.show(
                         context: context,
                         title: 'パスワードを入力',
@@ -58,12 +72,26 @@ class EmailPage extends HookConsumerWidget {
                         confirmButtonText: '変更',
                       );
                       if (password != null) {
-                        passwordValidation(password);
+                        // パスワードのバリデーション
+                        final validMessage =
+                            Validator.validatePassword(value: password);
+                        if (validMessage != null) {
+                          final snackbar = CustomSnackBar(
+                            context,
+                            msg: validMessage,
+                            color: Colors.red,
+                          );
+                          scaffoldMessenger.showSnackBar(snackbar);
+                          return;
+                        }
+
+                        // ユーザー情報変更のために再ログイン
                         await ref.read(loginRepositoryProvider).reSingIn(
                               email: userData!.email,
                               password: password,
                             );
-                        email.value = emailController.value.text;
+
+                        // ユーザー情報の更新
                         ref.read(userInfoProvider.notifier).updateUser(
                               uid: ref.watch(uidProvider),
                               roomCode: roomCode!,
@@ -79,12 +107,7 @@ class EmailPage extends HookConsumerWidget {
                         scaffoldMessenger.showSnackBar(snackbar);
                       }
                     } catch (e) {
-                      final snackbar = CustomSnackBar(
-                        context,
-                        msg: 'エラーが発生しました。\nもう一度お試しください。',
-                        color: Colors.red,
-                      );
-                      scaffoldMessenger.showSnackBar(snackbar);
+                      logger.e(e.toString());
                     }
                   },
                 ),

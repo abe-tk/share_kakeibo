@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/feature/login/presentation/state/auth_state.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class LoginPage extends HookConsumerWidget {
@@ -59,15 +60,28 @@ class LoginPage extends HookConsumerWidget {
                     onTaped: () async {
                       showProgressDialog(context);
                       try {
-                        loginValidation(
-                          email.value,
-                          password.value,
-                        );
+                        // メールアドレスとパスワードのバリデーション
+                        final validMessage = Validator.validateEmail(
+                                value: email.value) ??
+                            Validator.validatePassword(value: password.value);
+                        if (validMessage != null) {
+                          Navigator.of(context).pop();
+                          final snackbar = CustomSnackBar(
+                            context,
+                            msg: validMessage,
+                            color: Colors.red,
+                          );
+                          scaffoldMessenger.showSnackBar(snackbar);
+                          return;
+                        }
+
                         await loginNotifier.login(
-                          uidProvider: ref.read(uidProvider.notifier).state,
+                          // uidProvider: ref.read(uidProvider.notifier).state,
                           email: email.value,
                           password: password.value,
                         );
+                        ref.read(uidProvider.notifier).update(
+                            (state) => FirebaseAuth.instance.currentUser!.uid);
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
                         clearText();
@@ -75,18 +89,13 @@ class LoginPage extends HookConsumerWidget {
                         Navigator.of(context).pop();
                         final snackbar = CustomSnackBar(
                           context,
-                          msg: authValidation(e),
+                          msg: ref.watch(authNotifierProvider).getErrorMessage(e),
                           color: Colors.red,
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
                         Navigator.of(context).pop();
-                        final snackbar = CustomSnackBar(
-                          context,
-                          msg: 'エラーが発生しました。\nもう一度お試しください。',
-                          color: Colors.red,
-                        );
-                        scaffoldMessenger.showSnackBar(snackbar);
+                        logger.e(e.toString());
                       }
                     },
                   ),
