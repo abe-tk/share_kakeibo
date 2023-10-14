@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/common_widget/custom_snack_bar.dart';
+import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class MyApp extends HookConsumerWidget {
@@ -13,6 +13,9 @@ class MyApp extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // SnackBar表示のためののGlobalKey
     final scaffoldKey = ref.watch(scaffoldKeyProvider);
+
+    // authのサービス
+    final authService = ref.watch(authServiceProvider);
 
     // レスポンシブ対応のためflutter_screenUtilを適応
     return ScreenUtilInit(
@@ -34,7 +37,7 @@ class MyApp extends HookConsumerWidget {
         theme: CustomTheme.themeData(context),
         onGenerateRoute: RouteGenerator.generateRoute,
         home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
+          stream: authService.checkSignIn(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const SizedBox();

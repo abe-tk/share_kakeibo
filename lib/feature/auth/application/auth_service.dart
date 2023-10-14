@@ -1,41 +1,38 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/login/data/login_repository.dart';
-import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/feature/auth/data/auth_repository.dart';
+import 'package:share_kakeibo/feature/auth/data/auth_repository_impl.dart';
 
-final authNotifierProvider = Provider<AuthNotifier>(
-  (ref) => AuthNotifier(repository: ref.watch(loginRepositoryProvider)),
+final authServiceProvider = Provider<AuthService>(
+  (ref) => AuthService(repository: ref.watch(authRepositoryProvider)),
 );
 
-class AuthNotifier {
-  AuthNotifier({
-    required LoginRepository repository,
+class AuthService {
+  AuthService({
+    required AuthRepository repository,
   }) : _repository = repository;
 
-  final LoginRepository _repository;
+  final AuthRepository _repository;
 
-  Future<void> login({
+  Future<void> singIn({
     required String email,
     required String password,
   }) async {
-    await _repository.login(
+    await _repository.singIn(
       email: email,
       password: password,
     );
   }
 
-  Future<void> register({
-    required String uidProvider,
-    required String userName,
+  Future<UserCredential> register({
     required String email,
     required String password,
   }) async {
-    await _repository.register(
-      uidProvider: uidProvider,
-      userName: userName,
+    final userCredential = await _repository.register(
       email: email,
       password: password,
     );
+    return userCredential;
   }
 
   Future<void> resetPassword({
@@ -58,6 +55,10 @@ class AuthNotifier {
 
   Future<void> signOut() {
     return _repository.signOut();
+  }
+
+  Stream<User?> checkSignIn() {
+    return _repository.checkSignIn();
   }
 
 /*
