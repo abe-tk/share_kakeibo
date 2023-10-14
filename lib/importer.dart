@@ -34,7 +34,7 @@ export 'feature/home/presentation/state/total_assets_state.dart';
 export 'feature/room/presentation/state/room_code_state.dart';
 export 'feature/room/presentation/state/room_name_state.dart';
 export 'feature/room/presentation/state/room_member_state.dart';
-export 'feature/user/presentation/state/payment_user_state.dart';
+export 'feature/event/presentation/state/payment_user_state.dart';
 export 'feature/user/presentation/state/user_state.dart';
 export 'util/validator.dart';
 export 'util/logger.dart';

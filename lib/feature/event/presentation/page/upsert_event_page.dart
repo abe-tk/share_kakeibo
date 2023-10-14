@@ -54,11 +54,6 @@ class UpsertEventPage extends HookConsumerWidget {
           data: (data) => data,
         );
 
-    final eventData = ref.watch(eventProvider).whenOrNull(
-          skipLoadingOnRefresh: false,
-          data: (data) => data,
-        );
-
     final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
     List<String> _categories(List<Map<String, Object>> category) {
@@ -233,7 +228,7 @@ class UpsertEventPage extends HookConsumerWidget {
                 UpsertEventItem(
                   icon: const Icon(Icons.person),
                   initialItem: paymentUser.value.toString(),
-                  items: ref.watch(paymentUserProvider),
+                  items: ref.watch(paymentUsers),
                   selectItem: (value) => paymentUser.value = value!,
                 ),
                 UpsertEventItem(
