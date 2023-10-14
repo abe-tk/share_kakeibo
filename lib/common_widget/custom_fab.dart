@@ -15,9 +15,6 @@ class CustomFab extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final memo = useState('');
     final memoController = useTextEditingController();
-    final roomMember = ref.watch(roomMemberProvider).whenOrNull(
-          data: (data) => data,
-        );
     final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
     return FloatingActionButton(
       shape: RoundedRectangleBorder(
@@ -51,9 +48,6 @@ class CustomFab extends HookConsumerWidget {
                           title: const Text('収入の追加'),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () async {
-                            await ref
-                                .read(paymentUserProvider.notifier)
-                                .fetchPaymentUser(roomMember!);
                             Navigator.pushNamed(context, '/addIncomeEventPage');
                           },
                         ),
@@ -63,9 +57,6 @@ class CustomFab extends HookConsumerWidget {
                           title: const Text('支出の追加'),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () async {
-                            await ref
-                                .read(paymentUserProvider.notifier)
-                                .fetchPaymentUser(roomMember!);
                             Navigator.pushNamed(
                                 context, '/addSpendingEventPage');
                           },

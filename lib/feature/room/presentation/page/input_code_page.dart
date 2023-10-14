@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/common_widget/custom_text_field.dart';
-import 'package:share_kakeibo/feature/room/data/room_name_repository_impl.dart';
+import 'package:share_kakeibo/feature/room/data/room_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class InputCodePage extends HookConsumerWidget {
@@ -52,7 +52,7 @@ class InputCodePage extends HookConsumerWidget {
                     }
 
                     ownerRoomName.value = await ref
-                        .read(roomNameRepositoryProvider)
+                        .read(roomRepositoryProvider)
                         .readRoomName(roomCode: roomCode.value);
                     ref.read(userInfoProvider.notifier).updateUser(
                         uid: ref.watch(uidProvider),

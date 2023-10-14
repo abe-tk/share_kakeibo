@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/room/data/room_name_repository_impl.dart';
+import 'package:share_kakeibo/feature/room/data/room_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 final roomNameProvider = AsyncNotifierProvider<RoomName, String>(RoomName.new);
@@ -11,7 +11,7 @@ class RoomName extends AsyncNotifier<String> {
   Future<String> readRoomName({
     required String roomCode,
   }) async {
-    final repository = ref.watch(roomNameRepositoryProvider);
+    final repository = ref.watch(roomRepositoryProvider);
     return repository.readRoomName(
       roomCode: roomCode,
     );
@@ -29,7 +29,7 @@ class RoomName extends AsyncNotifier<String> {
     required String roomCode,
     required String newRoomName,
   }) async {
-    final repository = ref.watch(roomNameRepositoryProvider);
+    final repository = ref.watch(roomRepositoryProvider);
 
     // Stateに[AsyncLoading()]を代入し非同期処理が開始
     state = const AsyncLoading();

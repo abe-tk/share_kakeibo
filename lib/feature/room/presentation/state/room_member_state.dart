@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/room/data/room_member_repository_impl.dart';
+import 'package:share_kakeibo/feature/room/data/room_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 final roomMemberProvider =
@@ -11,7 +11,7 @@ class RoomNameState extends AsyncNotifier<List<RoomMember>> {
   Future<List<RoomMember>> readRoomMember({
     required String roomCode,
   }) async {
-    final repository = ref.watch(roomMemberRepositoryProvider);
+    final repository = ref.watch(roomRepositoryProvider);
     return repository.readRoomMember(
       roomCode: roomCode,
     );
@@ -29,7 +29,7 @@ class RoomNameState extends AsyncNotifier<List<RoomMember>> {
     required String userName,
     required String imgURL,
   }) async {
-    final repository = ref.watch(roomMemberRepositoryProvider);
+    final repository = ref.watch(roomRepositoryProvider);
 
     state = const AsyncLoading();
 
@@ -49,7 +49,7 @@ class RoomNameState extends AsyncNotifier<List<RoomMember>> {
     required String roomCode,
     required String userName,
   }) async {
-    final repository = ref.watch(roomMemberRepositoryProvider);
+    final repository = ref.watch(roomRepositoryProvider);
 
     state = const AsyncLoading();
 

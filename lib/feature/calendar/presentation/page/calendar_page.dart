@@ -29,11 +29,6 @@ class CalendarPage extends HookConsumerWidget {
             .toUtc()
             .add(const Duration(hours: 9)));
 
-    // ルームメンバー
-    final roomMember = ref.watch(roomMemberProvider).whenOrNull(
-          data: (data) => data,
-        );
-
     // カレンダーのイベントを日付ごとにまとめる
     final _events = LinkedHashMap<DateTime, List>(
       equals: isSameDay,
@@ -94,9 +89,6 @@ class CalendarPage extends HookConsumerWidget {
                                 paymentUser: event.paymentUser,
                                 memo: event.memo,
                                 onTap: () {
-                                  ref
-                                      .read(paymentUserProvider.notifier)
-                                      .fetchPaymentUser(roomMember!);
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) {
