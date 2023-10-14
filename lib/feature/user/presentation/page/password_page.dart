@@ -14,8 +14,6 @@ class PasswordPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final password = useState('');
     final passwordController = useTextEditingController(text: '');
-    final checkPassword = useState('');
-    final checkPasswordController = useTextEditingController(text: '');
     final _isObscurePassword = useState(true);
 
     final userData = ref.watch(userInfoProvider).whenOrNull(
@@ -41,22 +39,24 @@ class PasswordPage extends HookConsumerWidget {
                   isObscureChange: () =>
                       _isObscurePassword.value = !_isObscurePassword.value,
                 ),
-                const SubTitle(title: '変更後のパスワード（確認用）'),
-                CustomTextField(
-                  hintText: 'パスワード（6〜20文字）',
-                  controller: checkPasswordController,
-                  textChange: (text) => checkPassword.value = text,
-                  isObscure: _isObscurePassword.value,
-                  isObscureChange: () =>
-                      _isObscurePassword.value = !_isObscurePassword.value,
-                ),
                 const SizedBox(height: 16),
                 CustomElevatedButton(
                   text: '変更',
                   onTaped: () async {
                     try {
-                      updatePasswordValidation(
-                          password.value, checkPassword.value);
+                      // パスワードのバリデーション
+                      final validMessage =
+                          Validator.validatePassword(value: password.value);
+                      if (validMessage != null) {
+                        final snackbar = CustomSnackBar(
+                          context,
+                          msg: validMessage,
+                          color: Colors.red,
+                        );
+                        scaffoldMessenger.showSnackBar(snackbar);
+                        return;
+                      }
+
                       final reSignInPwd = await InputTextDialog.show(
                         context: context,
                         title: 'パスワードを入力',
@@ -65,7 +65,19 @@ class PasswordPage extends HookConsumerWidget {
                         confirmButtonText: '変更',
                       );
                       if (reSignInPwd != null) {
-                        passwordValidation(password);
+                        // パスワードのバリデーション
+                        final validMessage =
+                            Validator.validatePassword(value: reSignInPwd);
+                        if (validMessage != null) {
+                          final snackbar = CustomSnackBar(
+                            context,
+                            msg: validMessage,
+                            color: Colors.red,
+                          );
+                          scaffoldMessenger.showSnackBar(snackbar);
+                          return;
+                        }
+
                         await ref.read(loginRepositoryProvider).reSingIn(
                               email: userData!.email,
                               password: reSignInPwd,
@@ -83,12 +95,7 @@ class PasswordPage extends HookConsumerWidget {
                         scaffoldMessenger.showSnackBar(snackbar);
                       }
                     } catch (e) {
-                      final snackbar = CustomSnackBar(
-                        context,
-                        msg: 'エラーが発生しました。\nもう一度お試しください。',
-                        color: Colors.red,
-                      );
-                      scaffoldMessenger.showSnackBar(snackbar);
+                      logger.e(e.toString());
                     }
                   },
                 ),

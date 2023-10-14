@@ -131,12 +131,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                     );
                     scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
-                    final snackbar = CustomSnackBar(
-                      context,
-                      msg: 'エラーが発生しました。\nもう一度お試しください。',
-                      color: Colors.red,
-                    );
-                    scaffoldMessenger.showSnackBar(snackbar);
+                    logger.e(e.toString());
                   }
                 },
               ),

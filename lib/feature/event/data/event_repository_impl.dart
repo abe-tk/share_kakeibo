@@ -62,7 +62,6 @@ class EventRepositoryImpl extends EventRepository {
     required String paymentUser,
   }) async {
     try {
-      addEventValidation(price);
       await _firestore
           .collection('users')
           .doc(roomCode)
@@ -118,7 +117,6 @@ class EventRepositoryImpl extends EventRepository {
     required String paymentUser,
   }) async {
     try {
-      addEventValidation(price);
       await _firestore
           .collection('users')
           .doc(roomCode)

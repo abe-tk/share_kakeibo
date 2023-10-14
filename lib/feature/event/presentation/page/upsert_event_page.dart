@@ -71,7 +71,19 @@ class UpsertEventPage extends HookConsumerWidget {
 
     Future<void> addEvent() async {
       try {
-        addEventValidation(price.value);
+        // 金額のバリデーション
+        final validMessage = Validator.validatePrice(value: price.value);
+        if (validMessage != null) {
+          final snackbar = CustomSnackBar(
+            context,
+            msg: validMessage,
+            color: Colors.red,
+          );
+          scaffoldMessenger.showSnackBar(snackbar);
+          return;
+        }
+
+        // イベントの追加
         await ref.read(eventProvider.notifier).createEvent(
               roomCode: roomCode!,
               date: date.value,
@@ -91,18 +103,25 @@ class UpsertEventPage extends HookConsumerWidget {
         );
         scaffoldMessenger.showSnackBar(snackbar);
       } catch (e) {
-        final snackbar = CustomSnackBar(
-          context,
-          msg: 'エラーが発生しました。\nもう一度お試しください。',
-          color: Colors.red,
-        );
-        scaffoldMessenger.showSnackBar(snackbar);
+        logger.e(e.toString());
       }
     }
 
     Future<void> updateEvent() async {
       try {
-        addEventValidation(price.value);
+        // 金額のバリデーション
+        final validMessage = Validator.validatePrice(value: price.value);
+        if (validMessage != null) {
+          final snackbar = CustomSnackBar(
+            context,
+            msg: validMessage,
+            color: Colors.red,
+          );
+          scaffoldMessenger.showSnackBar(snackbar);
+          return;
+        }
+
+        // イベントの更新
         await ref.read(eventProvider.notifier).updateEvent(
               roomCode: roomCode!,
               event: event!,
@@ -121,12 +140,7 @@ class UpsertEventPage extends HookConsumerWidget {
         );
         scaffoldMessenger.showSnackBar(snackbar);
       } catch (e) {
-        final snackbar = CustomSnackBar(
-          context,
-          msg: 'エラーが発生しました。\nもう一度お試しください。',
-          color: Colors.red,
-        );
-        scaffoldMessenger.showSnackBar(snackbar);
+        logger.e(e.toString());
       }
     }
 
@@ -163,12 +177,7 @@ class UpsertEventPage extends HookConsumerWidget {
                     );
                     scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
-                    final snackbar = CustomSnackBar(
-                      context,
-                      msg: 'エラーが発生しました。\nもう一度お試しください。',
-                      color: Colors.red,
-                    );
-                    scaffoldMessenger.showSnackBar(snackbar);
+                    logger.e(e.toString());
                   }
                 },
               ),

@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/feature/login/presentation/state/auth_state.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class RegisterPage extends HookConsumerWidget {
@@ -63,11 +64,22 @@ class RegisterPage extends HookConsumerWidget {
                     onTaped: () async {
                       showProgressDialog(context);
                       try {
-                        registerValidation(
-                          userName.value,
-                          email.value,
-                          password.value,
-                        );
+                        // ユーザー名、メールアドレス、パスワードのバリデーション
+                        final validMessage = Validator.validateUserName(
+                                value: userName.value) ??
+                            Validator.validateEmail(value: email.value) ??
+                            Validator.validatePassword(value: password.value);
+                        if (validMessage != null) {
+                          Navigator.of(context).pop();
+                          final snackbar = CustomSnackBar(
+                            context,
+                            msg: validMessage,
+                            color: Colors.red,
+                          );
+                          scaffoldMessenger.showSnackBar(snackbar);
+                          return;
+                        }
+
                         await loginNotifier.register(
                           uidProvider: ref.read(uidProvider.notifier).state,
                           userName: userName.value,
@@ -85,18 +97,13 @@ class RegisterPage extends HookConsumerWidget {
                         Navigator.of(context).pop();
                         final snackbar = CustomSnackBar(
                           context,
-                          msg: authValidation(e),
+                          msg: ref.watch(authNotifierProvider).getErrorMessage(e),
                           color: Colors.red,
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
                         Navigator.of(context).pop();
-                        final snackbar = CustomSnackBar(
-                          context,
-                          msg: 'エラーが発生しました。\nもう一度お試しください。',
-                          color: Colors.red,
-                        );
-                        scaffoldMessenger.showSnackBar(snackbar);
+                        logger.e(e.toString());
                       }
                     },
                   ),

@@ -16,7 +16,7 @@ class LoginRepositoryImpl extends LoginRepository {
 
   @override
   Future<void> login({
-    required String uidProvider,
+    // required String uidProvider,
     required String email,
     required String password,
   }) async {
@@ -27,7 +27,8 @@ class LoginRepositoryImpl extends LoginRepository {
       );
 
       // uidをログインしたユーザのIDに変更
-      uidProvider = _auth.currentUser!.uid;
+      // TODO(takuro): 
+      // uidProvider = _auth.currentUser!.uid;
     } on FirebaseAuthException catch (e) {
       logger.e(e);
       rethrow;

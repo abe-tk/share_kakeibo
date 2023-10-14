@@ -1,9 +1,7 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 abstract class LoginRepository {
   // ログイン
   Future<void> login({
-    required String uidProvider,
+    // required String uidProvider,
     required String email,
     required String password,
   });

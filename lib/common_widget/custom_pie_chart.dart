@@ -24,10 +24,10 @@ class CustomPieChart extends StatelessWidget {
         Container(
           width: 200,
           height: 200,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: CustomColor.bdColor,
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
                 color: Colors.black38,
                 offset: Offset(0.0, 3.0),
@@ -39,9 +39,9 @@ class CustomPieChart extends StatelessWidget {
         Container(
           width: 100,
           height: 100,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
                 color: Colors.black38,
               ),
@@ -81,7 +81,7 @@ class CustomPieChart extends StatelessWidget {
               ),
             ),
             Text(
-              '${numberFormatter.format(price)}円',
+              '${price.separator}円',
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,

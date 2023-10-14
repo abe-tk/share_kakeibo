@@ -22,29 +22,6 @@ class RoomNamePage extends HookConsumerWidget {
 
     final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
 
-    Future<void> changeRooName() async {
-      try {
-        changeRoomNameValidation(roomName.value);
-        await ref.read(roomNameProvider.notifier).updateRoomName(
-              roomCode: roomCode!,
-              newRoomName: roomName.value!,
-            );
-        Navigator.of(context).pop();
-        final snackbar = CustomSnackBar(
-          context,
-          msg: 'Room名を変更しました',
-        );
-        scaffoldMessenger.showSnackBar(snackbar);
-      } catch (e) {
-        final snackbar = CustomSnackBar(
-          context,
-          msg: 'エラーが発生しました。\nもう一度お試しください。',
-          color: Colors.red,
-        );
-        scaffoldMessenger.showSnackBar(snackbar);
-      }
-    }
-
     return Scaffold(
       appBar: const CustomAppBar(title: 'Roomの名前を編集'),
       body: SingleChildScrollView(
@@ -61,7 +38,36 @@ class RoomNamePage extends HookConsumerWidget {
               const SizedBox(height: 16),
               CustomElevatedButton(
                 text: '保存',
-                onTaped: () async => changeRooName(),
+                onTaped: () async {
+                  try {
+                    // ルーム名のバリデーション
+                    // TODO(takuro): nullの場合の記述を修正
+                    final validMessage =
+                        Validator.validateRoomName(value: roomName.value ?? '');
+                    if (validMessage != null) {
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: validMessage,
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
+                      return;
+                    }
+
+                    await ref.read(roomNameProvider.notifier).updateRoomName(
+                          roomCode: roomCode!,
+                          newRoomName: roomName.value!,
+                        );
+                    Navigator.of(context).pop();
+                    final snackbar = CustomSnackBar(
+                      context,
+                      msg: 'Room名を変更しました',
+                    );
+                    scaffoldMessenger.showSnackBar(snackbar);
+                  } catch (e) {
+                    logger.e(e.toString());
+                  }
+                },
               ),
             ],
           ),

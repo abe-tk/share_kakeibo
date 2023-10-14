@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:share_kakeibo/feature/login/data/login_repository_impl.dart';
+import 'package:share_kakeibo/feature/login/presentation/state/auth_state.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class ResetPasswordPage extends HookConsumerWidget {
@@ -43,7 +44,19 @@ class ResetPasswordPage extends HookConsumerWidget {
                     onTaped: () async {
                       showProgressDialog(context);
                       try {
-                        resetPasswordValidation(email.value);
+                        // メールアドレスのバリデーション
+                        final validMessage =
+                            Validator.validateEmail(value: email.value);
+                        if (validMessage != null) {
+                          final snackbar = CustomSnackBar(
+                            context,
+                            msg: validMessage,
+                            color: Colors.red,
+                          );
+                          scaffoldMessenger.showSnackBar(snackbar);
+                          return;
+                        }
+
                         await loginNotifier.resetPassword(email: email.value);
                         Navigator.popUntil(
                             context, (Route<dynamic> route) => route.isFirst);
@@ -56,18 +69,13 @@ class ResetPasswordPage extends HookConsumerWidget {
                         Navigator.of(context).pop();
                         final snackbar = CustomSnackBar(
                           context,
-                          msg: authValidation(e),
+                          msg: ref.watch(authNotifierProvider).getErrorMessage(e),
                           color: Colors.red,
                         );
                         scaffoldMessenger.showSnackBar(snackbar);
                       } catch (e) {
                         Navigator.of(context).pop();
-                        final snackbar = CustomSnackBar(
-                          context,
-                          msg: 'エラーが発生しました。\nもう一度お試しください。',
-                          color: Colors.red,
-                        );
-                        scaffoldMessenger.showSnackBar(snackbar);
+                        logger.e(e.toString());
                       }
                     },
                   ),

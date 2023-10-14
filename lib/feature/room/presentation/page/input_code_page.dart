@@ -38,7 +38,19 @@ class InputCodePage extends HookConsumerWidget {
                 text: '保存',
                 onTaped: () async {
                   try {
-                    invitationRoomValidation(roomCode.value);
+                    // 招待コードのバリデーション
+                    final validMessage =
+                        Validator.validatePrice(value: roomCode.value);
+                    if (validMessage != null) {
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: validMessage,
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
+                      return;
+                    }
+
                     ownerRoomName.value = await ref
                         .read(roomNameRepositoryProvider)
                         .readRoomName(roomCode: roomCode.value);
@@ -67,12 +79,7 @@ class InputCodePage extends HookConsumerWidget {
                     );
                     scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
-                    final snackbar = CustomSnackBar(
-                      context,
-                      msg: 'エラーが発生しました。\nもう一度お試しください。',
-                      color: Colors.red,
-                    );
-                    scaffoldMessenger.showSnackBar(snackbar);
+                    logger.e(e.toString());
                   }
                 },
               ),
