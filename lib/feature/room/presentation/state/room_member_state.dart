@@ -20,8 +20,8 @@ class RoomNameState extends AsyncNotifier<List<RoomMember>> {
   // 初期データの読み込み
   @override
   FutureOr<List<RoomMember>> build() async {
-    return await readRoomMember(
-        roomCode: await RoomFire().getRoomCodeFire(ref.watch(uidProvider)));
+    final roomCode = await ref.watch(roomCodeProvider.future);
+    return await readRoomMember(roomCode: roomCode);
   }
 
   Future<void> joinRoom({
@@ -45,7 +45,7 @@ class RoomNameState extends AsyncNotifier<List<RoomMember>> {
     });
   }
 
-    Future<void> exitRoom({
+  Future<void> exitRoom({
     required String roomCode,
     required String userName,
   }) async {

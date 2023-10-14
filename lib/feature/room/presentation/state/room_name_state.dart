@@ -4,8 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/feature/room/data/room_name_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
-final roomNameProvider =
-    AsyncNotifierProvider<RoomName, String>(RoomName.new);
+final roomNameProvider = AsyncNotifierProvider<RoomName, String>(RoomName.new);
 
 class RoomName extends AsyncNotifier<String> {
   // ユーザー情報の取得
@@ -21,8 +20,8 @@ class RoomName extends AsyncNotifier<String> {
   // 初期データの読み込み
   @override
   FutureOr<String> build() async {
-    return await readRoomName(
-        roomCode: await RoomFire().getRoomCodeFire(ref.watch(uidProvider)));
+    final roomCode = await ref.watch(roomCodeProvider.future);
+    return await readRoomName(roomCode: roomCode);
   }
 
   // ルーム名の更新

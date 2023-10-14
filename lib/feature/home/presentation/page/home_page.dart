@@ -14,7 +14,7 @@ class HomePage extends HookConsumerWidget {
     final pieChartService = ref.watch(pieChartServiceProvider);
 
     // 総資産額
-    final totalAssets = ref.watch(totalAssetsStateProvider);
+    final totalAssets = ref.watch(totalAssetsProvider);
 
     // 総資産額の表示・非表示
     final isObscure = useState(true);
@@ -31,11 +31,6 @@ class HomePage extends HookConsumerWidget {
           skipLoadingOnRefresh: false,
           data: (data) => data,
         );
-
-    // TODO(takuro): 総資産額どうにかしたい
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(totalAssetsStateProvider.notifier).calcTotalAssets(event ?? []);
-    });
 
     return Scaffold(
       appBar: CustomAppBar(
