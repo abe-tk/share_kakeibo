@@ -73,11 +73,6 @@ class RoomInfoPage extends HookConsumerWidget {
                 // 各Stateを更新
                 ref.invalidate(roomCodeProvider);
                 ref.read(userInfoProvider.notifier).readUser();
-                ref
-                    .read(totalAssetsStateProvider.notifier)
-                    .firstCalcTotalAssets(
-                      ref.watch(uidProvider),
-                    );
 
                 Navigator.popUntil(
                     context, (Route<dynamic> route) => route.isFirst);

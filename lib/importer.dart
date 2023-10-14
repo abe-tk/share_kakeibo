@@ -22,7 +22,6 @@ export 'constant/colors.dart';
 export 'constant/theme.dart';
 export 'enum/flavor.dart';
 export 'feature/user/presentation/state/uid_state.dart';
-export 'util/room_fire.dart';
 export 'feature/event/domain/event.dart';
 export 'feature/memo/domain/memo.dart';
 export 'feature/room/domain/room_member.dart';

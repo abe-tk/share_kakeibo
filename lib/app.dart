@@ -47,9 +47,6 @@ class MyApp extends HookConsumerWidget {
               // 各Stateを更新
               ref.invalidate(roomCodeProvider);
               ref.read(userInfoProvider.notifier).readUser();
-              ref.read(totalAssetsStateProvider.notifier).firstCalcTotalAssets(
-                    ref.watch(uidProvider),
-                  );
               return const RootPage();
             }
             // Userがnullであれば（未サインイン）サインイン画面へ遷移

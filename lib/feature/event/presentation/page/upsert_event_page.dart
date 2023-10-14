@@ -94,7 +94,6 @@ class UpsertEventPage extends HookConsumerWidget {
               currentMonth: DateTime(date.value.year, date.value.month),
               paymentUser: paymentUser.value.toString(),
             );
-        ref.read(totalAssetsStateProvider.notifier).calcTotalAssets(eventData!);
         Navigator.of(context).pop();
         Navigator.of(context).pop();
         final snackbar = CustomSnackBar(
@@ -132,7 +131,6 @@ class UpsertEventPage extends HookConsumerWidget {
               currentMonth: DateTime(date.value.year, date.value.month),
               paymentUser: paymentUser.value.toString(),
             );
-        ref.read(totalAssetsStateProvider.notifier).calcTotalAssets(eventData!);
         Navigator.of(context).pop();
         final snackbar = CustomSnackBar(
           context,
@@ -165,9 +163,6 @@ class UpsertEventPage extends HookConsumerWidget {
                           roomCode: roomCode!,
                           id: event!.id,
                         );
-                    ref
-                        .read(totalAssetsStateProvider.notifier)
-                        .calcTotalAssets(eventData!);
 
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();

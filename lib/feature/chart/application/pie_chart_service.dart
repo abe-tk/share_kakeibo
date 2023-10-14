@@ -184,25 +184,6 @@ class PieChartService {
     return data;
   }
 
-// 全期間の「収入」または「支出」の累計金額を計算
-  int calcLargeCategoryPrice(
-    List<Event> events,
-    String largeCategory,
-  ) {
-    int calcResult = 0;
-    List<int> prices = [];
-    var eventList =
-        events.where((event) => event.largeCategory == largeCategory);
-    for (final document in eventList) {
-      final event = document;
-      final price = event.price;
-      prices.add(int.parse(price));
-      int calcResults = prices.reduce((a, b) => a + b);
-      calcResult = calcResults;
-    }
-    return calcResult;
-  }
-
 // List<PieChartSectionData>型の値をセット
   List<PieChartSectionData> getCategory({
     required List<PieChartSourceData> pieChartSourceData,
