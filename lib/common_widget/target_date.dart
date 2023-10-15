@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:share_kakeibo/importer.dart';
 
 class TargetDate extends StatelessWidget {
   final DateTime? year;

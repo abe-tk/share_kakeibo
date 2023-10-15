@@ -47,7 +47,7 @@ class HomePieChartNotifier extends AutoDisposeNotifier<PieChartDatatableState> {
     );
 
     // pieChartSourceDataを作成
-    final pieChartSourceData = totalPrice == 0
+    final pieChartSourceData = plusPrice == 0 && minusPrice == 0
         ? [
             const PieChartSourceData(
               category: 'データなし',
