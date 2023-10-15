@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/common_widget/custom_list_tile.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class ParticipationPage extends ConsumerWidget {
@@ -16,9 +15,9 @@ class ParticipationPage extends ConsumerWidget {
             margin: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               children: [
-                const SubTitle(title: 'QRコード'),
+                const SubTitle(title: '二次元バーコード'),
                 CustomListTile(
-                  title: 'QRコードを読み取る',
+                  title: '二次元バーコードを読み取る',
                   leading: const Icon(Icons.qr_code_scanner),
                   onTaped: () => Navigator.pushNamed(context, '/qrScanPage'),
                 ),

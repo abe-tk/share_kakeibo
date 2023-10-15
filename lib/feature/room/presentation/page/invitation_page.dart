@@ -59,9 +59,9 @@ class InvitationPage extends ConsumerWidget {
             margin: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               children: [
-                const SubTitle(title: 'QRコード'),
+                const SubTitle(title: '二次元バーコード'),
                 CustomListTile(
-                  title: 'QRコードを表示する',
+                  title: '二次元バーコードを表示する',
                   leading: const Icon(Icons.qr_code),
                   onTaped: () => showQrCode(),
                 ),
