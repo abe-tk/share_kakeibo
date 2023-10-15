@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:share_kakeibo/feature/event/presentation/widget/upsert_event_select_date.dart';
+import 'package:share_kakeibo/feature/event/presentation/widget/upsert_event_text_field.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class UpsertEventPage extends HookConsumerWidget {
@@ -203,7 +205,7 @@ class UpsertEventPage extends HookConsumerWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                UpsertEventItem(
+                UpsertEventTextField(
                   icon: const Icon(Icons.currency_yen),
                   hintText: '0',
                   controller: priceController,
@@ -211,13 +213,13 @@ class UpsertEventPage extends HookConsumerWidget {
                   keyboardType: TextInputType.number,
                   autofocus: true,
                 ),
-                UpsertEventItem(
+                UpsertEventSelectData(
                   icon: const Icon(Icons.calendar_today),
                   date: DateFormat.MMMEd('ja').format(date.value),
                   selectDate: () async =>
                       date.value = await _selectDate(context, date.value),
                 ),
-                UpsertEventItem(
+                UpsertEventDropDownButton(
                   icon: const Icon(Icons.category),
                   initialItem: smallCategory.value,
                   items: largeCategory == '収入'
@@ -225,13 +227,13 @@ class UpsertEventPage extends HookConsumerWidget {
                       : _categories(Category.minus),
                   selectItem: (value) => smallCategory.value = value!,
                 ),
-                UpsertEventItem(
+                UpsertEventDropDownButton(
                   icon: const Icon(Icons.person),
                   initialItem: paymentUser.value.toString(),
                   items: ref.watch(paymentUsers),
                   selectItem: (value) => paymentUser.value = value!,
                 ),
-                UpsertEventItem(
+                UpsertEventTextField(
                   icon: const Icon(Icons.featured_play_list_rounded),
                   hintText: 'メモ',
                   controller: memoController,

@@ -1,7 +1,7 @@
 export 'app.dart';
 export 'common_widget/custom_pie_chart.dart';
 export 'feature/calendar/presentation/widget/calendar_event_list.dart';
-export 'feature/event/presentation/widget/upsert_event_item.dart';
+export 'feature/event/presentation/widget/upsert_event_dropdown_button.dart';
 export 'feature/auth/presentation/widget/login_text_field.dart';
 export 'feature/calendar/presentation/widget/custom_calendar.dart';
 export 'feature/root_page.dart';
