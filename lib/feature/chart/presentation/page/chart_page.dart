@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:share_kakeibo/constant/img_url.dart';
 import 'package:share_kakeibo/feature/chart/application/pie_chart_service.dart';
 import 'package:share_kakeibo/feature/chart/presentation/state/pie_chart_state.dart';
 import 'package:share_kakeibo/importer.dart';
@@ -199,7 +200,7 @@ class ChartPage extends HookConsumerWidget {
                                         radius: 12,
                                         backgroundImage: NetworkImage(
                                           pieChart.pieChartSourceData[index]
-                                              .imgURL!,
+                                              .imgURL ?? imgURL,
                                         ),
                                       ),
                                 const Gap(10),
