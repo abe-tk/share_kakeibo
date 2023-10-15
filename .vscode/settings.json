@@ -21,6 +21,7 @@
         "Datatable",
         "Firestore",
         "fluttertoast",
+        "fullscreen",
         "kakeibo",
         "RGBO",
         "riverpod",
