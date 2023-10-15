@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:share_kakeibo/common_widget/custom_text_field.dart';
 import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
 import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
-import 'package:share_kakeibo/feature/auth/data/auth_repository_impl.dart';
 import 'package:share_kakeibo/feature/user/data/user_repository.impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
