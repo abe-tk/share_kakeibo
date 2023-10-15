@@ -85,6 +85,10 @@ class ProfilePage extends HookConsumerWidget {
               imgURL: imgURL.value,
               imgFilePath: imgFilePath.value,
             );
+
+        // ルームメンバーを更新
+        ref.invalidate(roomMemberProvider);
+
         // ユーザ名に変更があれば更新、イベント関連のstateを更新
         if (userName.value != beforeUserData!.userName) {
           // ref.read(eventProvider.notifier).setEvent();
