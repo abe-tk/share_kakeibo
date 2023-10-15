@@ -92,6 +92,7 @@ class ProfilePage extends HookConsumerWidget {
         // ユーザ名に変更があれば更新、イベント関連のstateを更新
         if (userName.value != beforeUserData!.userName) {
           // ref.read(eventProvider.notifier).setEvent();
+          ref.invalidate(eventProvider);
           ref
               .read(roomMemberProvider.notifier)
               .readRoomMember(roomCode: roomCode);
