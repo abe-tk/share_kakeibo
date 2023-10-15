@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
-import 'package:share_kakeibo/feature/chart/application/pie_chart_service.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class HomePage extends HookConsumerWidget {

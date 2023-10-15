@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/importer.dart';
 
 class LoginTextField extends StatelessWidget {
   final String labelText;

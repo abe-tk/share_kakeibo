@@ -23,7 +23,6 @@ class CalendarEventList extends StatelessWidget {
     required List<Map<String, Object>> category,
     required String smallCategory,
   }) {
-    List<String> categories = [];
     for (int i = 0; i < category.length; i++) {
       if (smallCategory == category[i]['category']) {
         return Icon(

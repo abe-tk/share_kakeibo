@@ -1,4 +1,4 @@
-import 'package:share_kakeibo/feature/memo/domain/memo.dart';
+import 'package:share_kakeibo/importer.dart';
 
 abstract class MemoRepository {
   // メモ一覧取得

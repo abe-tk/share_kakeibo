@@ -1,4 +1,4 @@
-import 'package:share_kakeibo/feature/room/domain/room_member.dart';
+import 'package:share_kakeibo/importer.dart';
 
 abstract class RoomRepository {
   // ルームの作成

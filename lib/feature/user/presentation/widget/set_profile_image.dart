@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 
 class SetProfileImage extends StatelessWidget {
   final String imgURL;
