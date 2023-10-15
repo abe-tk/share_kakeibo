@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:share_kakeibo/extension/text_theme.dart';
+import 'package:share_kakeibo/importer.dart';
 
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog._({

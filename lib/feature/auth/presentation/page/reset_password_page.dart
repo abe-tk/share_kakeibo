@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class ResetPasswordPage extends HookConsumerWidget {
@@ -68,7 +67,9 @@ class ResetPasswordPage extends HookConsumerWidget {
 
                         // メール送信処理後、ログイン画面へ戻る
                         Navigator.popUntil(
-                            context, (Route<dynamic> route) => route.isFirst);
+                          context,
+                          (Route<dynamic> route) => route.isFirst,
+                        );
 
                         // メッセージの表示
                         final snackbar = CustomSnackBar(

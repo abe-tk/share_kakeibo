@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/room/data/room_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 final roomNameProvider = AsyncNotifierProvider<RoomName, String>(RoomName.new);

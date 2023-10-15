@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/user/data/user_repository.dart';
 import 'package:share_kakeibo/importer.dart';
 
 final userRepositoryProvider = Provider(

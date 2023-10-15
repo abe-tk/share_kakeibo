@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/user/data/user_repository.impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 // ユーザー情報を管理するプロバイダ

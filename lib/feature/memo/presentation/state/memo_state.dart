@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/memo/data/memo_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class AsyncMemos extends AsyncNotifier<List<Memo>> {

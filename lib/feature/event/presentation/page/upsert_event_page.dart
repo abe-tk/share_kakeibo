@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:share_kakeibo/feature/event/presentation/widget/upsert_event_select_date.dart';
-import 'package:share_kakeibo/feature/event/presentation/widget/upsert_event_text_field.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class UpsertEventPage extends HookConsumerWidget {

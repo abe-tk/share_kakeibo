@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/feature/event/presentation/page/upsert_event_page.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class RouteGenerator {

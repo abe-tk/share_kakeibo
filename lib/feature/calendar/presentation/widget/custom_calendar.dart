@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:share_kakeibo/importer.dart';
 
 class CustomCalendar extends StatelessWidget {
   final DateTime focused;

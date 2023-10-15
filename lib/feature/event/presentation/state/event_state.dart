@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/event/data/event_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class AsyncEvents extends AsyncNotifier<List<Event>> {

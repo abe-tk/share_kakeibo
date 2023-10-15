@@ -1,8 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/constant/user_color.dart';
-import 'package:share_kakeibo/feature/chart/domain/pie_chart_source_data.dart';
 import 'package:share_kakeibo/importer.dart';
 
 // PieChartServiceのプロバイダ

@@ -1,5 +1,5 @@
-import 'package:share_kakeibo/feature/chart/domain/pie_chart_source_data.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:share_kakeibo/importer.dart';
 
 part 'pie_chart_datatable_state.freezed.dart';
 

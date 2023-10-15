@@ -1,4 +1,4 @@
-import 'package:share_kakeibo/feature/event/domain/event.dart';
+import 'package:share_kakeibo/importer.dart';
 
 abstract class EventRepository {
   // イベント一覧取得

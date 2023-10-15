@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/feature/auth/data/auth_repository.dart';
-import 'package:share_kakeibo/feature/auth/data/auth_repository_impl.dart';
+import 'package:share_kakeibo/importer.dart';
 
 final authServiceProvider = Provider<AuthService>(
   (ref) => AuthService(repository: ref.watch(authRepositoryProvider)),
