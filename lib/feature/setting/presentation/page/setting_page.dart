@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:share_kakeibo/common_widget/custom_list_tile.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class SettingPage extends HookConsumerWidget {

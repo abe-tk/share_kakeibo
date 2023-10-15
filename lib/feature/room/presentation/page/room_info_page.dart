@@ -38,7 +38,14 @@ class RoomInfoPage extends HookConsumerWidget {
           if (isExit) {
             try {
               if (ref.watch(uidProvider) == roomCode!) {
-                throw 'RoomOwnerは退出できません';
+                // ルームオーナーかの判定
+                final snackbar = CustomSnackBar(
+                  context,
+                  msg: 'RoomOwnerは退出できません',
+                  color: Colors.red,
+                );
+                scaffoldMessenger.showSnackBar(snackbar);
+                return;
               }
               final password = await InputTextDialog.show(
                 context: context,
