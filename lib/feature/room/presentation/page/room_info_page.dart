@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
 import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
-import 'package:share_kakeibo/feature/auth/data/auth_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class RoomInfoPage extends HookConsumerWidget {
@@ -27,7 +26,7 @@ class RoomInfoPage extends HookConsumerWidget {
       appBar: CustomAppBar(
         title: 'ROOM情報',
         icon: Icons.logout,
-        iconColor: CustomColor.defaultIconColor,
+        iconColor: Colors.black,
         onTaped: () async {
           final isExit = await ConfirmDialog.show(
             context: context,

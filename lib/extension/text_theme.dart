@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../importer.dart';
-
 extension TextThemeExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
 
@@ -11,7 +9,7 @@ extension TextThemeExtension on BuildContext {
       );
 
   TextStyle get bodyMediumGrey => theme.textTheme.bodyMedium!.copyWith(
-        color: CustomColor.detailTextColor,
+        color: Colors.grey,
       );
 
   TextStyle get bodyMediumRed => theme.textTheme.bodyMedium!.copyWith(

@@ -36,16 +36,16 @@ class NonDataCase extends StatelessWidget {
               children: [
                 const Text(
                   '「',
-                  style: TextStyle(color: CustomColor.detailTextColor),
+                  style: TextStyle(color: Colors.grey),
                 ),
                 const Icon(
                   Icons.edit,
                   size: 16,
-                  color: CustomColor.detailTextColor,
+                  color: Colors.grey,
                 ),
                 Text(
                   '入力」から$textを追加してください',
-                  style: const TextStyle(color: CustomColor.detailTextColor),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),

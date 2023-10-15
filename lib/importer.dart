@@ -17,7 +17,6 @@ export 'package:share_kakeibo/common_widget/custom_app_bar.dart';
 export 'common_widget/custom_elevated_button.dart';
 export 'common_widget/target_date.dart';
 export 'constant/category.dart';
-export 'constant/colors.dart';
 export 'constant/theme.dart';
 export 'enum/flavor.dart';
 export 'feature/user/presentation/state/uid_state.dart';

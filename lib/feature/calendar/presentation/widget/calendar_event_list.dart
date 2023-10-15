@@ -97,8 +97,8 @@ class CalendarEventList extends StatelessWidget {
                     : '- ${int.parse(price).separator} 円',
                 style: TextStyle(
                   color: (largeCategory == '収入')
-                      ? CustomColor.incomeTextColor
-                      : CustomColor.spendingTextColor,
+                      ? const Color(0xFF00800D)
+                      : const Color(0xFFFF0000),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

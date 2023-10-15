@@ -31,7 +31,7 @@ class InvitationPage extends ConsumerWidget {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: CustomColor.bdBorderSideColor),
+                    border: Border.all(color: Colors.black),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: roomCode.when(

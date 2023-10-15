@@ -51,7 +51,7 @@ class HomePage extends HookConsumerWidget {
     return Scaffold(
       appBar: CustomAppBar(
         icon: Icons.settings,
-        iconColor: CustomColor.defaultIconColor,
+        iconColor: Colors.black,
         onTaped: () => Navigator.pushNamed(context, '/settingPage'),
       ),
       drawer: const CustomDrawer(),

@@ -166,7 +166,7 @@ class ChartPage extends HookConsumerWidget {
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: CustomColor.detailTextColor,
+                          color: Colors.grey,
                         ),
                       ),
                     );

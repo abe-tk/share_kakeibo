@@ -13,7 +13,7 @@ class MemoPage extends ConsumerWidget {
     final memoNotifier = ref.watch(memoProvider.notifier);
     final scaffoldMessenger = ref.watch(scaffoldKeyProvider).currentState!;
     return Scaffold(
-      appBar: const CustomAppBar(title: 'メモ'),
+      appBar: const CustomAppBar(),
       drawer: const CustomDrawer(),
       body: SafeArea(
         child: CustomScrollView(

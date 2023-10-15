@@ -28,13 +28,13 @@ class LoginTextField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: CustomColor.tfBorderSideColor,
+            color: Colors.grey,
             width: 2.0,
           ),
         ),
         labelStyle: const TextStyle(
           fontSize: 12,
-          color: CustomColor.tfBorderSideColor,
+          color: Colors.grey,
         ),
         labelText: labelText,
         suffixIcon: isObscure != null
@@ -49,7 +49,7 @@ class LoginTextField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(
-            color: CustomColor.tfBorderSideColor,
+            color: Colors.grey,
             width: 1.0,
           ),
         ),

@@ -26,7 +26,7 @@ class CustomPieChart extends StatelessWidget {
           height: 200,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: CustomColor.bdColor,
+            color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black38,
@@ -46,7 +46,7 @@ class CustomPieChart extends StatelessWidget {
                 color: Colors.black38,
               ),
               BoxShadow(
-                color: CustomColor.bdColor,
+                color: Colors.white,
                 offset: Offset(0.0, 3.0),
                 blurRadius: 3.0,
               ),
@@ -77,7 +77,7 @@ class CustomPieChart extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: CustomColor.pieChartCenterTextColor,
+                color: Color.fromRGBO(65, 65, 65, 0.8),
               ),
             ),
             Text(
@@ -85,7 +85,7 @@ class CustomPieChart extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: CustomColor.pieChartCenterTextColor,
+                color: Color.fromRGBO(65, 65, 65, 0.8),
               ),
             ),
           ],

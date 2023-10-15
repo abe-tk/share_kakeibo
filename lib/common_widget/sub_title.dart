@@ -17,11 +17,11 @@ class SubTitle extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            color: CustomColor.detailTextColor,
+            color: Colors.grey,
           ),
         ),
         const Divider(
-          color: CustomColor.detailTextColor,
+          color: Colors.grey,
         ),
       ],
     );

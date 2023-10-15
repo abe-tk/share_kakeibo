@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/importer.dart';
 
 class CustomShadowContainer extends StatelessWidget {
   final double? height;
@@ -23,7 +22,7 @@ class CustomShadowContainer extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: CustomColor.bdColor,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(

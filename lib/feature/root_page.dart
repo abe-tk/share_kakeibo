@@ -107,7 +107,7 @@ class _BottomNavItem extends StatelessWidget {
                       color: Colors.black38,
                     ),
                     BoxShadow(
-                      color: CustomColor.bdColor,
+                      color: Colors.white,
                       offset: Offset(0.0, 3.0),
                       blurRadius: 3.0,
                     ),
