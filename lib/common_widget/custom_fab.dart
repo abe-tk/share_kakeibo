@@ -70,37 +70,42 @@ class CustomFab extends HookConsumerWidget {
                             try {
                               selectIndex();
                               Navigator.of(context).pop();
-                              memo.value = await InputTextDialog.show(
-                                    context: context,
-                                    title: 'メモを追加',
-                                    hintText: 'メモ',
-                                    confirmButtonText: '追加',
-                                  ) ??
-                                  '';
 
-                              // メモのバリデーション
-                              final validMessage =
-                                  Validator.validateMemo(value: memo.value);
-                              if (validMessage != null) {
+                              final inputText = await InputTextDialog.show(
+                                context: context,
+                                title: 'メモを追加',
+                                hintText: 'メモ',
+                                confirmButtonText: '追加',
+                              );
+
+                              if (inputText != null) {
+                                memo.value = inputText;
+                                // メモのバリデーション
+                                final validMessage =
+                                    Validator.validateMemo(value: memo.value);
+                                if (validMessage != null) {
+                                  final snackbar = CustomSnackBar(
+                                    context,
+                                    msg: validMessage,
+                                    color: Colors.red,
+                                  );
+                                  scaffoldMessenger.showSnackBar(snackbar);
+                                  return;
+                                }
+
+                                await ref
+                                    .watch(memoProvider.notifier)
+                                    .createMemo(
+                                      memo: memo.value,
+                                    );
+                                memoController.clear();
+                                memo.value = '';
                                 final snackbar = CustomSnackBar(
                                   context,
-                                  msg: validMessage,
-                                  color: Colors.red,
+                                  msg: 'メモを追加しました！',
                                 );
                                 scaffoldMessenger.showSnackBar(snackbar);
-                                return;
                               }
-                              
-                              await ref.watch(memoProvider.notifier).createMemo(
-                                    memo: memo.value,
-                                  );
-                              memoController.clear();
-                              memo.value = '';
-                              final snackbar = CustomSnackBar(
-                                context,
-                                msg: 'メモを追加しました！',
-                              );
-                              scaffoldMessenger.showSnackBar(snackbar);
                             } catch (e) {
                               logger.e(e.toString());
                             }
