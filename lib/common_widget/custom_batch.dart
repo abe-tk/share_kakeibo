@@ -17,7 +17,7 @@ class CustomBatch extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: Colors.red,
             shape: BoxShape.circle,
           ),
           width: 16.0,
