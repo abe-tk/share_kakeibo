@@ -29,6 +29,12 @@ class Validator {
     if (value.isEmpty) {
       return 'パスワードをご入力ください';
     }
+    if (value.length < 6 || 20 < value.length) {
+      return 'パスワードを6~20文字でご入力ください';
+    }
+    // if (RegExp(r'^[a-zA-Z0-9!-/:-@[-`{-~]*$').hasMatch(value)) {
+    //   return 'パスワードを半角英数字記号のみでご入力ください';
+    // }
     return null;
   }
 

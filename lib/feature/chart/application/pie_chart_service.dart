@@ -204,7 +204,7 @@ class PieChartService {
               titleStyle: const TextStyle(
                 // fontSize: fontSize,
                 fontWeight: FontWeight.bold,
-                color: CustomColor.pieChartCategoryTextColor,
+                color: Colors.black54,
               ),
             );
             return MapEntry(index, value);

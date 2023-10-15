@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/constant/colors.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   final String? text;
@@ -11,7 +10,7 @@ class CustomElevatedButton extends StatelessWidget {
     Key? key,
     this.text = '',
     this.textColor = Colors.black,
-    this.buttonColor = CustomColor.bdColor,
+    this.buttonColor = Colors.white,
     required this.onTaped,
   }) : super(key: key);
 

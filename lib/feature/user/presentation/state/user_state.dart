@@ -55,7 +55,7 @@ class UserInfo extends AsyncNotifier<UserData?> {
       );
 
       // ユーザー情報の取得更新
-      return readUser();
+      return await readUser();
     });
   }
 }

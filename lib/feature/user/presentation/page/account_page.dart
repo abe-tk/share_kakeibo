@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
 import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
-import 'package:share_kakeibo/feature/auth/data/auth_repository_impl.dart';
 import 'package:share_kakeibo/feature/user/data/user_repository.impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
@@ -27,7 +26,15 @@ class AccountPage extends HookConsumerWidget {
               CustomListTile(
                 title: 'メールアドレス',
                 leading: const Icon(Icons.mail),
-                onTaped: () => Navigator.pushNamed(context, '/emailPage'),
+                // onTaped: () => Navigator.pushNamed(context, '/emailPage'),
+                // TODO: routerに含める
+                onTaped: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return EmailPage(beforeUserData: userData);
+                    },
+                  ),
+                ),
               ),
               CustomListTile(
                 title: 'パスワード',

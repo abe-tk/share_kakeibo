@@ -4,22 +4,22 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/common_widget/custom_text_field.dart';
 import 'package:share_kakeibo/common_widget/dialog/input_text_dialog.dart';
 import 'package:share_kakeibo/feature/auth/application/auth_service.dart';
-import 'package:share_kakeibo/feature/auth/data/auth_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class EmailPage extends HookConsumerWidget {
-  const EmailPage({Key? key}) : super(key: key);
+  const EmailPage({
+    Key? key,
+    this.beforeUserData,
+  }) : super(key: key);
+
+  final UserData? beforeUserData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final beforeUserData = ref.watch(userInfoProvider).whenOrNull(
-          data: (data) => data,
-        );
-
-    // TODO(takuro): ここでbeforeUserDataを参照すると更新時にエラーになるため、前画面から値を受け取るようにする
+    // メールアドレス
     final email = useState(beforeUserData!.email);
     final emailController = useTextEditingController(
-      text: beforeUserData.email,
+      text: beforeUserData!.email,
     );
 
     final roomCode = ref.watch(roomCodeProvider).whenOrNull(

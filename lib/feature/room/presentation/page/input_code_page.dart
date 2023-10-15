@@ -40,7 +40,7 @@ class InputCodePage extends HookConsumerWidget {
                   try {
                     // 招待コードのバリデーション
                     final validMessage =
-                        Validator.validatePrice(value: roomCode.value);
+                        Validator.validateInvitationCode(value: roomCode.value);
                     if (validMessage != null) {
                       final snackbar = CustomSnackBar(
                         context,

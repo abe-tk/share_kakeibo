@@ -8,9 +8,9 @@ class RouteGenerator {
   static const String addIncomeEventPage = '/addIncomeEventPage';
   static const String addSpendingEventPage = '/addSpendingEventPage';
   static const String settingPage = '/settingPage';
-  static const String profilePage = '/profilePage';
+  // static const String profilePage = '/profilePage';
   static const String accountPage = '/accountPage';
-  static const String emailPage = '/emailPage';
+  // static const String emailPage = '/emailPage';
   static const String passwordPage = '/passwordPage';
   static const String roomInfoPage = '/roomInfoPage';
   static const String invitationPage = '/invitationPage';
@@ -52,11 +52,11 @@ class RouteGenerator {
           builder: (_) => const AccountPage(),
           fullscreenDialog: true,
         );
-      case emailPage:
-        return MaterialPageRoute(
-          builder: (_) => const EmailPage(),
-          fullscreenDialog: true,
-        );
+      // case emailPage:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const EmailPage(),
+      //     fullscreenDialog: true,
+      //   );
       case passwordPage:
         return MaterialPageRoute(
           builder: (_) => const PasswordPage(),

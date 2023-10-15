@@ -93,7 +93,7 @@ Widget _buildEventsMarker(DateTime date, List events) {
       duration: const Duration(milliseconds: 300),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: CustomColor.biBackGroundColor,
+        color: Colors.red,
       ),
       width: 16.0,
       height: 16.0,
@@ -101,7 +101,7 @@ Widget _buildEventsMarker(DateTime date, List events) {
         child: Text(
           '${events.length}',
           style: const TextStyle().copyWith(
-            color: CustomColor.biTextColor,
+            color: Colors.white,
             fontSize: 12.0,
           ),
         ),

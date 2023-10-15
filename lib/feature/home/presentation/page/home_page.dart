@@ -27,12 +27,6 @@ class HomePage extends HookConsumerWidget {
     final homePieChart = ref.watch(homePieChartProvider);
     final homePieChartNotifier = ref.watch(homePieChartProvider.notifier);
 
-    // イベント
-    final event = ref.watch(eventProvider).whenOrNull(
-          skipLoadingOnRefresh: false,
-          data: (data) => data,
-        );
-
     // 月の選択
     Future<DateTime> _selectMonth(BuildContext context, DateTime date) async {
       var selectedMonth = await showMonthPicker(
@@ -51,7 +45,7 @@ class HomePage extends HookConsumerWidget {
     return Scaffold(
       appBar: CustomAppBar(
         icon: Icons.settings,
-        iconColor: CustomColor.defaultIconColor,
+        iconColor: Colors.black,
         onTaped: () => Navigator.pushNamed(context, '/settingPage'),
       ),
       drawer: const CustomDrawer(),

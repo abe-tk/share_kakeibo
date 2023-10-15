@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:share_kakeibo/importer.dart';
 
 class TargetDate extends StatelessWidget {
   final DateTime? year;
@@ -26,7 +25,7 @@ class TargetDate extends StatelessWidget {
         IconButton(
           icon: const Icon(
             Icons.chevron_left,
-            color: CustomColor.detailIconColor,
+            color: Colors.black,
           ),
           onPressed: onTapedLeft,
         ),
@@ -42,7 +41,7 @@ class TargetDate extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: CustomColor.defaultTextColor,
+                    color: Colors.black,
                   ),
                 ),
                 onPressed: onTapedDate,
@@ -50,7 +49,7 @@ class TargetDate extends StatelessWidget {
         IconButton(
           icon: const Icon(
             Icons.chevron_right,
-            color: CustomColor.detailIconColor,
+            color: Colors.black,
           ),
           onPressed: onTapedRight,
         ),

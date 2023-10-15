@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:share_kakeibo/importer.dart';
 
 class CustomBatch extends StatelessWidget {
   final int length;
@@ -18,7 +17,7 @@ class CustomBatch extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
-            color: CustomColor.biBackGroundColor,
+            color: Colors.red,
             shape: BoxShape.circle,
           ),
           width: 16.0,
@@ -26,7 +25,7 @@ class CustomBatch extends StatelessWidget {
           child: Text(
             length < 100 ? '$length' : '99',
             style: const TextStyle().copyWith(
-              color: CustomColor.biTextColor,
+              color: Colors.white,
               fontSize: 12.0,
             ),
           ),

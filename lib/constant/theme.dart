@@ -1,49 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:share_kakeibo/importer.dart';
 
 class CustomTheme {
-
-  static AppBarTheme appBarTheme = const AppBarTheme(
-    // backgroundColor: CustomColor.appBarBackgroundColor,
-    backgroundColor: Color(0xFFF9F9F9),
-    centerTitle: true,
+  // primarySwatch
+  static const int _customPrimarySwatch = 0xFF9E9E9E;
+  static const MaterialColor customPrimarySwatch = MaterialColor(
+    _customPrimarySwatch,
+    <int, Color>{
+      50: Color(0xFFF3F3F3),
+      100: Color(0xFFE2E2E2),
+      200: Color(0xFFCFCFCF),
+      300: Color(0xFFBBBBBB),
+      400: Color(0xFFADADAD),
+      500: Color(_customPrimarySwatch),
+      600: Color(0xFF969696),
+      700: Color(0xFF8C8C8C),
+      800: Color(0xFF828282),
+      900: Color(0xFF707070),
+    },
   );
 
-  static BottomNavigationBarThemeData bottomNavigationBarThemeData = const BottomNavigationBarThemeData(
-    backgroundColor: CustomColor.bnBackGroundColor,
-    selectedItemColor: CustomColor.bnSelectedItemColor,
-    unselectedItemColor: CustomColor.bnUnSelectedItemColor,
+  static AppBarTheme appBarTheme = const AppBarTheme(
+    backgroundColor: Color(0xFFF9F9F9),
+    centerTitle: false,
+  );
+
+  static BottomNavigationBarThemeData bottomNavigationBarThemeData =
+      const BottomNavigationBarThemeData(
+    backgroundColor: Color(0xFFF1F1F1),
+    selectedItemColor: Color(0xFF000000),
+    unselectedItemColor: Color(0xFF808080),
     type: BottomNavigationBarType.fixed,
   );
 
-  static FloatingActionButtonThemeData floatingActionButtonThemeData = const FloatingActionButtonThemeData(
-    backgroundColor: CustomColor.fabBackGroundColor,
-  );
-
-  static ToggleButtonsThemeData toggleButtonsThemeData = ToggleButtonsThemeData(
-    fillColor: CustomColor.tbFillColor,
-    borderWidth: 2,
-    borderColor: CustomColor.tbBorderColor,
-    selectedColor: CustomColor.tbSelectedColor,
-    selectedBorderColor: CustomColor.tbBorderColor,
-    borderRadius: BorderRadius.circular(10),
+  static FloatingActionButtonThemeData floatingActionButtonThemeData =
+      const FloatingActionButtonThemeData(
+    backgroundColor: Color(0xFFFFFFFF),
   );
 
   static ThemeData themeData(BuildContext context) {
     return ThemeData(
-      primarySwatch: CustomColor.customPrimarySwatch,
+      primarySwatch: customPrimarySwatch,
       appBarTheme: appBarTheme,
       bottomNavigationBarTheme: bottomNavigationBarThemeData,
       floatingActionButtonTheme: floatingActionButtonThemeData,
-      toggleButtonsTheme: toggleButtonsThemeData,
-      indicatorColor: CustomColor.indicatorColor,
-      dividerColor: CustomColor.dividerColor,
-
+      indicatorColor: const Color(0xFF000000),
+      dividerColor: const Color(0xFF808080),
       textTheme: GoogleFonts.notoSansTextTheme(
         Theme.of(context).textTheme,
       ),
     );
   }
-
 }

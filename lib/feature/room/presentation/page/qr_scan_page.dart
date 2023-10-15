@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:share_kakeibo/feature/room/data/room_repository_impl.dart';
 import 'package:share_kakeibo/importer.dart';
 
 class QrScanPage extends StatefulHookConsumerWidget {
@@ -58,7 +59,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-        borderColor: CustomColor.qrBorderColor,
+        borderColor: Colors.red,
         borderRadius: 10,
         borderLength: 30,
         borderWidth: 10,
@@ -104,11 +105,12 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                 onPressed: () async {
                   // ここでjoinRoomの処理
                   try {
-                    ref
-                        .read(userInfoProvider.notifier)
-                        .updateUser(newRoomCode: (scanData.code).toString());
-                    // RoomFire().joinRoomFire((scanData.code).toString(),
-                    //     userData!.userName, userData.imgURL);
+                    // roomName = await ref
+                    //     .read(roomRepositoryProvider)
+                    //     .readRoomName(roomCode: (scanData.code).toString());
+                    ref.read(userInfoProvider.notifier).updateUser(
+                        uid: ref.watch(uidProvider),
+                        newRoomCode: (scanData.code).toString());
                     await ref.read(roomMemberProvider.notifier).joinRoom(
                           roomCode: (scanData.code).toString(),
                           userName: userData!.userName,
