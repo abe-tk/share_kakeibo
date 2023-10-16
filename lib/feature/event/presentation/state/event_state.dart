@@ -29,6 +29,7 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
     required String paymentUser,
   }) async {
     final repository = ref.watch(eventRepositoryProvider);
+    final events = state.whenOrNull(data: (data) => data) ?? [];
 
     state = const AsyncLoading();
 
@@ -43,7 +44,21 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
         currentMonth: currentMonth,
         paymentUser: paymentUser,
       );
-      return readEvent();
+
+      // get処理の回数を減らしたいため、stateにEventを追加
+      events.add(
+        Event(
+          id: '${DateTime.now()}', // 仮のid
+          date: date,
+          price: price,
+          largeCategory: largeCategory,
+          smallCategory: smallCategory,
+          memo: memo,
+          registerDate: currentMonth,
+          paymentUser: paymentUser,
+        ),
+      );
+      return events;
     });
   }
 
@@ -53,6 +68,7 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
     required String id,
   }) async {
     final repository = ref.watch(eventRepositoryProvider);
+    final events = state.whenOrNull(data: (data) => data) ?? [];
 
     state = const AsyncLoading();
 
@@ -61,7 +77,10 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
         roomCode: roomCode,
         id: id,
       );
-      return readEvent();
+
+      // get処理の回数を減らしたいため、stateのEventを削除
+      events.removeWhere((element) => element.id == id);
+      return events;
     });
   }
 
@@ -77,6 +96,7 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
     required String paymentUser,
   }) async {
     final repository = ref.watch(eventRepositoryProvider);
+    final events = state.whenOrNull(data: (data) => data) ?? [];
 
     state = const AsyncLoading();
 
@@ -91,7 +111,23 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
         currentMonth: currentMonth,
         paymentUser: paymentUser,
       );
-      return readEvent();
+
+      // get処理の回数を減らしたいため、stateにEventを追加
+      final eventList = events
+          .map((element) => element.id == event.id
+              ? Event(
+                  id: event.id,
+                  date: date,
+                  price: price,
+                  largeCategory: event.largeCategory,
+                  smallCategory: smallCategory,
+                  memo: memo,
+                  registerDate: currentMonth,
+                  paymentUser: paymentUser,
+                )
+              : element)
+          .toList();
+      return eventList;
     });
   }
 }
