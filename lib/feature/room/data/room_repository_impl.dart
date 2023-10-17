@@ -52,7 +52,7 @@ class RoomRepositoryImpl extends RoomRepository {
       rethrow;
     } catch (e) {
       logger.e(e);
-      throw '入力した招待コードのルームが存在しません';
+      rethrow;
     }
   }
 
