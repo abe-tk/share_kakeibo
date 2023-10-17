@@ -44,7 +44,7 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'QR読み取り'),
+      appBar: const CustomAppBar(title: '二次元バーコードの読み取り'),
       body: _buildQrView(context),
     );
   }
@@ -104,17 +104,26 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                 onPressed: () async {
                   // ここでjoinRoomの処理
                   try {
-                    // roomName = await ref
-                    //     .read(roomRepositoryProvider)
-                    //     .readRoomName(roomCode: (scanData.code).toString());
+                    // 所属ルームのルームコードでなければ、新しいルームコードに更新
+                    if (scanData.code == ref.watch(roomCodeProvider).value) {
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: '既に【$roomName】に参加しています',
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
+                      return;
+                    }
                     ref.read(userInfoProvider.notifier).updateUser(
                         uid: ref.watch(uidProvider),
                         newRoomCode: (scanData.code).toString());
+
                     await ref.read(roomMemberProvider.notifier).joinRoom(
                           roomCode: (scanData.code).toString(),
                           userName: userData!.userName,
                           imgURL: userData.imgURL,
                         );
+
                     // 各Stateを更新
                     ref.invalidate(roomCodeProvider);
                     ref.read(userInfoProvider.notifier).readUser();
@@ -128,6 +137,17 @@ class _QrScanPageState extends ConsumerState<QrScanPage> {
                     scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
                     logger.e(e.toString());
+                    // 入力したコードでルーム名が読み取れない = 招待コードが存在しない場合
+                    // QRを読み込んでいるため、実際には起きえない
+                    if (roomName.isEmpty) {
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: '入力した招待コードのルームが存在しません',
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
+                      return;
+                    }
                   }
                 },
               ),

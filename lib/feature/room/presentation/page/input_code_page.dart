@@ -52,9 +52,22 @@ class InputCodePage extends HookConsumerWidget {
                     ownerRoomName.value = await ref
                         .read(roomRepositoryProvider)
                         .readRoomName(roomCode: roomCode.value);
+
+                    // 所属ルームのルームコードでなければ、新しいルームコードに更新
+                    if (roomCode.value == ref.watch(roomCodeProvider).value) {
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: '既に【${ownerRoomName.value}】に参加しています',
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
+                      return;
+                    }
                     ref.read(userInfoProvider.notifier).updateUser(
-                        uid: ref.watch(uidProvider),
-                        newRoomCode: roomCode.value);
+                          uid: ref.watch(uidProvider),
+                          newRoomCode: roomCode.value,
+                        );
+
                     await ref.read(roomMemberProvider.notifier).joinRoom(
                           roomCode: roomCode.value,
                           userName: userData!.userName,
@@ -73,6 +86,16 @@ class InputCodePage extends HookConsumerWidget {
                     scaffoldMessenger.showSnackBar(snackbar);
                   } catch (e) {
                     logger.e(e.toString());
+                    // 入力したコードでルーム名が読み取れない = 招待コードが存在しない場合
+                    if (ownerRoomName.value.isEmpty) {
+                      final snackbar = CustomSnackBar(
+                        context,
+                        msg: '入力した招待コードのルームが存在しません',
+                        color: Colors.red,
+                      );
+                      scaffoldMessenger.showSnackBar(snackbar);
+                      return;
+                    }
                   }
                 },
               ),
