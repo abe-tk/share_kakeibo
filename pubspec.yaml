@@ -41,9 +41,6 @@ dependencies:
   # 画面遷移
   page_transition: ^2.0.5
 
-  # app_tracking_transparency
-  app_tracking_transparency: ^2.0.2+4
-
   # Freezed
   freezed: ^2.0.4
   build_runner: ^2.2.0
@@ -72,6 +69,10 @@ dependencies:
 
   # shared_preferences
   shared_preferences: ^2.2.2
+
+  # 広告
+  google_mobile_ads: ^3.1.0
+  app_tracking_transparency: ^2.0.4
 
 dev_dependencies:
   flutter_test:
