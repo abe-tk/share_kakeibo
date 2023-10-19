@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 extension TextThemeExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
 
+  TextStyle get titleLargeBold => theme.textTheme.titleLarge!.copyWith(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      );
+
   TextStyle get bodyMediumBold => theme.textTheme.bodyMedium!.copyWith(
         color: Colors.black,
         fontWeight: FontWeight.bold,

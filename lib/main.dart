@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/importer.dart';
+import 'package:share_kakeibo/util/shared_preferences/data/shared_preferences_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/firebase/dev/firebase_options.dart' as dev;
 import 'config/firebase/prod/firebase_options.dart' as prod;
@@ -24,9 +26,23 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
   await Firebase.initializeApp();
+
+  // SharedPreferencesの初期化
+  late final SharedPreferences sharedPreferences;
+  await Future.wait([
+    Future(() async {
+      sharedPreferences = await SharedPreferences.getInstance();
+    }),
+  ]);
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      overrides: [
+        sharedPreferencesRepositoryProvider.overrideWithValue(
+          SharedPreferencesRepository(sharedPreferences),
+        ),
+      ],
+      child: const MyApp(),
     ),
   );
 }
