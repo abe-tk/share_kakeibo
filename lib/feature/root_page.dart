@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:share_kakeibo/enum/update_request_type.dart';
 import 'package:share_kakeibo/importer.dart';
+import 'package:share_kakeibo/util/forced_update/application/update_request_service.dart';
+import 'package:share_kakeibo/util/forced_update/presentation/widget/update_dialog.dart';
 
 class RootPage extends HookConsumerWidget {
   const RootPage({Key? key}) : super(key: key);
@@ -20,6 +23,29 @@ class RootPage extends HookConsumerWidget {
     final selectIndex = useState(0);
 
     final memo = ref.watch(memoProvider);
+
+    // updateの確認
+    final updateRequestType = ref.watch(updateRequestService).whenOrNull(
+          skipLoadingOnRefresh: false,
+          data: (updateRequestType) => updateRequestType,
+        );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // アップデートがあった場合
+      if (updateRequestType == UpdateRequestType.cancelable ||
+          updateRequestType == UpdateRequestType.forcibly) {
+        // updateの案内を勝手に閉じて欲しくないのでbarrierDismissibleはfalse
+        showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return UpdateDialog(
+              updateRequestType: updateRequestType,
+            );
+          },
+        );
+      }
+    });
 
     return Scaffold(
       body: _pages[selectIndex.value],
