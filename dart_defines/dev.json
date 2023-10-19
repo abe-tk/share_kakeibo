@@ -1,5 +1,7 @@
 {
     "flavor": "dev",
     "appName": "家計簿.dev",
-    "appIdSuffix": ".dev"
+    "appIdSuffix": ".dev",
+    "iosAddAppId": "ca-app-pub-3940256099942544~1458002511",
+    "androidAdAppId": "ca-app-pub-3940256099942544~3347511713"
 }

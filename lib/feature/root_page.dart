@@ -1,8 +1,11 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/enum/update_request_type.dart';
 import 'package:share_kakeibo/importer.dart';
+import 'package:share_kakeibo/util/ad_mob/presentation/widget/ad_banner.dart';
 import 'package:share_kakeibo/util/forced_update/application/update_request_service.dart';
 import 'package:share_kakeibo/util/forced_update/presentation/widget/update_dialog.dart';
 
@@ -30,7 +33,20 @@ class RootPage extends HookConsumerWidget {
           data: (updateRequestType) => updateRequestType,
         );
 
+    // トラッキングの認否を確認
+    Future<void> initPlugin(BuildContext context) async {
+      final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      if (status == TrackingStatus.notDetermined) {
+        await Future.delayed(const Duration(milliseconds: 200), () async {
+          await AppTrackingTransparency.requestTrackingAuthorization();
+        });
+      }
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // トラッキングの許可を要求
+      initPlugin(context);
+
       // アップデートがあった場合
       if (updateRequestType == UpdateRequestType.cancelable ||
           updateRequestType == UpdateRequestType.forcibly) {
@@ -48,7 +64,18 @@ class RootPage extends HookConsumerWidget {
     });
 
     return Scaffold(
-      body: _pages[selectIndex.value],
+      body: Stack(
+        children: [
+          _pages[selectIndex.value],
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 36.h),
+              child: const AdBanner(),
+            ),
+          ),
+        ],
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: CustomFab(
         selectIndex: () => selectIndex.value = 3,

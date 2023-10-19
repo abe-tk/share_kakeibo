@@ -1,5 +1,7 @@
 {
     "flavor": "prod",
     "appName": "家計簿",
-    "appIdSuffix": ""
+    "appIdSuffix": "",
+    "iosAddAppId": "ca-app-pub-7848668294473541~3652793916",
+    "androidAdAppId": "ca-app-pub-7848668294473541~3369304027"
 }
