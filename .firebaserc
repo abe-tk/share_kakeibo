@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "sharekakeibo-dev-2372c",
+    "dev": "sharekakeibo-dev-2372c",
+    "prod": "sharekakeibo-59b13"
+  }
+}
