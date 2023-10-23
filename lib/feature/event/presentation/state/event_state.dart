@@ -29,7 +29,6 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
     required String paymentUser,
   }) async {
     final repository = ref.watch(eventRepositoryProvider);
-    final events = state.whenOrNull(data: (data) => data) ?? [];
 
     state = const AsyncLoading();
 
@@ -45,20 +44,7 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
         paymentUser: paymentUser,
       );
 
-      // get処理の回数を減らしたいため、stateにEventを追加
-      events.add(
-        Event(
-          id: '${DateTime.now()}', // 仮のid
-          date: date,
-          price: price,
-          largeCategory: largeCategory,
-          smallCategory: smallCategory,
-          memo: memo,
-          registerDate: currentMonth,
-          paymentUser: paymentUser,
-        ),
-      );
-      return events;
+      return await readEvent();
     });
   }
 
@@ -103,7 +89,7 @@ class AsyncEvents extends AsyncNotifier<List<Event>> {
     state = await AsyncValue.guard(() async {
       await repository.updateEvent(
         roomCode: roomCode,
-        event: event,
+        event: event, // firestore上のidと、仮のdateTimeのidが異なるためエラーになる
         date: date,
         price: price,
         smallCategory: smallCategory,
