@@ -37,7 +37,6 @@ ShareKakeibo/共有家計簿のセールスポイント
 * google_fonts: ^3.0.1
 * qr_flutter: ^4.0.0
 * qr_code_scanner: ^0.7.0
-* flutter_screenutil: ^5.6.0
 
 # Installation
 
@@ -60,7 +59,6 @@ $ dart pub add build_runner --dev
 $ flutter pub add google_fonts
 $ flutter pub add qr_flutter
 $ flutter pub add qr_code_scanner
-$ flutter pub add flutter_screenutil
 ```
 
 # Author
