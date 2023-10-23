@@ -173,6 +173,7 @@ class UpsertEventPage extends HookConsumerWidget {
                           roomCode: roomCode!,
                           id: event!.id,
                         );
+                        print(event!.id);
 
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();

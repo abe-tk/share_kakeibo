@@ -1,7 +1,6 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/enum/update_request_type.dart';
 import 'package:share_kakeibo/importer.dart';
@@ -67,11 +66,11 @@ class RootPage extends HookConsumerWidget {
       body: Stack(
         children: [
           _pages[selectIndex.value],
-          Align(
+          const Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 36.h),
-              child: const AdBanner(),
+              padding: EdgeInsets.only(bottom: 36),
+              child: AdBanner(),
             ),
           ),
         ],

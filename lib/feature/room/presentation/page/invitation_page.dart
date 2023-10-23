@@ -37,7 +37,7 @@ class InvitationPage extends ConsumerWidget {
                   child: roomCode.when(
                     loading: () => const CircularProgressIndicator(),
                     error: (error, stack) => const Text('error'),
-                    data: (data) => QrImage(
+                    data: (data) => QrImageView(
                       data: data,
                       version: QrVersions.auto,
                       size: 200.0,
