@@ -55,3 +55,18 @@ app.*.map.json
 **/android/app/google-services.json
 **/ios/GoogleService-Info.plist
 **/ios/firebase_app_id_file.json
+
+# firebase 関連のファイル
+lib/config/firebase/dev/firebase_options.dart
+lib/config/firebase/prod/firebase_options.dart
+ios/dev/firebase_app_id_file.json
+ios/dev/GoogleService-Info.plist
+ios/prod/firebase_app_id_file.json
+ios/prod/GoogleService-Info.plist
+.firebaserc
+
+# admob 関連のファイル
+dart_defines/dev.json
+dart_defines/prod.json
+lib/constant/ad_unit_id.dart
+public/app-ads.txt
