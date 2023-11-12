@@ -38,7 +38,7 @@ class MemoPage extends ConsumerWidget {
                               text: 'メモ',
                               topPadding: 200,
                             )
-                          : const Gap(50);
+                          : const Gap(120);
                     }
                     return Padding(
                       padding: const EdgeInsets.only(left: 8, top: 8, right: 8),

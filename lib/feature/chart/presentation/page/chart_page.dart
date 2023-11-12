@@ -155,18 +155,23 @@ class ChartPage extends HookConsumerWidget {
                 itemBuilder: (context, index) {
                   if (index == pieChart.pieChartSourceData.length) {
                     // リストの最後に合計値を表示
-                    return Container(
-                      alignment: Alignment.centerRight,
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.only(right: 16, bottom: 30),
-                      child: Text(
-                        '合計 ${pieChart.totalPrice.separator} 円',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                    return Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerRight,
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.only(right: 16, bottom: 30),
+                          child: Text(
+                            '合計 ${pieChart.totalPrice.separator} 円',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ),
-                      ),
+                        const Gap(80),
+                      ],
                     );
                   }
 
