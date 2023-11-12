@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_kakeibo/importer.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -78,32 +79,38 @@ class CalendarPage extends HookConsumerWidget {
               ),
               // 選択した日付のイベントを表示
               Expanded(
-                child: ListView(
-                  children: _getEventForDay(_selectedDay.value)
-                      .map((event) => Column(
-                            children: [
-                              CalendarEventList(
-                                price: event.price,
-                                largeCategory: event.largeCategory,
-                                smallCategory: event.smallCategory,
-                                paymentUser: event.paymentUser,
-                                memo: event.memo,
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return UpsertEventPage(
-                                          largeCategory: event.largeCategory,
-                                          event: event,
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ))
-                      .toList(),
+                child: ListView.builder(
+                  itemCount: _getEventForDay(_selectedDay.value).length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == _getEventForDay(_selectedDay.value).length) {
+                      return const Gap(120);
+                    }
+                    return _getEventForDay(_selectedDay.value).map((event) {
+                      return Column(
+                        children: [
+                          CalendarEventList(
+                            price: event.price,
+                            largeCategory: event.largeCategory,
+                            smallCategory: event.smallCategory,
+                            paymentUser: event.paymentUser,
+                            memo: event.memo,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return UpsertEventPage(
+                                      largeCategory: event.largeCategory,
+                                      event: event,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    }).toList()[index];
+                  },
                 ),
               ),
             ],
